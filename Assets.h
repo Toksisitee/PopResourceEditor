@@ -11,6 +11,7 @@ namespace Assets
 	enum class ErrorCode : uint8_t
 	{
 		OK = 0,
+		FAIL,
 		LOAD,
 		PARSE,
 		EXPORT,

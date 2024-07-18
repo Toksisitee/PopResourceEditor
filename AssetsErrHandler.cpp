@@ -43,7 +43,13 @@ namespace Assets
 
 	void CErrHandler::Log( const char* pszError )
 	{
-		sprintf_s( m_szErrBuffer, m_kErrBufferSize, "FileType=%s %s", GetLastFileTypeSz(), pszError );
+		assert( m_FileType != FileType::None && "CErrHandler: File type not set" );
+		sprintf_s( m_szErrBuffer, m_kErrBufferSize, "[%s]: %s", GetLastFileTypeSz(), pszError );
+		Flush();
+	}
+
+	void CErrHandler::Flush()
+	{
 		switch ( m_Err ) {
 			case Assets::ErrorCode::LOAD:
 			case Assets::ErrorCode::PARSE:
@@ -59,19 +65,38 @@ namespace Assets
 		}
 	}
 
-	void CErrHandler::SetFileTypeSz( const char* pszFileType )
+	void CErrHandler::HandleResult( Assets::ErrorCode code, std::optional<std::string> sErrorMsg )
 	{
-		sprintf_s( m_szTypeBuffer, m_kTypeBufferSize, pszFileType );
-	}
+		assert( m_FileType != FileType::None && "CErrHandler: File type not set" );
+		SetError( code );
 
-	void CErrHandler::SetFileType( Assets::FileType type )
-	{
-		m_FileType = type;
-	}
+		char szErrCode[128];
+		switch ( m_Err ) {
+			case Assets::ErrorCode::OK:
+				sprintf_s( szErrCode, sizeof( szErrCode ), "OK" );
+				break;
+			case Assets::ErrorCode::LOAD:
+				sprintf_s( szErrCode, sizeof( szErrCode ), "Failed to load file" );
+				break;
+			case Assets::ErrorCode::EXPORT:
+				sprintf_s( szErrCode, sizeof( szErrCode ), "Failed to export file" );
+				break;
+			case Assets::ErrorCode::PARSE:
+				sprintf_s( szErrCode, sizeof( szErrCode ), "Failed to parse file" );
+				break;
+			default:
+				sprintf_s( szErrCode, sizeof( szErrCode ), "Unknown error code" );
+				break;
+		}
 
-	FileType CErrHandler::GetFileType()
-	{
-		return m_FileType;
+		if ( sErrorMsg.has_value() ) {
+			sprintf_s( m_szErrBuffer, m_kErrBufferSize, "[%s]: %s", GetLastFileTypeSz(), sErrorMsg.value().c_str() );
+		}
+		else {
+			sprintf_s( m_szErrBuffer, m_kErrBufferSize, "[%s]: %s", GetLastFileTypeSz(), szErrCode);
+		}
+
+		Flush();
 	}
 
 	const char* CErrHandler::GetLastFileTypeSz()
@@ -88,21 +113,26 @@ namespace Assets
 
 	const char* CErrHandler::GetLastErrorSz()
 	{
-		switch ( m_Err ) {
-			case Assets::ErrorCode::OK:
-				Log( "OK" );
-				break;
-			case Assets::ErrorCode::LOAD:
-				Log( "Failed to load file!" );
-			case Assets::ErrorCode::EXPORT:
-				Log( "Failed to export file!" );
-			case Assets::ErrorCode::PARSE:
-				Log( "Failed to parse file!" );
-				break;
-			default:
-				break;
-		}
-
 		return m_szErrBuffer;
 	};
+
+	FileType CErrHandler::GetFileType()
+	{
+		return m_FileType;
+	}
+
+	void CErrHandler::SetFileTypeSz( const char* pszFileType )
+	{
+		sprintf_s( m_szTypeBuffer, m_kTypeBufferSize, pszFileType );
+	}
+
+	void CErrHandler::SetFileType( Assets::FileType type )
+	{
+		m_FileType = type;
+	}
+
+	void CErrHandler::SetError( Assets::ErrorCode code )
+	{
+		m_Err = code;
+	}
 }

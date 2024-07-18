@@ -1,4 +1,6 @@
 #pragma once
+#include <optional>
+
 namespace Assets
 {
 	class CErrHandler
@@ -12,15 +14,21 @@ namespace Assets
 
 		CErrHandler();
 		~CErrHandler();
+		
+		void Log( const char* pszError );
+		void LogFmt( const char* fmt, ... );
 		void SetFileType( FileType type );
+
+		void HandleResult( ErrorCode code, std::optional<std::string> sErrorMsg = std::nullopt );
+
+	private:
+		void Flush();
+
+		void SetFileTypeSz( const char* pszError );
+		void SetError( ErrorCode code );
 		[[nodiscard]] FileType GetFileType();
 		const char* GetLastFileTypeSz();
 		const char* GetLastErrorSz();
-		void Log( const char* pszError );
-		void LogFmt( const char* fmt, ... );
-
-	private:
-		void SetFileTypeSz( const char* pszError );
 
 	private:
 		FileType m_FileType;
