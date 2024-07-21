@@ -51,11 +51,12 @@ namespace Assets
 	void CErrHandler::Flush()
 	{
 		switch ( m_Err ) {
-			case Assets::ErrorCode::LOAD:
-			case Assets::ErrorCode::PARSE:
+			case Assets::ErrorCode::FAIL:
+			case Assets::ErrorCode::FAIL_PARSE:
+			case Assets::ErrorCode::FAIL_LOAD:
 				spdlog::critical( m_szErrBuffer );
 				break;
-			case Assets::ErrorCode::EXPORT:
+			case Assets::ErrorCode::FAIL_EXPORT:
 				spdlog::error( m_szErrBuffer );
 				break;
 			case Assets::ErrorCode::OK:
@@ -73,19 +74,28 @@ namespace Assets
 		char szErrCode[128];
 		switch ( m_Err ) {
 			case Assets::ErrorCode::OK:
-				sprintf_s( szErrCode, sizeof( szErrCode ), "OK" );
+				sprintf_s( szErrCode, sizeof( szErrCode ), "OK." );
 				break;
-			case Assets::ErrorCode::LOAD:
-				sprintf_s( szErrCode, sizeof( szErrCode ), "Failed to load file" );
+			case Assets::ErrorCode::OK_LOAD:
+				sprintf_s( szErrCode, sizeof( szErrCode ), "Successfully loaded file." );
 				break;
-			case Assets::ErrorCode::EXPORT:
-				sprintf_s( szErrCode, sizeof( szErrCode ), "Failed to export file" );
+			case Assets::ErrorCode::OK_EXPORT:
+				sprintf_s( szErrCode, sizeof( szErrCode ), "Successfully exported file." );
 				break;
-			case Assets::ErrorCode::PARSE:
-				sprintf_s( szErrCode, sizeof( szErrCode ), "Failed to parse file" );
+			case Assets::ErrorCode::OK_PARSE:
+				sprintf_s( szErrCode, sizeof( szErrCode ), "Successfully parsed file.." );
+				break;
+			case Assets::ErrorCode::FAIL_LOAD:
+				sprintf_s( szErrCode, sizeof( szErrCode ), "Failed to load file." );
+				break;
+			case Assets::ErrorCode::FAIL_EXPORT:
+				sprintf_s( szErrCode, sizeof( szErrCode ), "Failed to export file." );
+				break;
+			case Assets::ErrorCode::FAIL_PARSE:
+				sprintf_s( szErrCode, sizeof( szErrCode ), "Failed to parse file." );
 				break;
 			default:
-				sprintf_s( szErrCode, sizeof( szErrCode ), "Unknown error code" );
+				sprintf_s( szErrCode, sizeof( szErrCode ), "Unknown error code." );
 				break;
 		}
 

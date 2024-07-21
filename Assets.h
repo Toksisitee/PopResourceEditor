@@ -12,8 +12,11 @@ namespace Assets
 	{
 		OK = 0,
 		FAIL,
-		LOAD,
-		PARSE,
-		EXPORT,
+		OK_LOAD,
+		FAIL_LOAD,
+		OK_PARSE,
+		FAIL_PARSE,
+		OK_EXPORT,
+		FAIL_EXPORT
 	};
 }

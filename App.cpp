@@ -18,6 +18,7 @@
 
 #include "Assets.h"
 #include "AssetsErrHandler.h"
+#include "Palette.h"
 
 #include "App.h"
 
@@ -30,6 +31,7 @@ ImGui_sink_mt_t g_ImGuiSink = ImGui_sink_mt();
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
 
 CEditorApp g_Editor;
+Assets::CPalette g_Palette;
 ImFont* g_ImFonts[eImFont::Max] = { 0 };
 
 #if EDITOR_DEBUG_FONTS
@@ -201,6 +203,46 @@ void CEditorApp::Run()
 		if ( bShowDemo ) {
 			ImGui::ShowDemoWindow( &bShowDemo );
 		}
+
+		if ( ImGui::Button( "Test" ) ) {
+			//Assets::CErrHandler::Instance().LogFmt( "Successfully exported to bitmap: %s", sFilePath.c_str() );
+			//Assets::CErrHandler::Instance().HandleResult( g_Palette.Load( sFilePath ), Assets::FileType::Palette );
+			auto sFilePath = Util::FileSystem::FormatPath( "pal0-0.dat" );
+			Assets::CErrHandler::Instance().HandleResult( g_Palette.Load( sFilePath ) );
+			sFilePath = Util::FileSystem::FormatPath( "pal.bmp" );
+			Assets::CErrHandler::Instance().HandleResult( g_Palette.Export( sFilePath.c_str() ) );
+
+
+
+		}
+		static float col2[4] = { 0.4f, 0.7f, 0.0f, 0.5f };
+
+		ImGui::NewLine();
+
+		uint8_t uIndex = 0;
+		char szColorLabel[8];
+		const int k_iColorEditFlags = ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoBorder;
+		RGB* pPalette = g_Palette.GetPalette();
+
+		auto getColor = [&pPalette]( uint8_t uIndex ) -> float* {
+			float fColors[4];
+			ImColor col = ImColor( pPalette[uIndex].R, pPalette[uIndex].G, pPalette[uIndex].B );
+			memcpy( &fColors, &col, sizeof( float) * 4  );
+			return fColors;
+		};
+
+		ImGui::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2( 5.0f, 5.0f ) );
+		ImGui::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2( 0.0f, 0.0f ) );
+		for ( uint32_t y = 0; y < 16; y++ ) {
+			for ( uint32_t x = 0; x < 16; x++ ) {
+				sprintf_s( szColorLabel, sizeof( szColorLabel ), "##%i", uIndex );
+				ImGui::SameLine();
+				ImGui::ColorEdit3( szColorLabel, getColor(uIndex), k_iColorEditFlags );
+				uIndex++;
+			}
+			ImGui::NewLine();
+		}
+		ImGui::PopStyleVar(2);
 
 		g_ImGuiSink->render();
 
