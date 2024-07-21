@@ -19,6 +19,9 @@
     <Filter Include="Source Files\imgui\imsink">
       <UniqueIdentifier>{c4980ad9-8eba-425d-bb19-fa6f299f97c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\EasyBMP">
+      <UniqueIdentifier>{412ebbb6-b083-4f0e-bc30-8344b2afe9f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PopResourceEditor.cpp">
@@ -68,6 +71,12 @@
     </ClCompile>
     <ClCompile Include="Assets.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Palette.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\EasyBMP\EasyBMP.cpp">
+      <Filter>Source Files\EasyBMP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +130,21 @@
     </ClInclude>
     <ClInclude Include="Assets.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Palette.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EasyBMP\EasyBMP.h">
+      <Filter>Source Files\EasyBMP</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EasyBMP\EasyBMP_BMP.h">
+      <Filter>Source Files\EasyBMP</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EasyBMP\EasyBMP_DataStructures.h">
+      <Filter>Source Files\EasyBMP</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EasyBMP\EasyBMP_VariousBMPutilities.h">
+      <Filter>Source Files\EasyBMP</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
