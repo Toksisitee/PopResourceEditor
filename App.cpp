@@ -18,7 +18,9 @@
 
 #include "Assets.h"
 #include "AssetsErrHandler.h"
+
 #include "Palette.h"
+#include "Sky.h"
 
 #include "App.h"
 
@@ -32,6 +34,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT ms
 
 CEditorApp g_Editor;
 Assets::CPalette g_Palette;
+Assets::Sky::CSky g_Sky;
 ImFont* g_ImFonts[eImFont::Max] = { 0 };
 
 #if EDITOR_DEBUG_FONTS

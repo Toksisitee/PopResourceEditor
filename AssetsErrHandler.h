@@ -19,20 +19,20 @@ namespace Assets
 		void LogFmt( const char* fmt, ... );
 		void SetFileType( FileType type );
 
-		void HandleResult( ErrorCode code, std::optional<std::string> sErrorMsg = std::nullopt );
+		void HandleResult( Result code, std::optional<std::string> sErrorMsg = std::nullopt );
 
 	private:
 		void Flush();
 
 		void SetFileTypeSz( const char* pszError );
-		void SetError( ErrorCode code );
+		void SetError( Result code );
 		[[nodiscard]] FileType GetFileType();
 		const char* GetLastFileTypeSz();
 		const char* GetLastErrorSz();
 
 	private:
 		FileType m_FileType;
-		ErrorCode m_Err;
+		Result m_Err;
 
 		const size_t m_kErrBufferSize = 256;
 		char* m_szErrBuffer;

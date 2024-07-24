@@ -6,9 +6,10 @@ namespace Assets
 	{
 		None = 0,
 		Palette,
-		Alpha
+		Alpha,
+		Sky
 	};
-	enum class ErrorCode : uint8_t
+	enum class Result : uint8_t
 	{
 		OK = 0,
 		FAIL,
@@ -17,6 +18,8 @@ namespace Assets
 		OK_PARSE,
 		FAIL_PARSE,
 		OK_EXPORT,
-		FAIL_EXPORT
+		FAIL_EXPORT,
+		OK_GENERATE,
+		FAIL_GENERATE,
 	};
 }

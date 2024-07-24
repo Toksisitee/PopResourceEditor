@@ -16,7 +16,7 @@ namespace Assets
 		m_szErrBuffer = (char*)malloc( m_kErrBufferSize );
 		m_szTypeBuffer = (char*)malloc( m_kTypeBufferSize );
 		m_FileType = FileType::None;
-		m_Err = ErrorCode::OK;
+		m_Err = Result::OK;
 	}
 
 	CErrHandler::~CErrHandler()
@@ -51,47 +51,47 @@ namespace Assets
 	void CErrHandler::Flush()
 	{
 		switch ( m_Err ) {
-			case Assets::ErrorCode::FAIL:
-			case Assets::ErrorCode::FAIL_PARSE:
-			case Assets::ErrorCode::FAIL_LOAD:
+			case Assets::Result::FAIL:
+			case Assets::Result::FAIL_PARSE:
+			case Assets::Result::FAIL_LOAD:
 				spdlog::critical( m_szErrBuffer );
 				break;
-			case Assets::ErrorCode::FAIL_EXPORT:
+			case Assets::Result::FAIL_EXPORT:
 				spdlog::error( m_szErrBuffer );
 				break;
-			case Assets::ErrorCode::OK:
+			case Assets::Result::OK:
 			default:
 				spdlog::info( m_szErrBuffer );
 				break;
 		}
 	}
 
-	void CErrHandler::HandleResult( Assets::ErrorCode code, std::optional<std::string> sErrorMsg )
+	void CErrHandler::HandleResult( Assets::Result code, std::optional<std::string> sErrorMsg )
 	{
 		assert( m_FileType != FileType::None && "CErrHandler: File type not set" );
 		SetError( code );
 
 		char szErrCode[128];
 		switch ( m_Err ) {
-			case Assets::ErrorCode::OK:
+			case Assets::Result::OK:
 				sprintf_s( szErrCode, sizeof( szErrCode ), "OK." );
 				break;
-			case Assets::ErrorCode::OK_LOAD:
+			case Assets::Result::OK_LOAD:
 				sprintf_s( szErrCode, sizeof( szErrCode ), "Successfully loaded file." );
 				break;
-			case Assets::ErrorCode::OK_EXPORT:
+			case Assets::Result::OK_EXPORT:
 				sprintf_s( szErrCode, sizeof( szErrCode ), "Successfully exported file." );
 				break;
-			case Assets::ErrorCode::OK_PARSE:
+			case Assets::Result::OK_PARSE:
 				sprintf_s( szErrCode, sizeof( szErrCode ), "Successfully parsed file.." );
 				break;
-			case Assets::ErrorCode::FAIL_LOAD:
+			case Assets::Result::FAIL_LOAD:
 				sprintf_s( szErrCode, sizeof( szErrCode ), "Failed to load file." );
 				break;
-			case Assets::ErrorCode::FAIL_EXPORT:
+			case Assets::Result::FAIL_EXPORT:
 				sprintf_s( szErrCode, sizeof( szErrCode ), "Failed to export file." );
 				break;
-			case Assets::ErrorCode::FAIL_PARSE:
+			case Assets::Result::FAIL_PARSE:
 				sprintf_s( szErrCode, sizeof( szErrCode ), "Failed to parse file." );
 				break;
 			default:
@@ -141,7 +141,7 @@ namespace Assets
 		m_FileType = type;
 	}
 
-	void CErrHandler::SetError( Assets::ErrorCode code )
+	void CErrHandler::SetError( Assets::Result code )
 	{
 		m_Err = code;
 	}

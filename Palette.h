@@ -1,18 +1,21 @@
 #pragma once
 namespace Assets
 {
+	// TODO: Palette namespace?
+	// TODO: move const member vars (e.g. width) to namespace?
+
 	class CPalette
 	{
 	public:
-		ErrorCode Export( const char* pFilePath );
-		ErrorCode Load( std::string& file );
+		Result Export( const char* pFilePath );
+		Result Load( std::string& file );
 		uint8_t FindClosestColor( const RGB& clr, bool bFullSearch = false );
 		uint8_t FindColor( uint8_t* pPalette, const RGB& clr, size_t uMin, size_t uMax );
 		//uint8_t FindColor( const RGB& clr, bool bClosest = false );
 		uint8_t FindColorAll( const RGB& clr, bool bClosest = false );
 		uint8_t FindBigFadeColor( const RGB& clr );
 		uint8_t FindSkyColor( const RGB& clr );
-		RGB* GetPalette();
+		RGB* GetPalette(); // TODO: better name? accept index?
 		uint8_t* GetData();
 	private:
 		bool IndexIsColorKey( size_t uIndex );

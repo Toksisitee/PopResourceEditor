@@ -11,7 +11,7 @@
 
 namespace Assets
 {
-	ErrorCode CPalette::Export( const char* pFilePath )
+	Result CPalette::Export( const char* pFilePath )
 	{
 		CErrHandler::Instance().SetFileType( FileType::Palette );
 		
@@ -29,8 +29,6 @@ namespace Assets
 
 		for ( uint32_t y = 0; y < k_uColorsPerRow; y++ ) {
 			for ( uint32_t x = 0; x < k_uColorsPerRow; x++ ) {
-
-				// Cell Size
 				for ( size_t h = 0; h < k_uCellScale; h++ ) {
 					for ( size_t w = 0; w < k_uCellScale; w++ ) {
 						BMP.SetPixel( x * k_uCellScale + w, y * k_uCellScale + h, 
@@ -42,20 +40,19 @@ namespace Assets
 									  } );
 					}
 				}
-
 				uIndex++;
 			}
 		}
 
 		if ( !BMP.WriteToFile( pFilePath ) ) {
-			return ErrorCode::FAIL_EXPORT;
+			return Result::FAIL_EXPORT;
 		}
 		
 		CErrHandler::Instance().LogFmt( "Successfully exported as image: %s", pFilePath );
-		return ErrorCode::OK_EXPORT;
+		return Result::OK_EXPORT;
 	}
 
-	ErrorCode CPalette::Load( std::string& file )
+	Result CPalette::Load( std::string& file )
 	{
 		CErrHandler::Instance().SetFileType( FileType::Palette );
 		
@@ -64,38 +61,38 @@ namespace Assets
 
 		if ( ifs.is_open() ) {
 			ifs.seekg( 0 );
-			for ( size_t i = 0; i < 256; i++ ) {
+			for ( size_t i = 0; i < m_kNumColors; i++ ) {
 				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].R), sizeof( char ) );
 				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].G), sizeof( char ) );
 				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].B), sizeof( char ) );
 				ifs.read( &pad, sizeof( char ) );
 			}
 			ifs.close();
-			return ErrorCode::OK_LOAD;
+			return Result::OK_LOAD;
 		}
 
-		return ErrorCode::FAIL_LOAD;
+		return Result::FAIL_LOAD;
 	}
 
 	uint8_t CPalette::FindClosestColor( const RGB& clr, bool bFullSearch )
 	{
-		uint8_t index = m_uColorKeys[0];
+		uint8_t uIndex = m_uColorKeys[0];
 		double closestDist = DBL_MAX;
 
-		for ( uint32_t i = 0; i < 256; i++ ) {
+		for ( size_t i = 0; i < m_kNumColors; i++ ) {
 			auto deltaE = sqrt(
 				pow( clr.R - m_ColorTable[i].R, 2 ) +
 				pow( clr.G - m_ColorTable[i].G, 2 ) +
 				pow( clr.B - m_ColorTable[i].B, 2 ) );
 
 			if ( deltaE < closestDist ) {
-				index = i;
+				uIndex = i;
 				closestDist = deltaE;
 			}
 
 		}
 
-		return index;
+		return uIndex;
 	}
 
 #if 0
@@ -107,7 +104,7 @@ namespace Assets
 			return (0);
 		}
 
-		for ( uint32_t i = 128; i < 256; i++ ) {
+		for ( uint32_t i = 128; i < m_kNumColors; i++ ) {
 			if ( clr.R == m_ColorTable[i].R &&
 				clr.G == m_ColorTable[i].G &&
 				clr.B == m_ColorTable[i].B ) {
@@ -154,7 +151,7 @@ namespace Assets
 
 	uint8_t CPalette::FindColorAll( const RGB& clr, bool bClosest )
 	{
-		for ( uint32_t i = 0; i < 256; i++ ) {
+		for ( size_t i = 0; i < m_kNumColors; i++ ) {
 			if ( clr.R == m_ColorTable[i].R &&
 				clr.G == m_ColorTable[i].G &&
 				clr.B == m_ColorTable[i].B ) {
@@ -173,7 +170,7 @@ namespace Assets
 	uint8_t CPalette::FindBigFadeColor( const RGB& clr )
 	{
 		// TODO: avoid magic numbers
-		for ( uint32_t i = 0; i < 112; i++ ) {
+		for ( size_t i = 0; i < 112; i++ ) {
 			if ( clr.R == m_ColorTable[i].R &&
 				clr.G == m_ColorTable[i].G &&
 				clr.B == m_ColorTable[i].B ) {
@@ -187,7 +184,7 @@ namespace Assets
 	uint8_t CPalette::FindSkyColor( const RGB& clr )
 	{
 		// TODO: avoid magic numbers
-		for ( uint32_t i = 112; i < 128; i++ ) {
+		for ( size_t i = 112; i < 128; i++ ) {
 			if ( clr.R == m_ColorTable[i].R &&
 				clr.G == m_ColorTable[i].G &&
 				clr.B == m_ColorTable[i].B ) {

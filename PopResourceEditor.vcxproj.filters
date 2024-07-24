@@ -78,6 +78,9 @@
     <ClCompile Include="include\EasyBMP\EasyBMP.cpp">
       <Filter>Source Files\EasyBMP</Filter>
     </ClCompile>
+    <ClCompile Include="Sky.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3DApp.h">
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="include\EasyBMP\EasyBMP_VariousBMPutilities.h">
       <Filter>Source Files\EasyBMP</Filter>
+    </ClInclude>
+    <ClInclude Include="Sky.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
