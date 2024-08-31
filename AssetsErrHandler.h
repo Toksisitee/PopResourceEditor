@@ -1,16 +1,18 @@
 #pragma once
 #include <optional>
 
+#include "Assets.h"
+
 namespace Assets
 {
 	class CErrHandler
 	{
 	public:
-		static CErrHandler& Instance()
-		{
-			static CErrHandler sHandler;
-			return sHandler;
-		}
+		//static CErrHandler& Instance()
+		//{
+		//	static CErrHandler sHandler;
+		//	return sHandler;
+		//}
 
 		CErrHandler();
 		~CErrHandler();
@@ -19,7 +21,7 @@ namespace Assets
 		void LogFmt( const char* fmt, ... );
 		void SetFileType( FileType type );
 
-		void HandleResult( Result code, std::optional<std::string> sErrorMsg = std::nullopt );
+		Result HandleResult( Result code, std::optional<std::string> sErrorMsg = std::nullopt );
 
 	private:
 		void Flush();
@@ -41,3 +43,4 @@ namespace Assets
 	};
 }
 
+extern Assets::CErrHandler g_ErrHandler;

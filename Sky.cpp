@@ -4,7 +4,6 @@
 
 #include "Editor.h"
 #include "Utils.h"
-#include "Assets.h"
 #include "AssetsErrHandler.h"
 #include "Palette.h"
 
@@ -16,7 +15,7 @@ namespace Assets
 	{
 		Result CSky::Load( std::string& sFilePath )
 		{
-			CErrHandler::Instance().SetFileType( FileType::Sky );
+			g_ErrHandler.SetFileType( FileType::Sky );
 
 			std::ifstream ifs( sFilePath, std::ios::binary );
 			if ( ifs.is_open() ) {
@@ -34,7 +33,7 @@ namespace Assets
 
 		Result CSky::Export( std::string& fFilepath, RGB* pColorTable )
 		{
-			CErrHandler::Instance().SetFileType( FileType::Sky );
+			g_ErrHandler.SetFileType( FileType::Sky );
 			
 			BMP BMP;
 			size_t uIndex = 0;
@@ -64,7 +63,7 @@ namespace Assets
 
 		Result CSky::Generate( std::string& fFilepath, CPalette* pPalette )
 		{
-			CErrHandler::Instance().SetFileType( FileType::Sky );
+			g_ErrHandler.SetFileType( FileType::Sky );
 
 			std::ofstream ofs( fFilepath, std::ios::binary | std::ios::trunc );
 			if ( ofs.is_open() ) {

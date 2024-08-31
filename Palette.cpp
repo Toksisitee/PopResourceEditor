@@ -1,11 +1,11 @@
 #include <stdint.h>
 #include <fstream>
+#include <cassert>
 
 #include "EasyBMP/EasyBMP.h"
 
 #include "Editor.h"
 #include "Utils.h"
-#include "Assets.h"
 #include "AssetsErrHandler.h"
 #include "Palette.h"
 
@@ -13,16 +13,15 @@ namespace Assets
 {
 	Result CPalette::Export( const char* pFilePath )
 	{
-		CErrHandler::Instance().SetFileType( FileType::Palette );
+		g_ErrHandler.SetFileType( FileType::Palette );
 		
 		BMP BMP;
 		size_t uIndex = 0;
-		size_t r = 0;
 
 		constexpr size_t k_uColorsPerRow = 16;
-		constexpr const size_t k_uCellScale = 8;
-		size_t k_uWidth = k_uCellScale * k_uColorsPerRow;
-		size_t k_uHeight = k_uCellScale * (m_kNumColors / k_uColorsPerRow);
+		constexpr size_t k_uCellScale = 8;
+		const size_t k_uWidth = k_uCellScale * k_uColorsPerRow;
+		const size_t k_uHeight = k_uCellScale * (k_uNumColors / k_uColorsPerRow);
 
 		BMP.SetSize( k_uWidth, k_uHeight );
 		BMP.SetBitDepth( 24 );
@@ -48,20 +47,20 @@ namespace Assets
 			return Result::FAIL_EXPORT;
 		}
 		
-		CErrHandler::Instance().LogFmt( "Successfully exported as image: %s", pFilePath );
+		g_ErrHandler.LogFmt( "Successfully exported as image: %s", pFilePath );
 		return Result::OK_EXPORT;
 	}
 
 	Result CPalette::Load( std::string& file )
 	{
-		CErrHandler::Instance().SetFileType( FileType::Palette );
+		g_ErrHandler.SetFileType( FileType::Palette );
 		
 		char pad;
 		std::ifstream ifs( file, std::ios::binary );
 
 		if ( ifs.is_open() ) {
 			ifs.seekg( 0 );
-			for ( size_t i = 0; i < m_kNumColors; i++ ) {
+			for ( size_t i = 0; i < k_uNumColors; i++ ) {
 				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].R), sizeof( char ) );
 				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].G), sizeof( char ) );
 				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].B), sizeof( char ) );
@@ -77,17 +76,17 @@ namespace Assets
 	uint8_t CPalette::FindClosestColor( const RGB& clr, bool bFullSearch )
 	{
 		uint8_t uIndex = m_uColorKeys[0];
-		double closestDist = DBL_MAX;
+		double dClosestDist = DBL_MAX;
 
-		for ( size_t i = 0; i < m_kNumColors; i++ ) {
+		for ( size_t i = 0; i < k_uNumColors; i++ ) {
 			auto deltaE = sqrt(
 				pow( clr.R - m_ColorTable[i].R, 2 ) +
 				pow( clr.G - m_ColorTable[i].G, 2 ) +
 				pow( clr.B - m_ColorTable[i].B, 2 ) );
 
-			if ( deltaE < closestDist ) {
-				uIndex = i;
-				closestDist = deltaE;
+			if ( deltaE < dClosestDist ) {
+				uIndex = (uint8_t)i;
+				dClosestDist = deltaE;
 			}
 
 		}
@@ -104,7 +103,7 @@ namespace Assets
 			return (0);
 		}
 
-		for ( uint32_t i = 128; i < m_kNumColors; i++ ) {
+		for ( uint32_t i = 128; i < k_uNumColors; i++ ) {
 			if ( clr.R == m_ColorTable[i].R &&
 				clr.G == m_ColorTable[i].G &&
 				clr.B == m_ColorTable[i].B ) {
@@ -123,12 +122,12 @@ namespace Assets
 
 	uint8_t CPalette::FindColor( uint8_t* pPalette, const RGB& clr, size_t uMin, size_t uMax )
 	{
-		int32_t	dr, dg, db;
-		int32_t	iDistBest, iDist;
+		int32_t dr, dg, db;
+		int32_t nDistBest, nDist;
 		size_t uIndex = 0;
 		uint8_t* pptr;
 
-		iDistBest = (clr.R * clr.R + clr.G * clr.G + clr.B * clr.B) * 2;
+		nDistBest = (clr.R * clr.R + clr.G * clr.G + clr.B * clr.B) * 2;
 
 		pptr = &pPalette[uMin * 3];
 		for ( size_t i = uMin; i <= uMax; i++ ) {
@@ -136,12 +135,12 @@ namespace Assets
 			dg = clr.G - *pptr++;
 			db = clr.B - *pptr++;
 
-			iDist = dr * dr + dg * dg + db * db;
-			if ( iDist < iDistBest ) {
-				if ( !iDist ) {
-					return i;
+			nDist = dr * dr + dg * dg + db * db;
+			if ( nDist < nDistBest ) {
+				if ( !nDist ) {
+					return (uint8_t)i;
 				}
-				iDistBest = iDist;
+				nDistBest = nDist;
 				uIndex = i;
 			}
 		}
@@ -151,11 +150,11 @@ namespace Assets
 
 	uint8_t CPalette::FindColorAll( const RGB& clr, bool bClosest )
 	{
-		for ( size_t i = 0; i < m_kNumColors; i++ ) {
+		for ( size_t i = 0; i < k_uNumColors; i++ ) {
 			if ( clr.R == m_ColorTable[i].R &&
 				clr.G == m_ColorTable[i].G &&
 				clr.B == m_ColorTable[i].B ) {
-				return (i);
+				return (uint8_t)i;
 			}
 		}
 
@@ -174,7 +173,7 @@ namespace Assets
 			if ( clr.R == m_ColorTable[i].R &&
 				clr.G == m_ColorTable[i].G &&
 				clr.B == m_ColorTable[i].B ) {
-				return (i);
+				return (uint8_t)i;
 			}
 		}
 
@@ -188,7 +187,7 @@ namespace Assets
 			if ( clr.R == m_ColorTable[i].R &&
 				clr.G == m_ColorTable[i].G &&
 				clr.B == m_ColorTable[i].B ) {
-				return (i);
+				return (uint8_t)i;
 			}
 		}
 
@@ -213,5 +212,16 @@ namespace Assets
 	uint8_t* CPalette::GetData()
 	{
 		return (uint8_t*)&m_ColorTable[0];
+	}
+
+	uint8_t CPalette::GetColorKey( size_t uSlot )
+	{
+		assert( uSlot > k_uNumColorKeys && "uSlot oob");
+
+		if ( uSlot < k_uNumColorKeys ) {
+			m_uColorKeys[uSlot];
+		}
+
+		return m_uColorKeys[0];
 	}
 }

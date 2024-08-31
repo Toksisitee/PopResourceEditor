@@ -7,7 +7,8 @@ namespace Assets
 		None = 0,
 		Palette,
 		Alpha,
-		Sky
+		Sky,
+		Sprite
 	};
 	enum class Result : uint8_t
 	{

@@ -163,6 +163,7 @@
     <ClCompile Include="Palette.cpp" />
     <ClCompile Include="PopResourceEditor.cpp" />
     <ClCompile Include="Sky.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
@@ -188,6 +189,7 @@
     <ClInclude Include="include\EasyBMP\EasyBMP_VariousBMPutilities.h" />
     <ClInclude Include="Palette.h" />
     <ClInclude Include="Sky.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>

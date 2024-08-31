@@ -6,11 +6,13 @@
 #include "imgui.h"
 
 #include "Editor.h"
-#include "Assets.h"
 #include "AssetsErrHandler.h"
+
+Assets::CErrHandler g_ErrHandler;
 
 namespace Assets
 {
+	
 	CErrHandler::CErrHandler()
 	{
 		m_szErrBuffer = (char*)malloc( m_kErrBufferSize );
@@ -66,7 +68,7 @@ namespace Assets
 		}
 	}
 
-	void CErrHandler::HandleResult( Assets::Result code, std::optional<std::string> sErrorMsg )
+	Result CErrHandler::HandleResult( Assets::Result code, std::optional<std::string> sErrorMsg )
 	{
 		assert( m_FileType != FileType::None && "CErrHandler: File type not set" );
 		SetError( code );
@@ -107,6 +109,8 @@ namespace Assets
 		}
 
 		Flush();
+
+		return code;
 	}
 
 	const char* CErrHandler::GetLastFileTypeSz()

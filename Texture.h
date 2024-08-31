@@ -2,11 +2,13 @@
 #include <D3dx9tex.h>
 #include <map>
 
+
 class CTexture2D
 {
 public:
 	CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirectory, std::string sName, int nWidth, int nHeight );
 	CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirectory, std::string sName );
+	CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, void* pPalette );
 	~CTexture2D();
 
 	[[nodiscard]] LPDIRECT3DTEXTURE9 GetTexture() { return m_pTexture; };

@@ -6,14 +6,16 @@
 #include <D3dx9tex.h>
 #include <DxErr.h>
 
-#include "Utils.h"
 #include "spdlog\spdlog.h"
+
+#include "Utils.h"
+#include "Palette.h"
 #include "Texture.h"
 
 CTextureManager g_TextureManager;
 
-CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirectory, std::string sTexName, int nHeight, int nWidth ) :
-	m_pd3dDevice( pd3dDevice ), m_nHeight( nHeight ), m_nWidth( nWidth )
+CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirectory, std::string sTexName, int nWidth, int nHeight ) :
+	m_pd3dDevice( pd3dDevice ), m_nWidth( nWidth ), m_nHeight( nHeight )
 {
 	HRESULT hr;
 	std::string sPath = Util::FileSystem::GetAssetsDirectory() + sDirectory + "\\" + sTexName;
@@ -27,7 +29,7 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirect
 }
 
 CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirectory, std::string sTexName ) :
-	m_pd3dDevice( pd3dDevice ), m_nHeight( 0 ), m_nWidth( 0 )
+	m_pd3dDevice( pd3dDevice ), m_nWidth( 0 ), m_nHeight( 0 )
 {
 	HRESULT hr;
 	std::string sPath = Util::FileSystem::GetAssetsDirectory() + sDirectory + "\\" + sTexName;
@@ -43,6 +45,33 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirect
 	m_pTexture->GetLevelDesc( 0, &desc );
 	m_nHeight = desc.Height;
 	m_nWidth = desc.Width;
+}
+
+CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, void* pPalette ) :
+	m_pd3dDevice( pd3dDevice ), m_nWidth( nWidth ), m_nHeight( nHeight )
+{
+	pd3dDevice->CreateTexture( nWidth, nHeight, 1, 0, D3DFMT_X8R8G8B8, D3DPOOL_MANAGED, &m_pTexture, NULL );
+
+	D3DLOCKED_RECT rc;
+	m_pTexture->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
+
+	BYTE* pTexels = static_cast<BYTE*>(rc.pBits);
+	auto pColorTable = static_cast<Assets::CPalette*>(pPalette)->GetPalette();
+
+	for ( size_t y = 0; y < nHeight; ++y ) {
+		for ( size_t x = 0; x < nWidth; ++x ) {
+			size_t uIndex = y * nWidth + x;
+
+			RGB clr = pColorTable[uIndex];
+			size_t iTexelIndex = (y * rc.Pitch) + (x * 4);
+			pTexels[iTexelIndex] = clr.B;
+			pTexels[iTexelIndex + 1] = clr.G;
+			pTexels[iTexelIndex + 2] = clr.R;
+			pTexels[iTexelIndex + 3] = 255;
+		}
+	}
+
+	m_pTexture->UnlockRect( 0 );
 }
 
 void CTexture2D::Clear()

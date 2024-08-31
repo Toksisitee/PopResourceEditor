@@ -16,7 +16,6 @@
 #include "D3DApp.h"
 #include "Texture.h"
 
-#include "Assets.h"
 #include "AssetsErrHandler.h"
 
 #include "Palette.h"
@@ -207,15 +206,16 @@ void CEditorApp::Run()
 			ImGui::ShowDemoWindow( &bShowDemo );
 		}
 
+		//auto errHandler = Assets::CErrHandler::Instance();
+
+
 		if ( ImGui::Button( "Test" ) ) {
 			//Assets::CErrHandler::Instance().LogFmt( "Successfully exported to bitmap: %s", sFilePath.c_str() );
 			//Assets::CErrHandler::Instance().HandleResult( g_Palette.Load( sFilePath ), Assets::FileType::Palette );
 			auto sFilePath = Util::FileSystem::FormatPath( "pal0-0.dat" );
-			Assets::CErrHandler::Instance().HandleResult( g_Palette.Load( sFilePath ) );
+			g_ErrHandler.HandleResult( g_Palette.Load( sFilePath ) );
 			sFilePath = Util::FileSystem::FormatPath( "pal.bmp" );
-			Assets::CErrHandler::Instance().HandleResult( g_Palette.Export( sFilePath.c_str() ) );
-
-
+			g_ErrHandler.HandleResult( g_Palette.Export( sFilePath.c_str() ) );
 
 		}
 		static float col2[4] = { 0.4f, 0.7f, 0.0f, 0.5f };
@@ -247,6 +247,29 @@ void CEditorApp::Run()
 		}
 		ImGui::PopStyleVar(2);
 
+		{
+			static bool bLoaded = false;
+
+			if ( !bLoaded ) {
+				auto sFilePath = Util::FileSystem::FormatPath( "pal0-0.dat" );
+				g_ErrHandler.HandleResult( g_Palette.Load( sFilePath ) );
+				sFilePath = Util::FileSystem::FormatPath( "pal.bmp" );
+				g_ErrHandler.HandleResult( g_Palette.Export( sFilePath.c_str() ) );
+
+				sFilePath = Util::FileSystem::FormatPath( "sky0-0.dat" );
+				if ( g_ErrHandler.HandleResult( g_Sky.Load( sFilePath ) ) != Assets::Result::OK_LOAD ) {
+
+				}
+				bLoaded = true;
+			}
+
+			static CTexture2D* pTex = new CTexture2D(
+				g_Editor.m_pd3dDevice,
+				Assets::Sky::k_uWidth,
+				Assets::Sky::k_uHeight,
+				&g_Palette 
+			);
+		}
 		g_ImGuiSink->render();
 
 		// Rendering
