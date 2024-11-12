@@ -47,7 +47,7 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirect
 	m_nWidth = desc.Width;
 }
 
-CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, void* pPalette ) :
+CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, RGB* pPalette ) :
 	m_pd3dDevice( pd3dDevice ), m_nWidth( nWidth ), m_nHeight( nHeight )
 {
 	pd3dDevice->CreateTexture( nWidth, nHeight, 1, 0, D3DFMT_X8R8G8B8, D3DPOOL_MANAGED, &m_pTexture, NULL );
@@ -56,13 +56,13 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, v
 	m_pTexture->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
 
 	BYTE* pTexels = static_cast<BYTE*>(rc.pBits);
-	auto pColorTable = static_cast<Assets::CPalette*>(pPalette)->GetPalette();
 
-	for ( size_t y = 0; y < nHeight; ++y ) {
-		for ( size_t x = 0; x < nWidth; ++x ) {
+	for ( size_t y = 0; y < nHeight; y++ ) {
+		for ( size_t x = 0; x < nWidth; x++ ) {
 			size_t uIndex = y * nWidth + x;
 
-			RGB clr = pColorTable[uIndex];
+			RGB clr = pPalette[uIndex];
+
 			size_t iTexelIndex = (y * rc.Pitch) + (x * 4);
 			pTexels[iTexelIndex] = clr.B;
 			pTexels[iTexelIndex + 1] = clr.G;
@@ -71,22 +71,27 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, v
 		}
 	}
 
+	// Unlock the texture
 	m_pTexture->UnlockRect( 0 );
+}
+
+CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight ) :
+	m_pd3dDevice( pd3dDevice ), m_nWidth( nWidth ), m_nHeight( nHeight )
+{
+	pd3dDevice->CreateTexture( nWidth, nHeight, 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &m_pTexture, NULL );
 }
 
 void CTexture2D::Clear()
 {
 	if ( m_pTexture ) {
+		m_pTexture->Release();
 		m_pTexture = 0;
 	}
 }
 
 CTexture2D::~CTexture2D()
 {
-	if ( m_pTexture ) {
-		m_pTexture->Release();
-		m_pTexture = 0;
-	}
+	Clear();
 }
 
 /*

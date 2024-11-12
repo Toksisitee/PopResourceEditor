@@ -150,6 +150,7 @@
     <ClCompile Include="Assets.cpp" />
     <ClCompile Include="AssetsErrHandler.cpp" />
     <ClCompile Include="D3DApp.cpp" />
+    <ClCompile Include="ImEditor.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="D3DApp.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Editor.h" />
+    <ClInclude Include="ImEditor.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_freetype.h" />

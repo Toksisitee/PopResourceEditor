@@ -11,11 +11,11 @@ namespace Assets
 {
 	namespace Sprite
 	{
-		Result CSprite::LoadBank( const std::string& file )
+		Result CSprite::Load( const std::string& file )
 		{
 			g_ErrHandler.SetFileType( Assets::FileType::Sprite );
 
-			if ( SprBank.Data.size() > 0 )
+			if ( Bank.Frames.size() > 0 )
 				this->Clear();
 
 			std::ifstream ifs( file, std::ios::binary | std::ios::ate );
@@ -27,31 +27,32 @@ namespace Assets
 				ifs.read( m_pBuffer, m_nBufferLength );
 				ifs.close();
 
-				SprBank.Header = *(reinterpret_cast<CSprite::BankHeader*>(buffer));
-				buffer += sizeof( CSprite::BankHeader );
+				Bank.Header = *(reinterpret_cast<BankHeader*>(buffer));
+				buffer += sizeof( BankHeader );
 
-				if ( memcmp( SprBank.Header.Magic, "PSFB", 4 ) != 0 ) {
-					g_ErrHandler.LogFmt( "Wrong magic number %s. Not a valid sprite bank?\n", SprBank.Header.Magic );
+				if ( memcmp( Bank.Header.Magic, "PSFB", 4 ) != 0 ) {
+					g_ErrHandler.LogFmt( "Wrong magic number %s. Not a valid sprite bank?\n", Bank.Header.Magic );
 					this->Clear();
 					return Result::FAIL_LOAD;
 				}
 
-				if ( SprBank.Header.Frames == 0 ) {
+				if ( Bank.Header.Count <= 0 ) {
 					g_ErrHandler.Log( "Couldn't find any sprite frames..\n" );
 					this->Clear();
 					return Result::FAIL_LOAD;
 				}
 
-				g_ErrHandler.LogFmt( "Found %i sprite frames.\n", SprBank.Header.Frames );
+				g_ErrHandler.LogFmt( "Found %i sprite frames.\n", Bank.Header.Count );
 
-				for ( uint32_t i = 0; i < SprBank.Header.Frames; i++ ) {
-					SprBank.Data.push_back( { *(reinterpret_cast<CSprite::TbSprite*>(buffer)) } );
-					SprBank.Data.back().Data = reinterpret_cast<int8_t*>(m_pBuffer + SprBank.Data.back().Sprite.Offset);
-					buffer += sizeof( CSprite::TbSprite );
+				for ( uint32_t i = 0; i < Bank.Header.Count; i++ ) {
+					Bank.Frames.push_back( { *(reinterpret_cast<SpriteInfo*>(buffer)) } );
+					Bank.Frames.back().Data = reinterpret_cast<int8_t*>(m_pBuffer + Bank.Frames.back().Sprite.Offset);
+					buffer += sizeof( SpriteInfo );
 #if 0
 					printf( "#%i Height: %i, Width: %i, Offsets: (H)%06X && (D)%06X\n", i, SprBank.Data.back().Sprite.Height, SprBank.Data.back().Sprite.Width, ((1 + i) * sizeof( CSprite::BankHeader )), SprBank.Data.back().Sprite.Offset );
 #endif
 				}
+
 				g_ErrHandler.Log( "Opened sprite bank file.\n" );
 				return Result::OK_LOAD;
 			}
@@ -65,45 +66,40 @@ namespace Assets
 			return Result::FAIL_LOAD;
 		}
 
-		void CSprite::MapSprite( uint16_t uIndex)
+		void CSprite::Map( uint16_t uIndex )
 		{
 			int8_t b;
 
-			if ( SprBank.Data[uIndex].Map.size() < 1 ) {
-				SprBank.Data[uIndex].Map.resize( SprBank.Data[uIndex].Sprite.Width, std::vector<int32_t>( SprBank.Data[uIndex].Sprite.Height, 0 ) );
+			if ( Bank.Frames[uIndex].Map.size() == 0 ) {
+				const auto k_uWidth = Bank.Frames[uIndex].Sprite.Width;
+				const auto k_uHeight = Bank.Frames[uIndex].Sprite.Height;
+				Bank.Frames[uIndex].Map.resize( k_uWidth, std::vector<int32_t>( k_uHeight, 0 ) );
 
-				for ( uint32_t x = 0, y = 0, p = 0; y < SprBank.Data[uIndex].Sprite.Height; y++, x = 0 ) {
+				for ( uint32_t x = 0, y = 0, p = 0; y < k_uHeight; y++, x = 0 ) {
 					while ( true ) {
-						b = SprBank.Data[uIndex].Data[p];
+						b = Bank.Frames[uIndex].Data[p];
 						p++;
 
 						if ( b == 0 ) {
-							SprBank.Data[uIndex].Raw.push_back( { static_cast<uint8_t>(b), REND } );
-							for ( ; x < SprBank.Data[uIndex].Sprite.Width; x++ )
-								SprBank.Data[uIndex].Map[x][y] = m_pPalette->GetColorKey();
+							for ( ; x < k_uWidth; x++ )
+								Bank.Frames[uIndex].Map[x][y] = m_pPalette->GetColorKey();
 							break;
 						}
 
 						if ( b < 0 ) {
-							SprBank.Data[uIndex].Raw.push_back( { static_cast<uint8_t>(b), RSKIP } );
 							for ( uint32_t i = 0; i <= (-b); i++ )
-								if ( (x + i) < SprBank.Data[uIndex].Sprite.Width )
-									SprBank.Data[uIndex].Map[x + i][y] = m_pPalette->GetColorKey();
-
+								if ( (x + i) < k_uWidth )
+									Bank.Frames[uIndex].Map[x + i][y] = m_pPalette->GetColorKey();
 							x += -b;
 						}
 						else if ( b > 0 ) {
-							SprBank.Data[uIndex].Raw.push_back( { static_cast<uint8_t>(b), RREAD } );
-
 							for ( uint32_t i = 0, n = b; i < n; i++ ) {
-								if ( x < SprBank.Data[uIndex].Sprite.Width && y < SprBank.Data[uIndex].Sprite.Height ) {
-									b = SprBank.Data[uIndex].Data[p];
-									SprBank.Data[uIndex].Map[x][y] = b;
-									SprBank.Data[uIndex].Raw.push_back( { static_cast<uint8_t>(b), RPAL } );
+								if ( x < k_uWidth && y < k_uHeight ) {
+									b = Bank.Frames[uIndex].Data[p];
+									Bank.Frames[uIndex].Map[x][y] = b;
 									p++;
 									x++;
 								}
-
 							}
 						}
 					}
@@ -111,23 +107,27 @@ namespace Assets
 			}
 		}
 
-		void CSprite::ExportSprite( uint16_t uIndex )
+		void CSprite::Export( uint16_t uIndex )
 		{
 			auto pColorTable = m_pPalette->GetPalette();
 			uint8_t uColorIndex;
 			uint16_t uMin = 1;
 			BMP BMP;
 
-			BMP.SetSize( std::max( uMin, SprBank.Data[uIndex].Sprite.Width ), std::max( uMin, SprBank.Data[uIndex].Sprite.Height ) );
+
+			const auto k_uWidth = Bank.Frames[uIndex].Sprite.Width;
+			const auto k_uHeight = Bank.Frames[uIndex].Sprite.Height;
+
+			BMP.SetSize( std::max( uMin, k_uWidth ), std::max( uMin, k_uHeight ) );
 			BMP.SetBitDepth( 24 );
 
 
 
-			MapSprite( uIndex );
+			Map( uIndex );
 
-			for ( uint16_t x = 0; x < SprBank.Data[uIndex].Sprite.Width; x++ ) {
-				for ( uint16_t y = 0; y < SprBank.Data[uIndex].Sprite.Height; y++ ) {
-					uColorIndex = SprBank.Data[uIndex].Map[x][y];
+			for ( uint16_t x = 0; x < k_uWidth; x++ ) {
+				for ( uint16_t y = 0; y < k_uHeight; y++ ) {
+					uColorIndex = Bank.Frames[uIndex].Map[x][y];
 
 					if ( m_pPalette->IndexIsColorKey( uColorIndex ) )
 						uColorIndex = m_pPalette->GetColorKey(0);
@@ -139,36 +139,52 @@ namespace Assets
 			//BMP.WriteToFile( (Util::FileSystem::GetCurrentDir() + "//output//" + std::to_string( uIndex ) + ".bmp").c_str() );
 		}
 
-		void CSprite::ExportSprites()
+
+		void CSprite::CreateTextures( LPDIRECT3DDEVICE9 pD3DDevice, CPalette* pPalette )
 		{
-			if ( SprBank.Header.Frames > 0 ) {
-				for ( uint32_t i = 0; i < SprBank.Header.Frames; i++ ) {
-					ExportSprite( i );
+			const auto pColorTable = pPalette->GetPalette();
+			CTexture2D* pTexture = nullptr;
+			BYTE* pTexels = nullptr;
+			D3DLOCKED_RECT rc;
+
+			if ( m_Textures.size() > 0 ) {
+				// TODO: log
+				return;
+			}
+
+			m_Textures.resize( Bank.Header.Count );
+			for ( uint32_t i = 0; i < Bank.Header.Count; i++ ) {
+
+				const auto k_uWidth = Bank.Frames[i].Sprite.Width;
+				const auto k_uHeight = Bank.Frames[i].Sprite.Height;
+
+				if ( !IsValid(Bank.Frames[i].Sprite) ) {
+					// TODO: log?
+					continue;
 				}
+
+				Map( i );
+				m_Textures[i] = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight );
+				pTexture = m_Textures[i];
+
+				pTexture->GetTexture()->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
+				pTexels = static_cast<BYTE*>(rc.pBits);
+
+				for ( uint16_t y = 0; y < k_uHeight; y++ ) {
+					for ( uint16_t x = 0; x < k_uWidth; x++ ) {
+						size_t index = y * k_uWidth + x;
+						RGB rgb = pColorTable[Bank.Frames[i].Map[x][y]];
+						//WriteRGBTexel( pTexels, x, y, rc.Pitch, rgb );
+						size_t iTexelIndex = (y * rc.Pitch) + (x * 4);
+						pTexels[iTexelIndex] = rgb.B;
+						pTexels[iTexelIndex + 1] = rgb.G;
+						pTexels[iTexelIndex + 2] = rgb.R;
+						pTexels[iTexelIndex + 3] = 255;
+					}
+				}
+
+				pTexture->GetTexture()->UnlockRect( 0 );
 			}
-		}
-
-
-		bool CSprite::IsPixelEmpty( const RGBApixel& rgb )
-		{
-			if ( rgb.Red == 0 &&
-				rgb.Green == 255 &&
-				rgb.Blue == 255 ) {
-				return true;
-			}
-
-			return false;
-		}
-
-		bool CSprite::IsPixelColorKey( const RGBApixel& rgb )
-		{
-			if ( rgb.Red == 255 &&
-				rgb.Green == 0 &&
-				rgb.Blue == 255 ) {
-				return true;
-			}
-
-			return false;
 		}
 
 		bool CSprite::IsAlphaSprite( uint32_t index )
@@ -181,6 +197,17 @@ namespace Assets
 			}
 
 			return false;
+		}
+
+		void CSprite::Clear() 
+		{ 
+			m_nBufferLength = 0;
+			delete[] m_pBuffer;
+			for ( size_t i = 0; i < m_Textures.size(); i++ ) {
+				m_Textures[i]->Clear();
+			}
+			Bank.Frames.clear(); 
+			m_IsHFX = false; 
 		}
 	}
 }

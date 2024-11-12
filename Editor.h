@@ -18,6 +18,8 @@
 #define SAFE_FREE(pBuffer) if (pBuffer) \
 	free(pBuffer); \
 
+typedef unsigned char BYTE;
+
 struct RGB
 {
 	uint8_t R, G, B;
@@ -29,4 +31,13 @@ enum eImFont : uint8_t
 	Medium,
 	Large,
 	Max
+};
+
+inline void WriteRGBTexel( BYTE* pTexels, size_t x, size_t y, size_t pitch, const RGB& rgb )
+{
+	size_t i = (y * pitch) + (x * 4);
+	pTexels[i] = rgb.B;
+	pTexels[i + 1] = rgb.G;
+	pTexels[i + 2] = rgb.R;
+	pTexels[i + 3] = 255;
 };

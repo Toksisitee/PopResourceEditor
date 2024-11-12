@@ -216,8 +216,6 @@ namespace Assets
 
 	uint8_t CPalette::GetColorKey( size_t uSlot )
 	{
-		assert( uSlot > k_uNumColorKeys && "uSlot oob");
-
 		if ( uSlot < k_uNumColorKeys ) {
 			m_uColorKeys[uSlot];
 		}

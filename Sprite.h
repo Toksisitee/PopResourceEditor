@@ -1,82 +1,90 @@
 #pragma once
+#define NOMINMAX
 #include <vector>
 
+#include "Texture.h"
 #include "Palette.h"
 #include "EasyBMP/EasyBMP.h"
-
-#define RPAL	(0)
-#define RREAD	(1)
-#define RSKIP	(2)
-#define REND	(3)
 
 namespace Assets
 {
 	namespace Sprite
 	{
+		// TODO: array*?
+		typedef std::vector<std::vector<int32_t>> PixelMap;
+
+		struct SpriteInfo
+		{
+			uint16_t	Width;
+			uint16_t	Height;
+			uint32_t	Offset;
+		};
+
+		struct Frame
+		{
+			SpriteInfo	Sprite;
+			int8_t*		Data;
+			PixelMap	Map;
+		};
+
+		struct BankHeader
+		{
+			char		Magic[4];
+			uint32_t	Count;
+		};
+
+		struct Bank
+		{
+			BankHeader Header;
+			std::vector<Frame> Frames;
+		};
+
 		class CSprite
 		{
 		public:
+			~CSprite() = default;
 			CSprite( CPalette* pPalette ) :
-				m_pPalette(pPalette)
+				m_pPalette(pPalette), m_IsHFX(false), m_pBuffer(nullptr), m_nBufferLength(0)
+			{}
+
+			Bank Bank;
+			Result Load( const std::string& file );
+			void Map( uint16_t index );
+			void Export( uint16_t index );
+			void CreateTextures( LPDIRECT3DDEVICE9 pD3DDevice, CPalette* pPalette );
+			void Clear();
+
+			void SetPalette( CPalette* pPalette )
 			{
-				m_IsHFX = false;
-				m_pBuffer = nullptr;
-				m_nBufferLength = 0;
-			};
+				m_pPalette = pPalette;
+			}
 
-			~CSprite() {};
-
-			typedef std::vector<std::vector<int32_t>> MAP;
-
-			struct RAW
+			void SetHFX( bool b )
 			{
-				uint8_t	Data;
-				int8_t  Type;
-			};
+				m_IsHFX = b;
+			}
 
-			struct TbSprite
+			[[nodiscard]] bool IsValid( SpriteInfo& spr )
 			{
-				uint16_t	Width;
-				uint16_t	Height;
-				uint32_t	Offset;
-			};
+				return (spr.Height == 0 || spr.Width == 0) ? false : true;
+			}
 
-			struct DATA
+			[[nodiscard]] CTexture2D* GetTexture( uint32_t uSlot )
 			{
-				TbSprite			Sprite;
-				int8_t* Data;
-				std::vector<RAW>	Raw;
-				MAP					Map;
-			};
-
-			struct BankHeader
-			{
-				char		Magic[4];
-				uint32_t	Frames;
-			};
-
-			struct Bank
-			{
-				BankHeader Header;
-				std::vector<DATA> Data;
-			};
-
-			Bank SprBank;
-			Result LoadBank( const std::string& file );
-			void MapSprite( uint16_t index );
-			void ExportSprite( uint16_t index );
-			void ExportSprites();
-			void Clear() { delete[] m_pBuffer; SprBank.Data.clear(); m_IsHFX = false; }
-			void SetHFX( bool b ) { m_IsHFX = b; };
+				return m_Textures.at(uSlot);
+			}
 
 		private:
-			CPalette* m_pPalette;
-			bool m_IsHFX ;
+			bool IsAlphaSprite( uint32_t index );
+
+		private:
 			char* m_pBuffer;
 			uint32_t m_nBufferLength;
-			bool IsPixelColorKey( const RGBApixel& rgb );
-			bool IsPixelEmpty( const RGBApixel& rgb );
-			bool IsAlphaSprite( uint32_t index );
+			
+			CPalette* m_pPalette;
+			std::vector<CTexture2D*> m_Textures;
+			
+			bool m_IsHFX;
 		};
 	}
 }

@@ -12,6 +12,7 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "imsink/imsink.h"
 
+#include "ImEditor.h"
 #include "Utils.h"
 #include "D3DApp.h"
 #include "Texture.h"
@@ -19,6 +20,7 @@
 #include "AssetsErrHandler.h"
 
 #include "Palette.h"
+#include "Sprite.h"
 #include "Sky.h"
 
 #include "App.h"
@@ -34,6 +36,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT ms
 CEditorApp g_Editor;
 Assets::CPalette g_Palette;
 Assets::Sky::CSky g_Sky;
+Assets::Sprite::CSprite g_Sprite(nullptr);
 ImFont* g_ImFonts[eImFont::Max] = { 0 };
 
 #if EDITOR_DEBUG_FONTS
@@ -230,7 +233,7 @@ void CEditorApp::Run()
 		auto getColor = [&pPalette]( uint8_t uIndex ) -> float* {
 			float fColors[4];
 			ImColor col = ImColor( pPalette[uIndex].R, pPalette[uIndex].G, pPalette[uIndex].B );
-			memcpy( &fColors, &col, sizeof( float) * 4  );
+			memcpy( &fColors, &col, sizeof( float ) * 4 );
 			return fColors;
 		};
 
@@ -240,35 +243,75 @@ void CEditorApp::Run()
 			for ( uint32_t x = 0; x < 16; x++ ) {
 				sprintf_s( szColorLabel, sizeof( szColorLabel ), "##%i", uIndex );
 				ImGui::SameLine();
-				ImGui::ColorEdit3( szColorLabel, getColor(uIndex), k_iColorEditFlags );
+				ImGui::ColorEdit3( szColorLabel, getColor( uIndex ), k_iColorEditFlags );
 				uIndex++;
 			}
 			ImGui::NewLine();
 		}
-		ImGui::PopStyleVar(2);
+		ImGui::PopStyleVar( 2 );
 
 		{
 			static bool bLoaded = false;
 
 			if ( !bLoaded ) {
-				auto sFilePath = Util::FileSystem::FormatPath( "pal0-0.dat" );
+				auto sFilePath = Util::FileSystem::FormatPath( "pal0-b.dat" );
 				g_ErrHandler.HandleResult( g_Palette.Load( sFilePath ) );
 				sFilePath = Util::FileSystem::FormatPath( "pal.bmp" );
 				g_ErrHandler.HandleResult( g_Palette.Export( sFilePath.c_str() ) );
 
-				sFilePath = Util::FileSystem::FormatPath( "sky0-0.dat" );
+				sFilePath = Util::FileSystem::FormatPath( "sky0-b.dat" );
 				if ( g_ErrHandler.HandleResult( g_Sky.Load( sFilePath ) ) != Assets::Result::OK_LOAD ) {
 
 				}
 				bLoaded = true;
 			}
-
+			/*
 			static CTexture2D* pTex = new CTexture2D(
 				g_Editor.m_pd3dDevice,
 				Assets::Sky::k_uWidth,
 				Assets::Sky::k_uHeight,
-				&g_Palette 
+				g_Palette.GetPalette()
 			);
+			*/
+
+			{
+				ImGui::Begin( "Sky Texture" );
+				if ( g_Sky.GetTexture() == nullptr ) {
+					g_Sky.CreateTexture( g_Editor.m_pd3dDevice, &g_Palette );
+				}
+				else {
+					static const ImVec2 texSize = ImVec2( 256, 256 );
+					ImEditor::RenderTexture( g_Sky.GetTexture(), texSize );
+				}
+				ImGui::End();
+			}
+
+			{
+				ImGui::Begin( "Sprite Textures" );
+				if ( g_Sprite.Bank.Header.Count == 0 ) {
+					auto sFilePath = Util::FileSystem::FormatPath( "HSPR0-0.dat" );
+					g_ErrHandler.HandleResult( g_Sprite.Load( sFilePath ) );
+					g_Sprite.SetPalette( &g_Palette );
+					g_Sprite.CreateTextures( g_Editor.m_pd3dDevice, &g_Palette );
+				}
+				else {
+					g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_POINT );
+					g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_POINT );
+					g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MIPFILTER, D3DTEXF_POINT );
+
+
+					auto pTex = g_Sprite.GetTexture( 5554 );
+					ImVec2 texSize = ImVec2( pTex->GetWidth(), pTex->GetHeight() );
+					texSize.x = 256;
+					texSize.y = 256;
+					ImEditor::RenderTexture( pTex, texSize );
+
+					g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR );
+					g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR );
+					g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR );
+				}
+				ImGui::End();
+			}
 		}
 		g_ImGuiSink->render();
 
