@@ -38,8 +38,16 @@ namespace Util
 		std::string GetCurrentDir()
 		{
 			char szBuffer[MAX_PATH];
-			GetCurrentDirectoryA( MAX_PATH, szBuffer );
-			return (std::string( szBuffer ));
+			if ( GetModuleFileNameA( NULL, szBuffer, MAX_PATH ) == 0 ) {
+				return "";
+			}
+
+			std::string fullPath( szBuffer );
+			size_t uSlash = fullPath.find_last_of( "\\/" );
+			if ( uSlash != std::string::npos ) {
+				return fullPath.substr( 0, uSlash );
+			}
+			return fullPath;
 		}
 
 		std::string FormatPath( const char* pFileName, const char* pFilePath )

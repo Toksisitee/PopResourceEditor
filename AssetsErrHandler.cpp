@@ -120,6 +120,10 @@ namespace Assets
 				return "Palette";
 			case Assets::FileType::Alpha:
 				return "Alpha";
+			case Assets::FileType::Sky:
+				return "Sky";
+			case Assets::FileType::Sprite:
+				return "Sprite";
 		}
 
 		return "Unknown";

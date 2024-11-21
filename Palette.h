@@ -18,7 +18,7 @@ namespace Assets
 		[[nodiscard]] uint8_t FindBigFadeColor( const RGB& clr );
 		[[nodiscard]] uint8_t FindSkyColor( const RGB& clr );
 		[[nodiscard]] RGB* GetPalette(); // TODO: better name? accept index?
-		[[nodiscard]] uint8_t* GetData();
+		[[nodiscard]] uint8_t* GetPtr();
 		[[nodiscard]] uint8_t GetColorKey( size_t uSlot = 0 );
 		[[nodiscard]] bool IndexIsColorKey( size_t uIndex );
 	private:

@@ -1,6 +1,7 @@
 #include <cstdint>
 #include <fstream>
 #include <algorithm>
+#include <assert.h>
 
 #include "Utils.h"
 #include "AssetsErrHandler.h"
@@ -73,7 +74,7 @@ namespace Assets
 			if ( Bank.Frames[uIndex].Map.size() == 0 ) {
 				const auto k_uWidth = Bank.Frames[uIndex].Sprite.Width;
 				const auto k_uHeight = Bank.Frames[uIndex].Sprite.Height;
-				Bank.Frames[uIndex].Map.resize( k_uWidth, std::vector<int32_t>( k_uHeight, 0 ) );
+				Bank.Frames[uIndex].Map.resize( k_uWidth, decltype(Bank.Frames[uIndex].Map)::value_type( k_uHeight, 0 ) );
 
 				for ( uint32_t x = 0, y = 0, p = 0; y < k_uHeight; y++, x = 0 ) {
 					while ( true ) {
@@ -130,7 +131,7 @@ namespace Assets
 					uColorIndex = Bank.Frames[uIndex].Map[x][y];
 
 					if ( m_pPalette->IndexIsColorKey( uColorIndex ) )
-						uColorIndex = m_pPalette->GetColorKey(0);
+						uColorIndex = m_pPalette->GetColorKey( 0 );
 
 					BMP.SetPixel( x, y, { pColorTable[uColorIndex].B, pColorTable[uColorIndex].G, pColorTable[uColorIndex].R, 0 } );
 				}
@@ -140,9 +141,13 @@ namespace Assets
 		}
 
 
-		void CSprite::CreateTextures( LPDIRECT3DDEVICE9 pD3DDevice, CPalette* pPalette )
+		void CSprite::CreateTextures( LPDIRECT3DDEVICE9 pD3DDevice )
 		{
-			const auto pColorTable = pPalette->GetPalette();
+			assert( m_pPalette != nullptr && "m_pPalette is nullptr" );
+			assert( pD3DDevice != nullptr && "pD3DDevice is nullptr" );
+			assert( m_Textures.size() == 0 && "Sprite textures were already created" );
+
+			const auto pColorTable = m_pPalette->GetPalette();
 			CTexture2D* pTexture = nullptr;
 			BYTE* pTexels = nullptr;
 			D3DLOCKED_RECT rc;
@@ -158,7 +163,7 @@ namespace Assets
 				const auto k_uWidth = Bank.Frames[i].Sprite.Width;
 				const auto k_uHeight = Bank.Frames[i].Sprite.Height;
 
-				if ( !IsValid(Bank.Frames[i].Sprite) ) {
+				if ( !IsValid( Bank.Frames[i].Sprite ) ) {
 					// TODO: log?
 					continue;
 				}
@@ -172,14 +177,9 @@ namespace Assets
 
 				for ( uint16_t y = 0; y < k_uHeight; y++ ) {
 					for ( uint16_t x = 0; x < k_uWidth; x++ ) {
-						size_t index = y * k_uWidth + x;
-						RGB rgb = pColorTable[Bank.Frames[i].Map[x][y]];
-						//WriteRGBTexel( pTexels, x, y, rc.Pitch, rgb );
-						size_t iTexelIndex = (y * rc.Pitch) + (x * 4);
-						pTexels[iTexelIndex] = rgb.B;
-						pTexels[iTexelIndex + 1] = rgb.G;
-						pTexels[iTexelIndex + 2] = rgb.R;
-						pTexels[iTexelIndex + 3] = 255;
+						auto index = Bank.Frames[i].Map[x][y];
+						RGB clr = pColorTable[index];
+						WriteRGBTexel( pTexels, x, y, rc.Pitch, clr );
 					}
 				}
 
@@ -187,6 +187,7 @@ namespace Assets
 			}
 		}
 
+		// TODO: use flags?
 		bool CSprite::IsAlphaSprite( uint32_t index )
 		{
 			if ( m_IsHFX ) {
@@ -199,15 +200,15 @@ namespace Assets
 			return false;
 		}
 
-		void CSprite::Clear() 
-		{ 
+		void CSprite::Clear()
+		{
 			m_nBufferLength = 0;
 			delete[] m_pBuffer;
 			for ( size_t i = 0; i < m_Textures.size(); i++ ) {
 				m_Textures[i]->Clear();
 			}
-			Bank.Frames.clear(); 
-			m_IsHFX = false; 
+			Bank.Frames.clear();
+			m_IsHFX = false;
 		}
 	}
 }

@@ -209,7 +209,7 @@ namespace Assets
 		return &m_ColorTable[0];
 	}
 
-	uint8_t* CPalette::GetData()
+	uint8_t* CPalette::GetPtr()
 	{
 		return (uint8_t*)&m_ColorTable[0];
 	}

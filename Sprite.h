@@ -10,8 +10,8 @@ namespace Assets
 {
 	namespace Sprite
 	{
-		// TODO: array*?
-		typedef std::vector<std::vector<int32_t>> PixelMap;
+		// Has to be uint8_t
+		typedef std::vector<std::vector<uint8_t>> PixelMap;
 
 		struct SpriteInfo
 		{
@@ -51,7 +51,7 @@ namespace Assets
 			Result Load( const std::string& file );
 			void Map( uint16_t index );
 			void Export( uint16_t index );
-			void CreateTextures( LPDIRECT3DDEVICE9 pD3DDevice, CPalette* pPalette );
+			void CreateTextures( LPDIRECT3DDEVICE9 pD3DDevice );
 			void Clear();
 
 			void SetPalette( CPalette* pPalette )
@@ -64,6 +64,7 @@ namespace Assets
 				m_IsHFX = b;
 			}
 
+			// TODO: use flags?
 			[[nodiscard]] bool IsValid( SpriteInfo& spr )
 			{
 				return (spr.Height == 0 || spr.Width == 0) ? false : true;

@@ -36,7 +36,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT ms
 CEditorApp g_Editor;
 Assets::CPalette g_Palette;
 Assets::Sky::CSky g_Sky;
-Assets::Sprite::CSprite g_Sprite(nullptr);
+Assets::Sprite::CSprite g_Sprite( nullptr );
 ImFont* g_ImFonts[eImFont::Max] = { 0 };
 
 #if EDITOR_DEBUG_FONTS
@@ -190,6 +190,11 @@ void CEditorApp::Run()
 		// Start the Dear ImGui frame
 		ImGui_ImplDX9_NewFrame();
 		ImGui_ImplWin32_NewFrame();
+
+		//g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_POINT );
+		//g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_POINT );
+		//g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MIPFILTER, D3DTEXF_POINT );
+
 #if EDITOR_DEBUG_FONTS
 		static FreeTypeTest freetype_test;
 		if ( freetype_test.PreNewFrame() ) {
@@ -280,35 +285,51 @@ void CEditorApp::Run()
 					g_Sky.CreateTexture( g_Editor.m_pd3dDevice, &g_Palette );
 				}
 				else {
-					static const ImVec2 texSize = ImVec2( 256, 256 );
-					ImEditor::RenderTexture( g_Sky.GetTexture(), texSize );
+					ImEditor::SetPointFiltering( g_Editor.m_pd3dDevice );
+					auto pSkyTex = g_Sky.GetTexture();
+					const ImVec2 texSize = ImVec2( pSkyTex->GetWidth(), pSkyTex->GetHeight() );
+					ImEditor::RenderTexture( pSkyTex, texSize );
+					ImEditor::ResetRenderState();
+
 				}
 				ImGui::End();
 			}
 
 			{
 				ImGui::Begin( "Sprite Textures" );
+				const ImU16 u16_one = 1;
+				static bool inputs_step = true;
+
 				if ( g_Sprite.Bank.Header.Count == 0 ) {
 					auto sFilePath = Util::FileSystem::FormatPath( "HSPR0-0.dat" );
-					g_ErrHandler.HandleResult( g_Sprite.Load( sFilePath ) );
 					g_Sprite.SetPalette( &g_Palette );
-					g_Sprite.CreateTextures( g_Editor.m_pd3dDevice, &g_Palette );
+					g_ErrHandler.HandleResult( g_Sprite.Load( sFilePath ) );
+					g_Sprite.CreateTextures( g_Editor.m_pd3dDevice );
 				}
 				else {
-					g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_POINT );
-					g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_POINT );
-					g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MIPFILTER, D3DTEXF_POINT );
+					ImEditor::SetPointFiltering( g_Editor.m_pd3dDevice );
 
-
-					auto pTex = g_Sprite.GetTexture( 5554 );
+					static uint16_t uSprIndex = 5000;
+					ImGui::InputScalar( "##SpriteIndex", ImGuiDataType_U16, &uSprIndex, inputs_step ? &u16_one : NULL, NULL, "%u" );
+					auto pTex = g_Sprite.GetTexture( uSprIndex );
 					ImVec2 texSize = ImVec2( pTex->GetWidth(), pTex->GetHeight() );
 					texSize.x = 256;
 					texSize.y = 256;
-					ImEditor::RenderTexture( pTex, texSize );
 
-					g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR );
-					g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR );
-					g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR );
+					static bool uv = false;
+					ImGui::Checkbox( "UV", &uv );
+					if ( uv ) {
+						float fTexelU = 0.5f / texSize.x;
+						float fTexelV = 0.5f / texSize.y;
+						auto uv0 = ImVec2( fTexelU, fTexelV );
+						auto uv1 = ImVec2( 1.0f - fTexelU, 1.0f - fTexelV );
+						ImEditor::RenderTexture( pTex, texSize, uv0, uv1 );
+					}
+					else {
+						ImEditor::RenderTexture( pTex, texSize );
+					}
+
+					ImEditor::ResetRenderState();
 				}
 				ImGui::End();
 			}
