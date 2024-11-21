@@ -164,9 +164,11 @@
     <ClCompile Include="Palette.cpp" />
     <ClCompile Include="PopResourceEditor.cpp" />
     <ClCompile Include="Sky.cpp" />
+    <ClCompile Include="SkyWindow.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="WindowBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Assets.h" />
@@ -191,9 +193,11 @@
     <ClInclude Include="include\EasyBMP\EasyBMP_VariousBMPutilities.h" />
     <ClInclude Include="Palette.h" />
     <ClInclude Include="Sky.h" />
+    <ClInclude Include="SkyWindow.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="WindowBase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -87,6 +87,12 @@
     <ClCompile Include="ImEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SkyWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3DApp.h">
@@ -162,6 +168,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="ImEditor.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyWindow.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowBase.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

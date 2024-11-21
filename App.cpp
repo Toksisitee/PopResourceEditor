@@ -23,6 +23,8 @@
 #include "Sprite.h"
 #include "Sky.h"
 
+#include "SkyWindow.h"
+
 #include "App.h"
 
 
@@ -36,6 +38,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT ms
 CEditorApp g_Editor;
 Assets::CPalette g_Palette;
 Assets::Sky::CSky g_Sky;
+CSkyWindow g_SkyWindow( nullptr );
 Assets::Sprite::CSprite g_Sprite( nullptr );
 ImFont* g_ImFonts[eImFont::Max] = { 0 };
 
@@ -171,6 +174,9 @@ void CEditorApp::Run()
 	ImGui_ImplWin32_Init( GetHwnd() );
 	ImGui_ImplDX9_Init( GetDevice() );
 
+	g_SkyWindow.Initialize( GetDevice() );
+	g_SkyWindow.SetWindowName( "Sky Window" );
+
 	bool bDone = false;
 	while ( !bDone ) {
 		MSG msg;
@@ -283,8 +289,12 @@ void CEditorApp::Run()
 			}
 
 			{
+				g_SkyWindow.Render();
+			}
+
+			{
 				ImGui::Begin( "Sprite Textures" );
-				
+
 				static bool inputs_step = true;
 
 				if ( g_Sprite.Bank.Header.Count == 0 ) {

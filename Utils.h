@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include "Editor.h"
 
 namespace Util
