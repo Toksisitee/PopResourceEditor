@@ -214,12 +214,7 @@ void CEditorApp::Run()
 			ImGui::ShowDemoWindow( &bShowDemo );
 		}
 
-		//auto errHandler = Assets::CErrHandler::Instance();
-
-
 		if ( ImGui::Button( "Test" ) ) {
-			//Assets::CErrHandler::Instance().LogFmt( "Successfully exported to bitmap: %s", sFilePath.c_str() );
-			//Assets::CErrHandler::Instance().HandleResult( g_Palette.Load( sFilePath ), Assets::FileType::Palette );
 			auto sFilePath = Util::FileSystem::FormatPath( "pal0-0.dat" );
 			g_ErrHandler.HandleResult( g_Palette.Load( sFilePath ) );
 			sFilePath = Util::FileSystem::FormatPath( "pal.bmp" );
@@ -270,14 +265,6 @@ void CEditorApp::Run()
 				}
 				bLoaded = true;
 			}
-			/*
-			static CTexture2D* pTex = new CTexture2D(
-				g_Editor.m_pd3dDevice,
-				Assets::Sky::k_uWidth,
-				Assets::Sky::k_uHeight,
-				g_Palette.GetPalette()
-			);
-			*/
 
 			{
 				ImGui::Begin( "Sky Texture" );
@@ -297,7 +284,7 @@ void CEditorApp::Run()
 
 			{
 				ImGui::Begin( "Sprite Textures" );
-				const ImU16 u16_one = 1;
+				
 				static bool inputs_step = true;
 
 				if ( g_Sprite.Bank.Header.Count == 0 ) {
@@ -310,7 +297,8 @@ void CEditorApp::Run()
 					ImEditor::SetPointFiltering( g_Editor.m_pd3dDevice );
 
 					static uint16_t uSprIndex = 5000;
-					ImGui::InputScalar( "##SpriteIndex", ImGuiDataType_U16, &uSprIndex, inputs_step ? &u16_one : NULL, NULL, "%u" );
+					ImEditor::InputScalar( "##SpriteEditor", &uSprIndex );
+					//ImGui::InputScalar( "##SpriteIndex", ImGuiDataType_U16, &uSprIndex, inputs_step ? &u16_one : NULL, NULL, "%u" );
 					auto pTex = g_Sprite.GetTexture( uSprIndex );
 					ImVec2 texSize = ImVec2( pTex->GetWidth(), pTex->GetHeight() );
 					texSize.x = 256;
