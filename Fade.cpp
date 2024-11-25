@@ -1,5 +1,6 @@
 #include <fstream>
 #include <assert.h>
+#include <algorithm>
 
 #include "EasyBMP/EasyBMP.h"
 
