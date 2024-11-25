@@ -2,9 +2,9 @@
 #define NOMINMAX
 #include <vector>
 
+#include "AssetsErrHandler.h"
 #include "Texture.h"
 #include "Palette.h"
-#include "EasyBMP/EasyBMP.h"
 
 namespace Assets
 {

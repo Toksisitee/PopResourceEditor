@@ -93,6 +93,15 @@
     <ClCompile Include="WindowBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ghost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3DApp.h">
@@ -174,6 +183,15 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="WindowBase.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ghost.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostWindow.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowManager.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

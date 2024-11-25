@@ -9,7 +9,9 @@ namespace Assets
 		Palette,
 		Alpha,
 		Sky,
-		Sprite
+		Sprite,
+		Ghost,
+		Fade,
 	};
 
 	enum class Result : uint8_t

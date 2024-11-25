@@ -124,6 +124,10 @@ namespace Assets
 				return "Sky";
 			case Assets::FileType::Sprite:
 				return "Sprite";
+			case Assets::FileType::Ghost:
+				return "Ghost";
+			case Assets::FileType::Fade:
+				return "Fade";
 		}
 
 		return "Unknown";

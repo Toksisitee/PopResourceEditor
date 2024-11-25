@@ -24,6 +24,7 @@
 #include "Sky.h"
 
 #include "SkyWindow.h"
+#include "GhostWindow.h"
 
 #include "App.h"
 
@@ -37,8 +38,10 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT ms
 
 CEditorApp g_Editor;
 Assets::CPalette g_Palette;
-Assets::Sky::CSky g_Sky;
+Assets::CSky g_Sky;
 CSkyWindow g_SkyWindow( nullptr );
+CGhostWindow g_GhostWindow( nullptr );
+CGhostWindow g_GhostWindow2( nullptr );
 Assets::Sprite::CSprite g_Sprite( nullptr );
 ImFont* g_ImFonts[eImFont::Max] = { 0 };
 
@@ -177,6 +180,11 @@ void CEditorApp::Run()
 	g_SkyWindow.Initialize( GetDevice() );
 	g_SkyWindow.SetWindowName( "Sky Window" );
 
+	g_GhostWindow.Initialize( GetDevice() );
+	g_GhostWindow2.Initialize( GetDevice() );
+	g_GhostWindow.SetWindowName( "Ghost Window" );
+	g_GhostWindow2.SetWindowName( "Ghost Window2" );
+
 	bool bDone = false;
 	while ( !bDone ) {
 		MSG msg;
@@ -259,6 +267,7 @@ void CEditorApp::Run()
 		{
 			static bool bLoaded = false;
 
+#if 1
 			if ( !bLoaded ) {
 				auto sFilePath = Util::FileSystem::FormatPath( "pal0-b.dat" );
 				g_ErrHandler.HandleResult( g_Palette.Load( sFilePath ) );
@@ -287,9 +296,12 @@ void CEditorApp::Run()
 				}
 				ImGui::End();
 			}
+#endif
 
 			{
 				g_SkyWindow.Render();
+				g_GhostWindow.Render();
+				g_GhostWindow2.Render();
 			}
 
 			{

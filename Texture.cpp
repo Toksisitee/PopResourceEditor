@@ -9,7 +9,6 @@
 #include "spdlog\spdlog.h"
 
 #include "Utils.h"
-#include "Palette.h"
 #include "Texture.h"
 
 CTextureManager g_TextureManager;
@@ -21,7 +20,7 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirect
 	std::string sPath = Util::FileSystem::GetAssetsDirectory() + sDirectory + "\\" + sTexName;
 	std::wstring wStr = std::wstring( sPath.begin(), sPath.end() );
 	if ( FAILED( (hr = D3DXCreateTextureFromFileEx( pd3dDevice, wStr.c_str(), nWidth, nHeight, D3DX_DEFAULT, 0,
-		 D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &m_pTexture )) ) ) {
+		 D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &m_pD3DTexture )) ) ) {
 		spdlog::error( "Failed to create Texture2D\nName: {}\nWidth: {}, Height: {}\nError: {} :: {}",
 			sPath.c_str(), nWidth, nHeight, DXGetErrorStringA( hr ), DXGetErrorDescriptionA( hr ) );
 		return;
@@ -35,14 +34,14 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirect
 	std::string sPath = Util::FileSystem::GetAssetsDirectory() + sDirectory + "\\" + sTexName;
 	std::wstring wStr = std::wstring( sPath.begin(), sPath.end() );
 
-	if ( FAILED( (hr = D3DXCreateTextureFromFile( pd3dDevice, wStr.c_str(), &m_pTexture )) ) ) {
+	if ( FAILED( (hr = D3DXCreateTextureFromFile( pd3dDevice, wStr.c_str(), &m_pD3DTexture )) ) ) {
 		spdlog::error( "Failed to create Texture2D\nName: {}\nError: {} :: {}",
 			sPath.c_str(), DXGetErrorStringA( hr ), DXGetErrorDescriptionA( hr ) );
 		return;
 	}
 
 	D3DSURFACE_DESC desc;
-	m_pTexture->GetLevelDesc( 0, &desc );
+	m_pD3DTexture->GetLevelDesc( 0, &desc );
 	m_nHeight = desc.Height;
 	m_nWidth = desc.Width;
 }
@@ -50,10 +49,10 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirect
 CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, RGB* pPalette ) :
 	m_pd3dDevice( pd3dDevice ), m_nWidth( nWidth ), m_nHeight( nHeight )
 {
-	pd3dDevice->CreateTexture( nWidth, nHeight, 1, 0, D3DFMT_X8R8G8B8, D3DPOOL_MANAGED, &m_pTexture, NULL );
+	pd3dDevice->CreateTexture( nWidth, nHeight, 1, 0, D3DFMT_X8R8G8B8, D3DPOOL_MANAGED, &m_pD3DTexture, NULL );
 
 	D3DLOCKED_RECT rc;
-	m_pTexture->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
+	m_pD3DTexture->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
 
 	BYTE* pTexels = static_cast<BYTE*>(rc.pBits);
 
@@ -72,20 +71,20 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, R
 	}
 
 	// Unlock the texture
-	m_pTexture->UnlockRect( 0 );
+	m_pD3DTexture->UnlockRect( 0 );
 }
 
 CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight ) :
 	m_pd3dDevice( pd3dDevice ), m_nWidth( nWidth ), m_nHeight( nHeight )
 {
-	pd3dDevice->CreateTexture( nWidth, nHeight, 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &m_pTexture, NULL );
+	pd3dDevice->CreateTexture( nWidth, nHeight, 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &m_pD3DTexture, NULL );
 }
 
 void CTexture2D::Clear()
 {
-	if ( m_pTexture ) {
-		m_pTexture->Release();
-		m_pTexture = 0;
+	if ( m_pD3DTexture ) {
+		m_pD3DTexture->Release();
+		m_pD3DTexture = nullptr;
 	}
 }
 

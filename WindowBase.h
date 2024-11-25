@@ -4,7 +4,7 @@
 
 class CWindowBase {
 public:
-    CWindowBase( LPDIRECT3DDEVICE9 pd3dDevice ) : m_pd3dDevice( pd3dDevice ) {}
+    CWindowBase( LPDIRECT3DDEVICE9 pd3dDevice ) : m_pd3dDevice( pd3dDevice ), m_bFirstPass( false ) {}
     virtual ~CWindowBase() = default;
 
     virtual void Render() = 0;
@@ -15,6 +15,7 @@ public:
     [[nodiscard]] virtual const std::string& GetWindowName() const { return m_sWindowName; }
 
 protected:
+    bool                m_bFirstPass;
     std::string         m_sWindowName;
     LPDIRECT3DDEVICE9   m_pd3dDevice;
 };

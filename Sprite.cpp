@@ -4,8 +4,9 @@
 #include <assert.h>
 
 #include "Utils.h"
-#include "AssetsErrHandler.h"
 #include "Editor.h"
+#include "EasyBMP/EasyBMP.h"
+
 #include "Sprite.h"
 
 namespace Assets

@@ -89,15 +89,55 @@ namespace ImEditor
 		return ImGuiDataType_COUNT;
 	}
 
-	template<typename T>
-	bool InputScalar( const char* label, T* p_data, const void* p_step = NULL, const char* format = NULL, ImGuiInputTextFlags flags = 0 )
+	template<typename PT>
+	const char* GetImGuiFormatSpec( PT p_data )
 	{
+		using T = std::remove_pointer_t<PT>;
+
+		if constexpr ( std::is_same_v<T, int8_t> ) {
+			return "%d";
+		}
+		if constexpr ( std::is_same_v<T, uint8_t> ) {
+			return "%u";
+		}
+
+		if constexpr ( std::is_same_v<T, int16_t> ) {
+			return "%d";
+		}
+		if constexpr ( std::is_same_v<T, uint16_t> ) {
+			return "%u";
+		}
+
+		if constexpr ( std::is_same_v<T, int32_t> ) {
+			return "%d";
+		}
+		if constexpr ( std::is_same_v<T, uint32_t> ) {
+			return "%u";
+		}
+
+		if constexpr ( std::is_same_v<T, float> ) {
+			return "%f";
+		}
+		if constexpr ( std::is_same_v<T, double> ) {
+			return "%lf";
+		}
+
+		assert( false && "Invalid data type in GetImGuiFormatSpec" );
+		return "%u";
+	}
+
+	template<typename T>
+	bool InputScalar( const char* label, T* p_data, const void* p_step = NULL, ImGuiInputTextFlags flags = 0 )
+	{
+		//if ( *p_data < v_min ) *p_data = v_min;
+		//else if ( *p_data > v_max ) *p_data = v_max;
+
 		auto eDataType = GetImGuiDataType( p_data );
 		auto pStepOne = GetImGuiStepOne( p_data );
-		return ImGui::InputScalar( label, eDataType, p_data, p_step ? (T*)pStepOne : NULL, NULL, "%u" );
+		return ImGui::InputScalar( label, eDataType, p_data, p_step ? (T*)pStepOne : NULL, NULL, GetImGuiFormatSpec( p_data ), flags );
 	}
 
 	extern void SetPointFiltering( LPDIRECT3DDEVICE9 pD3DDevice );
 	extern void ResetRenderState();
-	extern void RenderTexture( CTexture2D* pTexture, const ImVec2& size, const ImVec2& uv0 = ImVec2( 0, 0 ), const ImVec2& uv1 = ImVec2( 1, 1 ), const ImVec4& tint_col = ImVec4( 1, 1, 1, 1 ), const ImVec4& border_col = ImVec4( 0, 0, 0, 0 ) );
+	extern void RenderTexture( CTexture2D* pTexture, const ImVec2& size = ImVec2( 0, 0 ), const ImVec2& uv0 = ImVec2( 0, 0 ), const ImVec2& uv1 = ImVec2( 1, 1 ), const ImVec4& tint_col = ImVec4( 1, 1, 1, 1 ), const ImVec4& border_col = ImVec4( 0, 0, 0, 0 ) );
 };

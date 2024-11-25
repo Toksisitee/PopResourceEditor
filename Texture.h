@@ -3,6 +3,8 @@
 #include <string>
 #include <map>
 
+#include "Palette.h"
+
 class CTexture2D
 {
 public:
@@ -12,13 +14,13 @@ public:
 	CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight );
 	~CTexture2D();
 
-	[[nodiscard]] LPDIRECT3DTEXTURE9 GetTexture() { return m_pTexture; };
+	[[nodiscard]] LPDIRECT3DTEXTURE9 GetTexture() { return m_pD3DTexture; };
 	[[nodiscard]] int GetHeight() const { return m_nHeight; };
 	[[nodiscard]] int GetWidth() const { return m_nWidth; };
 	void Clear();
 
 private:
-	LPDIRECT3DTEXTURE9 m_pTexture;
+	LPDIRECT3DTEXTURE9 m_pD3DTexture;
 	int m_nHeight, m_nWidth;
 	LPDIRECT3DDEVICE9 m_pd3dDevice;
 };
@@ -41,3 +43,11 @@ private:
 };
 
 extern CTextureManager g_TextureManager;
+
+inline void SafeDestroyTexture( CTexture2D*& pTexture )
+{
+	if ( pTexture ) {
+		delete pTexture;
+		pTexture = nullptr;
+	}
+}

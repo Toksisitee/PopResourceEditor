@@ -11,10 +11,12 @@
 
 namespace Assets
 {
+	using namespace Palette;
+
 	Result CPalette::Export( const char* pFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Palette );
-		
+
 		BMP BMP;
 		size_t uIndex = 0;
 
@@ -30,12 +32,12 @@ namespace Assets
 			for ( uint32_t x = 0; x < k_uColorsPerRow; x++ ) {
 				for ( size_t h = 0; h < k_uCellScale; h++ ) {
 					for ( size_t w = 0; w < k_uCellScale; w++ ) {
-						BMP.SetPixel( x * k_uCellScale + w, y * k_uCellScale + h, 
-									  { 
-										m_ColorTable[uIndex].B, 
+						BMP.SetPixel( x * k_uCellScale + w, y * k_uCellScale + h,
+									  {
+										m_ColorTable[uIndex].B,
 										m_ColorTable[uIndex].G,
-										m_ColorTable[uIndex].R, 
-										0 
+										m_ColorTable[uIndex].R,
+										0
 									  } );
 					}
 				}
@@ -46,7 +48,7 @@ namespace Assets
 		if ( !BMP.WriteToFile( pFilePath ) ) {
 			return Result::FAIL_EXPORT;
 		}
-		
+
 		g_ErrHandler.LogFmt( "Successfully exported as image: %s", pFilePath );
 		return Result::OK_EXPORT;
 	}
@@ -54,7 +56,7 @@ namespace Assets
 	Result CPalette::Load( std::string& file )
 	{
 		g_ErrHandler.SetFileType( FileType::Palette );
-		
+
 		char pad;
 		std::ifstream ifs( file, std::ios::binary );
 
