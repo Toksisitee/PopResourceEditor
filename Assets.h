@@ -13,7 +13,7 @@ namespace Assets
 		Ghost,
 		Fade,
 		BigFade,
-
+		Cliff,
 	};
 
 	enum class Result : uint8_t

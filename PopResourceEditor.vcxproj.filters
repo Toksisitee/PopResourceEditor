@@ -117,6 +117,12 @@
     <ClCompile Include="BigFade.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CliffWindow.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Cliff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3DApp.h">
@@ -219,6 +225,12 @@
       <Filter>Source Files\Windows</Filter>
     </ClInclude>
     <ClInclude Include="BigFade.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CliffWindow.h">
+      <Filter>Source Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Cliff.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
