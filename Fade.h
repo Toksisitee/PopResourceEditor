@@ -1,6 +1,4 @@
 #pragma once
-#include <algorithm> // clamp
-
 #include "Texture.h"
 #include "Palette.h"
 #include "AssetsErrHandler.h"

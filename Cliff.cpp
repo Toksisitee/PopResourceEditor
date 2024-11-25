@@ -14,7 +14,7 @@ namespace Assets
 
 	Result CCliff::Load( std::string& sFilePath )
 	{
-		g_ErrHandler.SetFileType( FileType::Fade );
+		g_ErrHandler.SetFileType( FileType::Cliff );
 
 		std::ifstream ifs( sFilePath, std::ios::binary );
 		if ( ifs.is_open() ) {
@@ -33,7 +33,7 @@ namespace Assets
 
 	Result CCliff::Export( std::string& sFilePath )
 	{
-		g_ErrHandler.SetFileType( FileType::Fade );
+		g_ErrHandler.SetFileType( FileType::Cliff );
 
 		BMP BMP;
 		size_t uIndex = 0;
@@ -69,7 +69,7 @@ namespace Assets
 
 	Result CCliff::Generate( std::string& sFilePath )
 	{
-		g_ErrHandler.SetFileType( FileType::Fade );
+		g_ErrHandler.SetFileType( FileType::Cliff );
 
 		GenerateTable();
 

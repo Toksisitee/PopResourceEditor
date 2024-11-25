@@ -13,7 +13,7 @@ namespace Assets
 
 	Result CBigFade::Load( std::string& sFilePath )
 	{
-		g_ErrHandler.SetFileType( FileType::Ghost );
+		g_ErrHandler.SetFileType( FileType::BigFade );
 
 		std::ifstream ifs( sFilePath, std::ios::binary );
 		if ( ifs.is_open() ) {
@@ -31,7 +31,7 @@ namespace Assets
 
 	Result CBigFade::Export( std::string& sFilePath )
 	{
-		g_ErrHandler.SetFileType( FileType::Ghost );
+		g_ErrHandler.SetFileType( FileType::BigFade );
 
 		BMP BMP;
 		size_t uIndex = 0;
@@ -63,7 +63,7 @@ namespace Assets
 	// TODO: generate BigFade (raw data) from image
 	Result CBigFade::Generate( std::string& sFilePath )
 	{
-		g_ErrHandler.SetFileType( FileType::Ghost );
+		g_ErrHandler.SetFileType( FileType::BigFade );
 		//BMP bmp;
 
 		std::ofstream ofs( sFilePath, std::ios::binary | std::ios::trunc );
