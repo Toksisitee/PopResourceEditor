@@ -20,7 +20,7 @@ namespace Assets
 		if ( ifs.is_open() ) {
 			ifs.seekg( 0 );
 
-			for ( size_t i = 0; i < k_uWidth * k_uWidth; i++ )
+			for ( size_t i = 0; i < k_uWidth * k_uHeight; i++ )
 				ifs.read( reinterpret_cast<char*>(&m_Data[i]), sizeof( uint8_t ) );
 
 			ifs.close();
