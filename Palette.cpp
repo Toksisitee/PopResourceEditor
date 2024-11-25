@@ -75,7 +75,7 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
-	uint8_t CPalette::FindClosestColor( const RGB& clr, bool bFullSearch )
+	uint8_t CPalette::FindClosestColor( const Color& clr, bool bFullSearch )
 	{
 		uint8_t uIndex = m_uColorKeys[0];
 		double dClosestDist = DBL_MAX;
@@ -97,7 +97,7 @@ namespace Assets
 	}
 
 #if 0
-	uint8_t CPalette::FindColor( const RGB& clr, bool bClosest )
+	uint8_t CPalette::FindColor( const Color& clr, bool bClosest )
 	{
 		if ( clr.R == m_ColorTable[0].R &&
 			clr.G == m_ColorTable[0].G &&
@@ -122,7 +122,7 @@ namespace Assets
 	}
 #endif
 
-	uint8_t CPalette::FindColor( uint8_t* pPalette, const RGB& clr, size_t uMin, size_t uMax )
+	uint8_t CPalette::FindColor( uint8_t* pPalette, const Color& clr, size_t uMin, size_t uMax )
 	{
 		int32_t dr, dg, db;
 		int32_t nDistBest, nDist;
@@ -150,7 +150,7 @@ namespace Assets
 		return (uint8_t)uIndex;
 	}
 
-	uint8_t CPalette::FindColorAll( const RGB& clr, bool bClosest )
+	uint8_t CPalette::FindColorAll( const Color& clr, bool bClosest )
 	{
 		for ( size_t i = 0; i < k_uNumColors; i++ ) {
 			if ( clr.R == m_ColorTable[i].R &&
@@ -168,7 +168,7 @@ namespace Assets
 		return m_uColorKeys[0];
 	}
 
-	uint8_t CPalette::FindBigFadeColor( const RGB& clr )
+	uint8_t CPalette::FindBigFadeColor( const Color& clr )
 	{
 		// TODO: avoid magic numbers
 		for ( size_t i = 0; i < 112; i++ ) {
@@ -182,7 +182,7 @@ namespace Assets
 		return m_uColorKeys[0];
 	}
 
-	uint8_t CPalette::FindSkyColor( const RGB& clr )
+	uint8_t CPalette::FindSkyColor( const Color& clr )
 	{
 		// TODO: avoid magic numbers
 		for ( size_t i = 112; i < 128; i++ ) {
@@ -206,7 +206,7 @@ namespace Assets
 		return false;
 	}
 
-	RGB* CPalette::GetPalette()
+	Color* CPalette::GetColorTable()
 	{
 		return &m_ColorTable[0];
 	}

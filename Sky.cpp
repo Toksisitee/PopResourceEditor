@@ -29,7 +29,7 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
-	Result CSky::Export( std::string& fFilepath, RGB* pColorTable )
+	Result CSky::Export( std::string& fFilepath, Color* pColorTable )
 	{
 		g_ErrHandler.SetFileType( FileType::Sky );
 
@@ -85,7 +85,7 @@ namespace Assets
 
 	bool CSky::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice, CPalette* pPalette )
 	{
-		auto pColorTable = pPalette->GetPalette();
+		auto pColorTable = pPalette->GetColorTable();
 
 		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight );
 
@@ -99,7 +99,7 @@ namespace Assets
 				size_t index = y * k_uWidth + x;
 				uint8_t paletteIndex = m_Data[index] + k_uColorStart;
 
-				RGB clr = pColorTable[paletteIndex];
+				Color clr = pColorTable[paletteIndex];
 
 				size_t iTexelIndex = (y * rc.Pitch) + (x * 4);
 				pTexels[iTexelIndex] = clr.B;

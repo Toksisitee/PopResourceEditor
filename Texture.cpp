@@ -46,7 +46,7 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirect
 	m_nWidth = desc.Width;
 }
 
-CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, RGB* pPalette ) :
+CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, Color* pPalette ) :
 	m_pd3dDevice( pd3dDevice ), m_nWidth( nWidth ), m_nHeight( nHeight )
 {
 	pd3dDevice->CreateTexture( nWidth, nHeight, 1, 0, D3DFMT_X8R8G8B8, D3DPOOL_MANAGED, &m_pD3DTexture, NULL );
@@ -60,7 +60,7 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, R
 		for ( size_t x = 0; x < nWidth; x++ ) {
 			size_t uIndex = y * nWidth + x;
 
-			RGB clr = pPalette[uIndex];
+			Color clr = pPalette[uIndex];
 
 			size_t iTexelIndex = (y * rc.Pitch) + (x * 4);
 			pTexels[iTexelIndex] = clr.B;

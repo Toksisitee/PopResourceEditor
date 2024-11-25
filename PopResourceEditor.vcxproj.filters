@@ -22,6 +22,9 @@
     <Filter Include="Source Files\EasyBMP">
       <UniqueIdentifier>{412ebbb6-b083-4f0e-bc30-8344b2afe9f1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Windows">
+      <UniqueIdentifier>{32010482-d215-483a-b105-459b0025838b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PopResourceEditor.cpp">
@@ -87,20 +90,26 @@
     <ClCompile Include="ImEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SkyWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WindowBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Ghost.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GhostWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WindowManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Fade.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostWindow.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyWindow.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="FadeWindow.cpp">
+      <Filter>Source Files\Windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -179,20 +188,26 @@
     <ClInclude Include="ImEditor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="SkyWindow.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="WindowBase.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Ghost.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="GhostWindow.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="WindowManager.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Fade.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostWindow.h">
+      <Filter>Source Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyWindow.h">
+      <Filter>Source Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeWindow.h">
+      <Filter>Source Files\Windows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

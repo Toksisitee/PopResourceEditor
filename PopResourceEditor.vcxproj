@@ -150,6 +150,8 @@
     <ClCompile Include="Assets.cpp" />
     <ClCompile Include="AssetsErrHandler.cpp" />
     <ClCompile Include="D3DApp.cpp" />
+    <ClCompile Include="Fade.cpp" />
+    <ClCompile Include="FadeWindow.cpp" />
     <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="GhostWindow.cpp" />
     <ClCompile Include="ImEditor.cpp" />
@@ -179,6 +181,8 @@
     <ClInclude Include="D3DApp.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Editor.h" />
+    <ClInclude Include="Fade.h" />
+    <ClInclude Include="FadeWindow.h" />
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="GhostWindow.h" />
     <ClInclude Include="ImEditor.h" />

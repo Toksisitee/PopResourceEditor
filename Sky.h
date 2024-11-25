@@ -18,7 +18,7 @@ namespace Assets
 	public:
 		Result	Load( std::string& sFilePath );
 		Result	Generate( std::string& fFilepath, CPalette* pPalette );
-		Result	Export( std::string& fFilepath, RGB* pColorTable );
+		Result	Export( std::string& fFilepath, Color* pColorTable );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice, CPalette* pPalette );
 		[[nodiscard]] inline CTexture2D* GetTexture()
 		{

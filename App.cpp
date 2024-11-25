@@ -25,6 +25,7 @@
 
 #include "SkyWindow.h"
 #include "GhostWindow.h"
+#include "FadeWindow.h"
 
 #include "App.h"
 
@@ -42,6 +43,8 @@ Assets::CSky g_Sky;
 CSkyWindow g_SkyWindow( nullptr );
 CGhostWindow g_GhostWindow( nullptr );
 CGhostWindow g_GhostWindow2( nullptr );
+CFadeWindow g_FadeWindow( nullptr );
+CFadeWindow g_FadeWindow2( nullptr );
 Assets::Sprite::CSprite g_Sprite( nullptr );
 ImFont* g_ImFonts[eImFont::Max] = { 0 };
 
@@ -177,13 +180,17 @@ void CEditorApp::Run()
 	ImGui_ImplWin32_Init( GetHwnd() );
 	ImGui_ImplDX9_Init( GetDevice() );
 
-	g_SkyWindow.Initialize( GetDevice() );
-	g_SkyWindow.SetWindowName( "Sky Window" );
 
+	g_SkyWindow.Initialize( GetDevice() );
 	g_GhostWindow.Initialize( GetDevice() );
 	g_GhostWindow2.Initialize( GetDevice() );
+	g_FadeWindow.Initialize( GetDevice() );
+	g_FadeWindow2.Initialize( GetDevice() );
+	g_SkyWindow.SetWindowName( "Sky Window" );
 	g_GhostWindow.SetWindowName( "Ghost Window" );
 	g_GhostWindow2.SetWindowName( "Ghost Window2" );
+	g_FadeWindow.SetWindowName( "Fade Window" );
+	g_FadeWindow2.SetWindowName( "Fade Window2" );
 
 	bool bDone = false;
 	while ( !bDone ) {
@@ -242,7 +249,7 @@ void CEditorApp::Run()
 		uint8_t uIndex = 0;
 		char szColorLabel[8];
 		const int k_iColorEditFlags = ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoBorder;
-		RGB* pPalette = g_Palette.GetPalette();
+		Color* pPalette = g_Palette.GetColorTable();
 
 		auto getColor = [&pPalette]( uint8_t uIndex ) -> float* {
 			float fColors[4];
@@ -302,6 +309,8 @@ void CEditorApp::Run()
 				g_SkyWindow.Render();
 				g_GhostWindow.Render();
 				g_GhostWindow2.Render();
+				g_FadeWindow.Render();
+				g_FadeWindow2.Render();
 			}
 
 			{

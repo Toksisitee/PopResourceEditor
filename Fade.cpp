@@ -1,19 +1,20 @@
 #include <fstream>
+#include <assert.h>
 
 #include "EasyBMP/EasyBMP.h"
 
 #include "Editor.h"
 #include "Utils.h"
 
-#include "Ghost.h"
+#include "Fade.h"
 
 namespace Assets
 {
-	using namespace Ghost;
+	using namespace Fade;
 
-	Result CGhost::Load( std::string& sFilePath )
+	Result CFade::Load( std::string& sFilePath )
 	{
-		g_ErrHandler.SetFileType( FileType::Ghost );
+		g_ErrHandler.SetFileType( FileType::Fade );
 
 		std::ifstream ifs( sFilePath, std::ios::binary );
 		if ( ifs.is_open() ) {
@@ -29,9 +30,10 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
-	Result CGhost::Export( std::string& sFilePath )
+
+	Result CFade::Export( std::string& sFilePath )
 	{
-		g_ErrHandler.SetFileType( FileType::Ghost );
+		g_ErrHandler.SetFileType( FileType::Fade );
 
 		BMP BMP;
 		size_t uIndex = 0;
@@ -60,34 +62,41 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
-	void CGhost::GenerateTable( uint8_t uOpacity )
+	void CFade::FadeDark( uint8_t* pPalette, uint8_t* pData, uint32_t uLights, uint32_t uDarkness )
 	{
-		if ( uOpacity > 100 ) uOpacity = 100;
-
-		Color* pColorPalette = m_Palette.GetColorTable();
-		uint8_t* pData = &m_Data[0];
-		Color blend;
-
-		for ( uint32_t y = 0; y < k_uHeight; ++y ) {
-			for ( uint32_t x = 0; x < k_uWidth; ++x ) {
-				const Color& base = pColorPalette[y % Palette::k_uNumColors];
-				const Color& target = pColorPalette[x % Palette::k_uNumColors];
-
-				blend.R = base.R + ((target.R - base.R) * uOpacity) / 100;
-				blend.G = base.G + ((target.G - base.G) * uOpacity) / 100;
-				blend.B = base.B + ((target.B - base.B) * uOpacity) / 100;
-
-				*pData++ = m_Palette.FindColor( reinterpret_cast<uint8_t*>(pColorPalette), blend );
-			}
-		}
+		// TODO
+		assert( false && "Missing implementation" );
 	}
 
-
-	Result CGhost::Generate( std::string& sFilePath )
+	void CFade::FadeLight( uint8_t* pPalette, uint8_t* pData, uint32_t uLights, uint32_t uLightness )
 	{
-		g_ErrHandler.SetFileType( FileType::Ghost );
+		// TODO
+		assert( false && "Missing implementation" );
+	}
 
-		GenerateTable( m_uOpacity );
+	void CFade::FadeColor( uint8_t& r, uint8_t& g, uint8_t& b, float fFadeFactor )
+	{
+		r = std::clamp( static_cast<int32_t>(r * fFadeFactor), 0, 255 );
+		g = std::clamp( static_cast<int32_t>(g * fFadeFactor), 0, 255 );
+		b = std::clamp( static_cast<int32_t>(b * fFadeFactor), 0, 255 );
+	}
+
+	uint8_t CFade::GetLuminance( uint8_t r, uint8_t g, uint8_t b )
+	{
+		return static_cast<uint8_t>(0.299 * r + 0.587 * g + 0.114 * b);
+	}
+
+	void CFade::GenerateTable()
+	{
+		// TODO
+		assert( false && "Missing implementation" );
+	}
+
+	Result CFade::Generate( std::string& sFilePath )
+	{
+		g_ErrHandler.SetFileType( FileType::Fade );
+
+		GenerateTable( );
 
 		DestroyTexture();
 
@@ -103,7 +112,7 @@ namespace Assets
 		return Result::FAIL_GENERATE;
 	}
 
-	bool CGhost::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
+	bool CFade::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
 		auto pColorTable = m_Palette.GetColorTable();
 

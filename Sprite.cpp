@@ -111,7 +111,7 @@ namespace Assets
 
 		void CSprite::Export( uint16_t uIndex )
 		{
-			auto pColorTable = m_pPalette->GetPalette();
+			auto pColorTable = m_pPalette->GetColorTable();
 			uint8_t uColorIndex;
 			uint16_t uMin = 1;
 			BMP BMP;
@@ -148,7 +148,7 @@ namespace Assets
 			assert( pD3DDevice != nullptr && "pD3DDevice is nullptr" );
 			assert( m_Textures.size() == 0 && "Sprite textures were already created" );
 
-			const auto pColorTable = m_pPalette->GetPalette();
+			const auto pColorTable = m_pPalette->GetColorTable();
 			CTexture2D* pTexture = nullptr;
 			BYTE* pTexels = nullptr;
 			D3DLOCKED_RECT rc;
@@ -179,7 +179,7 @@ namespace Assets
 				for ( uint16_t y = 0; y < k_uHeight; y++ ) {
 					for ( uint16_t x = 0; x < k_uWidth; x++ ) {
 						auto index = Bank.Frames[i].Map[x][y];
-						RGB clr = pColorTable[index];
+						Color clr = pColorTable[index];
 						WriteRGBTexel( pTexels, x, y, rc.Pitch, clr );
 					}
 				}

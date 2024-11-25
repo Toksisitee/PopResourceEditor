@@ -20,8 +20,20 @@
 
 typedef unsigned char BYTE;
 
-struct RGB
-{
+struct Color {
+	Color() = default;
+	Color( uint8_t r, uint8_t g, uint8_t b ) : R( r ), G( g ), B( b ) {}
+
+	bool operator==( const Color& o ) const
+	{
+		return R == o.R && G == o.G && B == o.B;
+	}
+
+	bool operator!=( const Color& o ) const
+	{
+		return !(*this == o);
+	}
+
 	uint8_t R, G, B;
 };
 
@@ -33,7 +45,7 @@ enum eImFont : uint8_t
 	Max
 };
 
-inline void WriteRGBTexel( BYTE* pTexels, size_t x, size_t y, size_t pitch, const RGB& rgb )
+inline void WriteRGBTexel( BYTE* pTexels, size_t x, size_t y, size_t pitch, const Color& rgb )
 {
 	size_t i = (y * pitch) + (x * 4);
 	pTexels[i] = rgb.B;
