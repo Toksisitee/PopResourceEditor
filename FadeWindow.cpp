@@ -22,26 +22,6 @@ void CFadeWindow::Render()
 		m_Fade.Generate( f );
 	}
 
-
-	if ( ImEditor::InputScalar( "Dark Lights", &m_Fade.m_NumLightsDark ) ) {
-		std::string f;
-		m_Fade.Generate( f );
-	}
-	if ( ImEditor::InputScalar( "Dark Darkness", &m_Fade.m_NumDarknessDark ) ) {
-		std::string f;
-		m_Fade.Generate( f );
-	}
-
-	if ( ImEditor::InputScalar( "Light Lights", &m_Fade.m_NumLightsLight ) ) {
-		std::string f;
-		m_Fade.Generate( f );
-	}
-	if ( ImEditor::InputScalar( "Light Darkness", &m_Fade.m_NumDarknessLight ) ) {
-		std::string f;
-		m_Fade.Generate( f );
-	}
-
-
 	if ( m_Fade.GetTexture() == nullptr ) {
 		m_Fade.CreateTexture( m_pd3dDevice );
 	}

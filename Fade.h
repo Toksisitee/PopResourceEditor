@@ -35,10 +35,6 @@ namespace Assets
 		{
 			return &m_Palette;
 		}
-		int m_NumLightsDark = 64;
-		int m_NumDarknessDark = 65;
-		int m_NumLightsLight = 64;
-		int m_NumDarknessLight = 35;
 
 	protected:
 		void FadeDark( uint8_t* pPalette, uint8_t* pData, uint32_t uLights, uint32_t uDarkness );
