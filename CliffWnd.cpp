@@ -2,9 +2,9 @@
 
 #include "Utils.h"
 #include "ImEditor.h"
-#include "CliffWindow.h"
+#include "CliffWnd.h"
 
-void CCliffWindow::Render()
+void CCliffWnd::Render()
 {
 	ImGui::Begin( m_sWindowName.c_str() );
 	auto pPalette = m_Cliff.GetPalette();

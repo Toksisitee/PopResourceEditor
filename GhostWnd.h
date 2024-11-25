@@ -5,9 +5,9 @@
 #include "Ghost.h"
 #include "WindowBase.h"
 
-class CGhostWindow : public CWindowBase {
+class CGhostWnd : public CWindowBase {
 public:
-	CGhostWindow( LPDIRECT3DDEVICE9 pd3dDevice ) :CWindowBase( pd3dDevice ) {}
+	CGhostWnd( LPDIRECT3DDEVICE9 pd3dDevice ) :CWindowBase( pd3dDevice ) {}
 
 	void Render() override;
 

@@ -102,22 +102,22 @@
     <ClCompile Include="Fade.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GhostWindow.cpp">
+    <ClCompile Include="GhostWnd.cpp">
       <Filter>Source Files\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="SkyWindow.cpp">
+    <ClCompile Include="SkyWnd.cpp">
       <Filter>Source Files\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="FadeWindow.cpp">
+    <ClCompile Include="FadeWnd.cpp">
       <Filter>Source Files\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="BigFadeWindow.cpp">
+    <ClCompile Include="BigFadeWnd.cpp">
       <Filter>Source Files\Windows</Filter>
     </ClCompile>
     <ClCompile Include="BigFade.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CliffWindow.cpp">
+    <ClCompile Include="CliffWnd.cpp">
       <Filter>Source Files\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Cliff.cpp">
@@ -212,22 +212,22 @@
     <ClInclude Include="Fade.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="GhostWindow.h">
+    <ClInclude Include="GhostWnd.h">
       <Filter>Source Files\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="SkyWindow.h">
+    <ClInclude Include="SkyWnd.h">
       <Filter>Source Files\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="FadeWindow.h">
+    <ClInclude Include="FadeWnd.h">
       <Filter>Source Files\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="BigFadeWindow.h">
+    <ClInclude Include="BigFadeWnd.h">
       <Filter>Source Files\Windows</Filter>
     </ClInclude>
     <ClInclude Include="BigFade.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="CliffWindow.h">
+    <ClInclude Include="CliffWnd.h">
       <Filter>Source Files\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Cliff.h">

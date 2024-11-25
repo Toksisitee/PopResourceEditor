@@ -2,12 +2,13 @@
 #include <string>
 #include <d3d9.h>
 
-#include "Fade.h"
+#include "Palette.h"
+#include "Sky.h"
 #include "WindowBase.h"
 
-class CFadeWindow : public CWindowBase {
+class CSkyWnd : public CWindowBase {
 public:
-	CFadeWindow( LPDIRECT3DDEVICE9 pd3dDevice ) :CWindowBase( pd3dDevice ) {}
+	CSkyWnd( LPDIRECT3DDEVICE9 pd3dDevice ) :CWindowBase( pd3dDevice ) {}
 
 	void Render() override;
 
@@ -17,8 +18,10 @@ public:
 	}
 
 	void Cleanup() override
-	{}
+	{
+	}
 
 private:
-	Assets::CFade m_Fade;
+	Assets::CPalette m_Palette;
+	Assets::CSky m_Sky;
 };

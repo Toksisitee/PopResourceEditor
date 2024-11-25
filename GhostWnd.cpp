@@ -2,9 +2,9 @@
 
 #include "Utils.h"
 #include "ImEditor.h"
-#include "GhostWindow.h"
+#include "GhostWnd.h"
 
-void CGhostWindow::Render()
+void CGhostWnd::Render()
 {
 	ImGui::Begin( m_sWindowName.c_str() );
 	auto pPalette = m_Ghost.GetPalette();

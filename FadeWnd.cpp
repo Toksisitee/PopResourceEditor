@@ -2,9 +2,9 @@
 
 #include "Utils.h"
 #include "ImEditor.h"
-#include "FadeWindow.h"
+#include "FadeWnd.h"
 
-void CFadeWindow::Render()
+void CFadeWnd::Render()
 {
 	ImGui::Begin( m_sWindowName.c_str() );
 	auto pPalette = m_Fade.GetPalette();

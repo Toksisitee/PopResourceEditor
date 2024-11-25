@@ -23,11 +23,11 @@
 #include "Sprite.h"
 #include "Sky.h"
 
-#include "SkyWindow.h"
-#include "GhostWindow.h"
-#include "FadeWindow.h"
-#include "BigFadeWindow.h"
-#include "CliffWindow.h"
+#include "SkyWnd.h"
+#include "GhostWnd.h"
+#include "FadeWnd.h"
+#include "BigFadeWnd.h"
+#include "CliffWnd.h"
 
 #include "App.h"
 
@@ -42,13 +42,13 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT ms
 CEditorApp g_Editor;
 Assets::CPalette g_Palette;
 Assets::CSky g_Sky;
-CSkyWindow g_SkyWindow( nullptr );
-CGhostWindow g_GhostWindow( nullptr );
-CGhostWindow g_GhostWindow2( nullptr );
-CFadeWindow g_FadeWindow( nullptr );
-CFadeWindow g_FadeWindow2( nullptr );
-CBigFadeWindow g_BigFadeWindow( nullptr );
-CCliffWindow g_CliffWindow( nullptr );
+CSkyWnd g_SkyWnd( nullptr );
+CGhostWnd g_GhostWnd( nullptr );
+CGhostWnd g_GhostWnd2( nullptr );
+CFadeWnd g_FadeWnd( nullptr );
+CFadeWnd g_FadeWnd2( nullptr );
+CBigFadeWnd g_BigFadeWnd( nullptr );
+CCliffWnd g_CliffWnd( nullptr );
 Assets::Sprite::CSprite g_Sprite( nullptr );
 ImFont* g_ImFonts[eImFont::Max] = { 0 };
 
@@ -185,20 +185,20 @@ void CEditorApp::Run()
 	ImGui_ImplDX9_Init( GetDevice() );
 
 
-	g_SkyWindow.Initialize( GetDevice() );
-	g_GhostWindow.Initialize( GetDevice() );
-	g_GhostWindow2.Initialize( GetDevice() );
-	g_FadeWindow.Initialize( GetDevice() );
-	g_FadeWindow2.Initialize( GetDevice() );
-	g_BigFadeWindow.Initialize( GetDevice() );
-	g_CliffWindow.Initialize( GetDevice() );
-	g_SkyWindow.SetWindowName( "Sky Window" );
-	g_GhostWindow.SetWindowName( "Ghost Window" );
-	g_GhostWindow2.SetWindowName( "Ghost Window2" );
-	g_FadeWindow.SetWindowName( "Fade Window" );
-	g_FadeWindow2.SetWindowName( "Fade Window2" );
-	g_BigFadeWindow.SetWindowName( "BigFade Window" );
-	g_CliffWindow.SetWindowName( "Cliff Window" );
+	g_SkyWnd.Initialize( GetDevice() );
+	g_GhostWnd.Initialize( GetDevice() );
+	g_GhostWnd2.Initialize( GetDevice() );
+	g_FadeWnd.Initialize( GetDevice() );
+	g_FadeWnd2.Initialize( GetDevice() );
+	g_BigFadeWnd.Initialize( GetDevice() );
+	g_CliffWnd.Initialize( GetDevice() );
+	g_SkyWnd.SetWindowName( "Sky Window" );
+	g_GhostWnd.SetWindowName( "Ghost Window" );
+	g_GhostWnd2.SetWindowName( "Ghost Window2" );
+	g_FadeWnd.SetWindowName( "Fade Window" );
+	g_FadeWnd2.SetWindowName( "Fade Window2" );
+	g_BigFadeWnd.SetWindowName( "BigFade Window" );
+	g_CliffWnd.SetWindowName( "Cliff Window" );
 
 	bool bDone = false;
 	while ( !bDone ) {
@@ -314,13 +314,13 @@ void CEditorApp::Run()
 #endif
 
 			{
-				g_SkyWindow.Render();
-				g_GhostWindow.Render();
-				g_GhostWindow2.Render();
-				g_FadeWindow.Render();
-				g_FadeWindow2.Render();
-				g_BigFadeWindow.Render();
-				g_CliffWindow.Render();
+				g_SkyWnd.Render();
+				g_GhostWnd.Render();
+				g_GhostWnd2.Render();
+				g_FadeWnd.Render();
+				g_FadeWnd2.Render();
+				g_BigFadeWnd.Render();
+				g_CliffWnd.Render();
 			}
 
 			{

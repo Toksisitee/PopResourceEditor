@@ -2,12 +2,12 @@
 #include <string>
 #include <d3d9.h>
 
-#include "Cliff.h"
+#include "Fade.h"
 #include "WindowBase.h"
 
-class CCliffWindow : public CWindowBase {
+class CFadeWnd : public CWindowBase {
 public:
-	CCliffWindow( LPDIRECT3DDEVICE9 pd3dDevice ) :CWindowBase( pd3dDevice ) {}
+	CFadeWnd( LPDIRECT3DDEVICE9 pd3dDevice ) :CWindowBase( pd3dDevice ) {}
 
 	void Render() override;
 
@@ -20,5 +20,5 @@ public:
 	{}
 
 private:
-	Assets::CCliff m_Cliff;
+	Assets::CFade m_Fade;
 };

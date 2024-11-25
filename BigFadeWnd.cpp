@@ -2,9 +2,9 @@
 
 #include "Utils.h"
 #include "ImEditor.h"
-#include "BigFadeWindow.h"
+#include "BigFadeWnd.h"
 
-void CBigFadeWindow::Render()
+void CBigFadeWnd::Render()
 {
 	ImGui::Begin( m_sWindowName.c_str() );
 	auto pPalette = m_BigFade.GetPalette();

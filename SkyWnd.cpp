@@ -2,9 +2,9 @@
 
 #include "Utils.h"
 #include "ImEditor.h"
-#include "SkyWindow.h"
+#include "SkyWnd.h"
 
-void CSkyWindow::Render()
+void CSkyWnd::Render()
 {
 	ImGui::Begin( m_sWindowName.c_str() );
 
