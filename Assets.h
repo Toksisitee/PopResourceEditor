@@ -12,6 +12,8 @@ namespace Assets
 		Sprite,
 		Ghost,
 		Fade,
+		BigFade,
+
 	};
 
 	enum class Result : uint8_t
