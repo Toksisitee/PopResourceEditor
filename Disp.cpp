@@ -79,11 +79,11 @@ namespace Assets
 
 		for ( size_t y = 0; y < k_uHeight; y++ ) {
 			for ( size_t x = 0; x < k_uWidth; x++ ) {
-				int8_t sValue = m_Data[y * k_uWidth + x] + k_uGrayscaleOffset;
+				uint8_t uValue = m_Data[y * k_uWidth + x] + k_uGrayscaleOffset;
 				size_t iTexelIndex = (y * rc.Pitch) + (x * 4);
-				pTexels[iTexelIndex] = sValue;
-				pTexels[iTexelIndex + 1] = sValue;
-				pTexels[iTexelIndex + 2] = sValue;
+				pTexels[iTexelIndex] = uValue;
+				pTexels[iTexelIndex + 1] = uValue;
+				pTexels[iTexelIndex + 2] = uValue;
 				pTexels[iTexelIndex + 3] = 255;
 			}
 		}
