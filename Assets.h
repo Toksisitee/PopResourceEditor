@@ -15,6 +15,7 @@ namespace Assets
 		BigFade,
 		Cliff,
 		Disp,
+		Blocks,
 	};
 
 	enum class Result : uint8_t

@@ -30,6 +30,7 @@
 #include "CliffWnd.h"
 #include "AlphaWnd.h"
 #include "DispWnd.h"
+#include "BlocksWnd.h"
 
 #include "App.h"
 
@@ -53,6 +54,7 @@ CBigFadeWnd g_BigFadeWnd( nullptr );
 CCliffWnd g_CliffWnd( nullptr );
 CAlphaWnd g_AlphaWnd( nullptr );
 CDispWnd g_DispWnd( nullptr );
+CBlocksWnd g_BlocksWnd( nullptr );
 Assets::Sprite::CSprite g_Sprite( nullptr );
 ImFont* g_ImFonts[eImFont::Max] = { 0 };
 
@@ -188,7 +190,6 @@ void CEditorApp::Run()
 	ImGui_ImplWin32_Init( GetHwnd() );
 	ImGui_ImplDX9_Init( GetDevice() );
 
-
 	g_SkyWnd.Initialize( GetDevice() );
 	g_GhostWnd.Initialize( GetDevice() );
 	g_GhostWnd2.Initialize( GetDevice() );
@@ -198,6 +199,7 @@ void CEditorApp::Run()
 	g_CliffWnd.Initialize( GetDevice() );
 	g_AlphaWnd.Initialize( GetDevice() );
 	g_DispWnd.Initialize( GetDevice() );
+	g_BlocksWnd.Initialize( GetDevice() );
 	g_SkyWnd.SetWindowName( "Sky Window" );
 	g_GhostWnd.SetWindowName( "Ghost Window" );
 	g_GhostWnd2.SetWindowName( "Ghost Window2" );
@@ -207,6 +209,7 @@ void CEditorApp::Run()
 	g_CliffWnd.SetWindowName( "Cliff Window" );
 	g_AlphaWnd.SetWindowName( "Alpha Window" );
 	g_DispWnd.SetWindowName( "Displacement Window" );
+	g_BlocksWnd.SetWindowName( "Blocks Window" );
 
 	bool bDone = false;
 	while ( !bDone ) {
@@ -331,6 +334,7 @@ void CEditorApp::Run()
 				g_CliffWnd.Render();
 				g_AlphaWnd.Render();
 				g_DispWnd.Render();
+				g_BlocksWnd.Render();
 			}
 
 			{
