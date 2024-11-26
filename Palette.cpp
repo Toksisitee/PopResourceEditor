@@ -122,7 +122,7 @@ namespace Assets
 	}
 #endif
 
-	uint8_t CPalette::FindColor( uint8_t* pPalette, const Color& clr, size_t uMin, size_t uMax )
+	uint8_t CPalette::FindColor( const Color& clr, size_t uMin, size_t uMax )
 	{
 		int32_t dr, dg, db;
 		int32_t nDistBest, nDist;
@@ -131,7 +131,7 @@ namespace Assets
 
 		nDistBest = (clr.R * clr.R + clr.G * clr.G + clr.B * clr.B) * 2;
 
-		pptr = &pPalette[uMin * 3];
+		pptr = &GetPtr()[uMin * 3];
 		for ( size_t i = uMin; i <= uMax; i++ ) {
 			dr = clr.R - *pptr++;
 			dg = clr.G - *pptr++;

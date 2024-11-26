@@ -17,7 +17,7 @@ namespace Assets
 		[[nodiscard]] uint8_t* GetPtr();
 		[[nodiscard]] Color* GetColorTable();
 		[[nodiscard]] uint8_t FindClosestColor( const Color& clr, bool bFullSearch = false );
-		[[nodiscard]] uint8_t FindColor( uint8_t* pPalette, const Color& clr, size_t uMin = 0, size_t uMax = Palette::k_uNumColors );
+		[[nodiscard]] uint8_t FindColor( const Color& clr, size_t uMin = 0, size_t uMax = Palette::k_uNumColors );
 		//uint8_t FindColor( const RGB& clr, bool bClosest = false );
 		[[nodiscard]] uint8_t FindColorAll( const Color& clr, bool bClosest = false );
 		[[nodiscard]] uint8_t FindBigFadeColor( const Color& clr );

@@ -146,6 +146,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Alpha.cpp" />
+    <ClCompile Include="AlphaWnd.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Assets.cpp" />
     <ClCompile Include="AssetsErrHandler.cpp" />
@@ -180,6 +182,8 @@
     <ClCompile Include="WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Alpha.h" />
+    <ClInclude Include="AlphaWnd.h" />
     <ClInclude Include="Assets.h" />
     <ClInclude Include="AssetsErrHandler.h" />
     <ClInclude Include="BigFade.h" />

@@ -28,6 +28,7 @@
 #include "FadeWnd.h"
 #include "BigFadeWnd.h"
 #include "CliffWnd.h"
+#include "AlphaWnd.h"
 
 #include "App.h"
 
@@ -49,6 +50,7 @@ CFadeWnd g_FadeWnd( nullptr );
 CFadeWnd g_FadeWnd2( nullptr );
 CBigFadeWnd g_BigFadeWnd( nullptr );
 CCliffWnd g_CliffWnd( nullptr );
+CAlphaWnd g_AlphaWnd( nullptr );
 Assets::Sprite::CSprite g_Sprite( nullptr );
 ImFont* g_ImFonts[eImFont::Max] = { 0 };
 
@@ -192,6 +194,7 @@ void CEditorApp::Run()
 	g_FadeWnd2.Initialize( GetDevice() );
 	g_BigFadeWnd.Initialize( GetDevice() );
 	g_CliffWnd.Initialize( GetDevice() );
+	g_AlphaWnd.Initialize( GetDevice() );
 	g_SkyWnd.SetWindowName( "Sky Window" );
 	g_GhostWnd.SetWindowName( "Ghost Window" );
 	g_GhostWnd2.SetWindowName( "Ghost Window2" );
@@ -199,6 +202,7 @@ void CEditorApp::Run()
 	g_FadeWnd2.SetWindowName( "Fade Window2" );
 	g_BigFadeWnd.SetWindowName( "BigFade Window" );
 	g_CliffWnd.SetWindowName( "Cliff Window" );
+	g_AlphaWnd.SetWindowName( "Alpha Window" );
 
 	bool bDone = false;
 	while ( !bDone ) {
@@ -321,6 +325,7 @@ void CEditorApp::Run()
 				g_FadeWnd2.Render();
 				g_BigFadeWnd.Render();
 				g_CliffWnd.Render();
+				g_AlphaWnd.Render();
 			}
 
 			{

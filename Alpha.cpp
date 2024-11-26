@@ -1,19 +1,42 @@
 #include <fstream>
+#include <assert.h>
 
 #include "EasyBMP/EasyBMP.h"
 
 #include "Editor.h"
 #include "Utils.h"
 
-#include "Ghost.h"
+#include "Alpha.h"
 
 namespace Assets
 {
-	using namespace Ghost;
+	using namespace Alpha;
 
-	Result CGhost::Load( std::string& sFilePath )
+	uint8_t auColors[16 * 3 + 3] =
 	{
-		g_ErrHandler.SetFileType( FileType::Ghost );
+			245, 49, 37,
+			247, 175, 0,
+			245, 223, 204,
+			0, 255, 0,
+			0, 0, 255,
+			251, 215, 51,
+			145, 105, 70,
+			175, 185, 255,
+
+			0, 0, 0,
+			0, 0, 0,
+			0, 0, 0,
+			0, 0, 0,
+			0, 0, 0,
+			0, 0, 0,
+			0, 0, 0,
+			0, 0, 0,
+			0, 0, 0
+	};
+
+	Result CAlpha::Load( std::string& sFilePath )
+	{
+		g_ErrHandler.SetFileType( FileType::Fade );
 
 		std::ifstream ifs( sFilePath, std::ios::binary );
 		if ( ifs.is_open() ) {
@@ -29,9 +52,10 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
-	Result CGhost::Export( std::string& sFilePath )
+
+	Result CAlpha::Export( std::string& sFilePath )
 	{
-		g_ErrHandler.SetFileType( FileType::Ghost );
+		g_ErrHandler.SetFileType( FileType::Fade );
 
 		BMP BMP;
 		size_t uIndex = 0;
@@ -60,50 +84,45 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
-	void CGhost::GenerateTable( uint8_t uOpacity )
+	uint32_t CAlpha::ComputeTable( uint8_t* pData, const Color& targetColor, uint32_t uRow )
 	{
-		if ( uOpacity > 100 ) uOpacity = 100;
+		uint8_t r, g, b;
 
-		Color* pColorPalette = m_Palette.GetColorTable();
-		uint8_t* pData = &m_Data[0];
-		Color blend;
-
-		for ( uint32_t y = 0; y < k_uHeight; ++y ) {
-			for ( uint32_t x = 0; x < k_uWidth; ++x ) {
-				const Color& base = pColorPalette[y % Palette::k_uNumColors];
-				const Color& target = pColorPalette[x % Palette::k_uNumColors];
-
-				blend.R = base.R + ((target.R - base.R) * uOpacity) / 100;
-				blend.G = base.G + ((target.G - base.G) * uOpacity) / 100;
-				blend.B = base.B + ((target.B - base.B) * uOpacity) / 100;
-
-				*pData++ = m_Palette.FindColor( blend );
+		for ( uint32_t y = 0; y < 16; y++ ) {
+			Color* palette = m_Palette.GetColorTable();
+			for ( uint32_t x = 0; x < k_uWidth; x++, palette++, pData++ ) {
+				r = palette->R + ((targetColor.R - palette->R) * y) / 16;
+				g = palette->G + ((targetColor.G - palette->G) * y) / 16;
+				b = palette->B + ((targetColor.B - palette->B) * y) / 16;
+				*pData = m_Palette.FindColor( Color( r, g, b ) );
 			}
 		}
+
+		return uRow + 16;
 	}
 
-
-	Result CGhost::Generate( std::string& sFilePath )
+	Result CAlpha::Generate( std::string& sFilePath )
 	{
-		g_ErrHandler.SetFileType( FileType::Ghost );
+		g_ErrHandler.SetFileType( FileType::Alpha );
 
-		GenerateTable( m_uOpacity );
+		uint8_t r, g, b;
+		uint32_t i = 0;
+
+		for ( uint32_t k = 0; k < 16; k++ ) {
+			r = auColors[i++];
+			g = auColors[i++];
+			b = auColors[i++];
+
+			uint32_t uRow = k * 16 * k_uWidth;
+			ComputeTable( &m_Data[uRow], Color( r, g, b ), uRow );
+		}
 
 		DestroyTexture();
 
-#if 0
-		std::ofstream ofs( fFilepath, std::ios::binary | std::ios::trunc );
-		if ( ofs.is_open() ) {
-			ofs.write( reinterpret_cast<const char*>(&m_Data), (k_uWidth * k_uHeight) );
-			ofs.close();
-			return Result::OK_GENERATE;
-		}
-#endif
-
-		return Result::FAIL_GENERATE;
+		return Result::OK_GENERATE;
 	}
 
-	bool CGhost::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
+	bool CAlpha::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
 		auto pColorTable = m_Palette.GetColorTable();
 

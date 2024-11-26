@@ -123,6 +123,12 @@
     <ClCompile Include="Cliff.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Alpha.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AlphaWnd.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3DApp.h">
@@ -232,6 +238,12 @@
     </ClInclude>
     <ClInclude Include="Cliff.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Alpha.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AlphaWnd.h">
+      <Filter>Source Files\Windows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
