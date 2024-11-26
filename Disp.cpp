@@ -64,6 +64,7 @@ namespace Assets
 		g_ErrHandler.SetFileType( FileType::Disp );
 
 		// TODO
+		assert( false && "TODO: missing impl." );
 
 		return Result::OK_GENERATE;
 	}
