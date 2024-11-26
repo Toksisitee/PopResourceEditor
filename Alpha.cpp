@@ -36,7 +36,7 @@ namespace Assets
 
 	Result CAlpha::Load( std::string& sFilePath )
 	{
-		g_ErrHandler.SetFileType( FileType::Fade );
+		g_ErrHandler.SetFileType( FileType::Alpha );
 
 		std::ifstream ifs( sFilePath, std::ios::binary );
 		if ( ifs.is_open() ) {
@@ -55,7 +55,7 @@ namespace Assets
 
 	Result CAlpha::Export( std::string& sFilePath )
 	{
-		g_ErrHandler.SetFileType( FileType::Fade );
+		g_ErrHandler.SetFileType( FileType::Alpha );
 
 		BMP BMP;
 		size_t uIndex = 0;
