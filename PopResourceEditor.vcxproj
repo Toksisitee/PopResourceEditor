@@ -156,6 +156,8 @@
     <ClCompile Include="Cliff.cpp" />
     <ClCompile Include="CliffWnd.cpp" />
     <ClCompile Include="D3DApp.cpp" />
+    <ClCompile Include="Disp.cpp" />
+    <ClCompile Include="DispWnd.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="FadeWnd.cpp" />
     <ClCompile Include="Ghost.cpp" />
@@ -192,6 +194,8 @@
     <ClInclude Include="CliffWnd.h" />
     <ClInclude Include="D3DApp.h" />
     <ClInclude Include="App.h" />
+    <ClInclude Include="Disp.h" />
+    <ClInclude Include="DispWnd.h" />
     <ClInclude Include="Editor.h" />
     <ClInclude Include="Fade.h" />
     <ClInclude Include="FadeWnd.h" />

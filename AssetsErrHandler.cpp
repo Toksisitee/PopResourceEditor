@@ -130,6 +130,8 @@ namespace Assets
 				return "Fade";
 			case Assets::FileType::BigFade:
 				return "BigFade";
+			case Assets::FileType::Disp:
+				return "Disp";
 		}
 
 		return "Unknown";

@@ -129,6 +129,12 @@
     <ClCompile Include="AlphaWnd.cpp">
       <Filter>Source Files\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Disp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DispWnd.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3DApp.h">
@@ -243,6 +249,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="AlphaWnd.h">
+      <Filter>Source Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Disp.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DispWnd.h">
       <Filter>Source Files\Windows</Filter>
     </ClInclude>
   </ItemGroup>
