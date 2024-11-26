@@ -60,7 +60,7 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
-	void CGhost::GenerateTable( uint8_t uOpacity )
+	void CGhost::ComputeTable( uint8_t uOpacity )
 	{
 		if ( uOpacity > 100 ) uOpacity = 100;
 
@@ -87,7 +87,7 @@ namespace Assets
 	{
 		g_ErrHandler.SetFileType( FileType::Ghost );
 
-		GenerateTable( m_uOpacity );
+		ComputeTable( m_uOpacity );
 
 		DestroyTexture();
 

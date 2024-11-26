@@ -34,7 +34,7 @@ namespace Assets
 			return &m_Palette;
 		}
 	protected:
-		void GenerateTable();
+		void ComputeTable();
 
 	private:
 		uint8_t m_Data[Cliff::k_uWidth * Cliff::k_uHeight];

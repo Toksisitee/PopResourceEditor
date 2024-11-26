@@ -38,7 +38,7 @@ namespace Assets
 	public:
 		uint8_t m_uOpacity;
 	protected:
-		void GenerateTable( uint8_t uOpacity );
+		void ComputeTable( uint8_t uOpacity );
 	private:
 		uint8_t m_Data[Ghost::k_uWidth * Ghost::k_uHeight];
 		CPalette m_Palette;

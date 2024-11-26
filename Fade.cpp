@@ -87,7 +87,7 @@ namespace Assets
 		return static_cast<uint8_t>(0.299 * r + 0.587 * g + 0.114 * b);
 	}
 
-	void CFade::GenerateTable()
+	void CFade::ComputeTable()
 	{
 		// TODO
 		assert( false && "Missing implementation" );
@@ -97,7 +97,7 @@ namespace Assets
 	{
 		g_ErrHandler.SetFileType( FileType::Fade );
 
-		GenerateTable( );
+		ComputeTable( );
 
 		DestroyTexture();
 

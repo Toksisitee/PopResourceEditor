@@ -62,7 +62,7 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
-	void CCliff::GenerateTable()
+	void CCliff::ComputeTable()
 	{
 		assert( false && "TODO: missing implementation" );
 	}
@@ -71,7 +71,7 @@ namespace Assets
 	{
 		g_ErrHandler.SetFileType( FileType::Cliff );
 
-		GenerateTable();
+		ComputeTable();
 
 		DestroyTexture();
 
