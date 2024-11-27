@@ -88,20 +88,20 @@ namespace Assets
 		return true;
 	}
 
-	bool CBlocks::CreateSubTexture( LPDIRECT3DDEVICE9 pD3DDevice, size_t index )
+	bool CBlocks::CreateSubTexture( LPDIRECT3DDEVICE9 pD3DDevice, size_t uIndex )
 	{
-		if ( index >= k_uNumBlocks ) {
+		if ( uIndex >= k_uNumBlocks ) {
 			assert( false && "CBlocks::CreateSubTexture oob" );
 			return false;
 		}
 
 		D3DLOCKED_RECT rc;
-		size_t uRow = index / (k_uWidth / k_uBlockWidth);
-		size_t uCol = index % (k_uWidth / k_uBlockWidth);
+		size_t uRow = uIndex / (k_uWidth / k_uBlockWidth);
+		size_t uCol = uIndex % (k_uWidth / k_uBlockWidth);
 		auto pColorTable = m_Palette.GetColorTable();
 
-		m_pSubTextures[index] = new CTexture2D( pD3DDevice, k_uBlockWidth, k_uBlockHeight );
-		m_pSubTextures[index]->GetTexture()->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
+		m_pSubTextures[uIndex] = new CTexture2D( pD3DDevice, k_uBlockWidth, k_uBlockHeight );
+		m_pSubTextures[uIndex]->GetTexture()->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
 		BYTE* pTexels = static_cast<BYTE*>(rc.pBits);
 
 		for ( size_t y = 0; y < k_uBlockHeight; y++ ) {
@@ -113,8 +113,7 @@ namespace Assets
 			}
 		}
 
-		m_pSubTextures[index]->GetTexture()->UnlockRect( 0 );
-
+		m_pSubTextures[uIndex]->GetTexture()->UnlockRect( 0 );
 		return true;
 	}
 
