@@ -84,23 +84,7 @@ namespace Assets
 
 	bool CBlocks::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
-		D3DLOCKED_RECT rc;
-		auto pColorTable = m_Palette.GetColorTable();
-		
-		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight );
-		m_pTexture->GetTexture()->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
-		
-		BYTE* pTexels = static_cast<BYTE*>(rc.pBits);
-		
-		for ( size_t y = 0; y < k_uHeight; y++ ) {
-			for ( size_t x = 0; x < k_uWidth; x++ ) {
-				uint8_t paletteIndex = m_Data[y * k_uWidth + x];
-				Color* clr = &pColorTable[paletteIndex];
-				WriteRGBTexel( pTexels, x, y, rc.Pitch, clr );
-			}
-		}
-
-		m_pTexture->GetTexture()->UnlockRect( 0 );
+		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], &m_Palette );
 		return true;
 	}
 

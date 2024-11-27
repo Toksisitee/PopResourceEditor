@@ -46,27 +46,41 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirect
 	m_nWidth = desc.Width;
 }
 
-CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, Color* pPalette ) :
+CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, Assets::CPalette* pPalette ) :
 	m_pd3dDevice( pd3dDevice ), m_nWidth( nWidth ), m_nHeight( nHeight )
 {
-	pd3dDevice->CreateTexture( nWidth, nHeight, 1, 0, D3DFMT_X8R8G8B8, D3DPOOL_MANAGED, &m_pD3DTexture, NULL );
-
 	D3DLOCKED_RECT rc;
+	
+	pd3dDevice->CreateTexture( nWidth, nHeight, 1, 0, D3DFMT_X8R8G8B8, D3DPOOL_MANAGED, &m_pD3DTexture, NULL );
 	m_pD3DTexture->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
-
 	BYTE* pTexels = static_cast<BYTE*>(rc.pBits);
 
 	for ( size_t y = 0; y < nHeight; y++ ) {
 		for ( size_t x = 0; x < nWidth; x++ ) {
-			size_t uIndex = y * nWidth + x;
+			const size_t uIndex = y * nWidth + x;
+			Color* clr = pPalette->GetColor( uIndex );
+			WriteRGBTexel( pTexels, x, y, rc.Pitch, clr );
+		}
+	}
 
-			Color clr = pPalette[uIndex];
+	// Unlock the texture
+	m_pD3DTexture->UnlockRect( 0 );
+}
 
-			size_t uTexelIndex = (y * rc.Pitch) + (x * 4);
-			pTexels[uTexelIndex] = clr.B;
-			pTexels[uTexelIndex + 1] = clr.G;
-			pTexels[uTexelIndex + 2] = clr.R;
-			pTexels[uTexelIndex + 3] = 255;
+CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, uint8_t* pData, Assets::CPalette* pPalette ) :
+	m_pd3dDevice( pd3dDevice ), m_nWidth( nWidth ), m_nHeight( nHeight )
+{
+	D3DLOCKED_RECT rc;
+
+	pd3dDevice->CreateTexture( nWidth, nHeight, 1, 0, D3DFMT_X8R8G8B8, D3DPOOL_MANAGED, &m_pD3DTexture, NULL );
+	m_pD3DTexture->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
+	BYTE* pTexels = static_cast<BYTE*>(rc.pBits);
+
+	for ( size_t y = 0; y < nHeight; y++ ) {
+		for ( size_t x = 0; x < nWidth; x++ ) {
+			const size_t uIndex = y * nWidth + x;
+			Color* clr = pPalette->GetColor( pData[uIndex] );
+			WriteRGBTexel( pTexels, x, y, rc.Pitch, clr );
 		}
 	}
 

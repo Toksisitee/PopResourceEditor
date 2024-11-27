@@ -10,7 +10,8 @@ class CTexture2D
 public:
 	CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirectory, std::string sName, int nWidth, int nHeight );
 	CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirectory, std::string sName );
-	CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, Color* pPalette );
+	CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, Assets::CPalette* pPalette );
+	CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, uint8_t* pData, Assets::CPalette* pPalette );
 	CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight );
 	~CTexture2D();
 

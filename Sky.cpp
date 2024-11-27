@@ -85,27 +85,18 @@ namespace Assets
 
 	bool CSky::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice, CPalette* pPalette )
 	{
+		D3DLOCKED_RECT rc;
 		auto pColorTable = pPalette->GetColorTable();
 
 		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight );
-
-		D3DLOCKED_RECT rc;
 		m_pTexture->GetTexture()->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
-
 		BYTE* pTexels = static_cast<BYTE*>(rc.pBits);
 
 		for ( size_t y = 0; y < k_uHeight; y++ ) {
 			for ( size_t x = 0; x < k_uWidth; x++ ) {
-				size_t index = y * k_uWidth + x;
-				uint8_t paletteIndex = m_Data[index] + k_uColorStart;
-
-				Color clr = pColorTable[paletteIndex];
-
-				size_t uTexelIndex = (y * rc.Pitch) + (x * 4);
-				pTexels[uTexelIndex] = clr.B;
-				pTexels[uTexelIndex + 1] = clr.G;
-				pTexels[uTexelIndex + 2] = clr.R;
-				pTexels[uTexelIndex + 3] = 255;
+				uint8_t paletteIndex = m_Data[y * k_uWidth + x] + k_uColorStart;
+				Color* clr = &pColorTable[paletteIndex];
+				WriteRGBTexel( pTexels, x, y, rc.Pitch, clr );
 			}
 		}
 
