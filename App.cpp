@@ -52,6 +52,7 @@ CFadeWnd g_FadeWnd( nullptr );
 CFadeWnd g_FadeWnd2( nullptr );
 CBigFadeWnd g_BigFadeWnd( nullptr );
 CCliffWnd g_CliffWnd( nullptr );
+CCliffWnd g_CliffWnd2( nullptr );
 CAlphaWnd g_AlphaWnd( nullptr );
 CDispWnd g_DispWnd( nullptr );
 CBlocksWnd g_BlocksWnd( nullptr );
@@ -197,6 +198,7 @@ void CEditorApp::Run()
 	g_FadeWnd2.Initialize( GetDevice() );
 	g_BigFadeWnd.Initialize( GetDevice() );
 	g_CliffWnd.Initialize( GetDevice() );
+	g_CliffWnd2.Initialize( GetDevice() );
 	g_AlphaWnd.Initialize( GetDevice() );
 	g_DispWnd.Initialize( GetDevice() );
 	g_BlocksWnd.Initialize( GetDevice() );
@@ -207,6 +209,7 @@ void CEditorApp::Run()
 	g_FadeWnd2.SetWindowName( "Fade Window2" );
 	g_BigFadeWnd.SetWindowName( "BigFade Window" );
 	g_CliffWnd.SetWindowName( "Cliff Window" );
+	g_CliffWnd2.SetWindowName( "Cliff Window2" );
 	g_AlphaWnd.SetWindowName( "Alpha Window" );
 	g_DispWnd.SetWindowName( "Displacement Window" );
 	g_BlocksWnd.SetWindowName( "Blocks Window" );
@@ -281,7 +284,7 @@ void CEditorApp::Run()
 		ImGui::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2( 0.0f, 0.0f ) );
 		for ( uint32_t y = 0; y < 16; y++ ) {
 			for ( uint32_t x = 0; x < 16; x++ ) {
-				sprintf_s( szColorLabel, sizeof( szColorLabel ), "##%i", uIndex );
+				sprintf_s( szColorLabel, sizeof( szColorLabel ), "%i", uIndex );
 				ImGui::SameLine();
 				ImGui::ColorEdit3( szColorLabel, getColor( uIndex ), k_iColorEditFlags );
 				uIndex++;
@@ -332,6 +335,7 @@ void CEditorApp::Run()
 				g_FadeWnd2.Render();
 				g_BigFadeWnd.Render();
 				g_CliffWnd.Render();
+				g_CliffWnd2.Render();
 				g_AlphaWnd.Render();
 				g_DispWnd.Render();
 				g_BlocksWnd.Render();

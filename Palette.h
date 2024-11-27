@@ -14,6 +14,7 @@ namespace Assets
 	public:
 		Result Export( const char* pFilePath );
 		Result Load( std::string& file );
+		[[nodiscard]] Color* GetColor( uint8_t uIndex ) { return &m_ColorTable[uIndex]; }
 		[[nodiscard]] uint8_t* GetPtr();
 		[[nodiscard]] Color* GetColorTable();
 		[[nodiscard]] uint8_t FindClosestColor( const Color& clr, bool bFullSearch = false );

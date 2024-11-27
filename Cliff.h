@@ -17,7 +17,7 @@ namespace Assets
 		~CCliff() { SafeDestroyTexture( m_pTexture ); }
 
 		Result	Load( std::string& sFilePath );
-		Result	Generate( std::string& sFilePath );
+		Result	Generate( uint8_t uMode );
 		Result	Export( std::string& sFilePath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
 
@@ -33,9 +33,11 @@ namespace Assets
 		{
 			return &m_Palette;
 		}
+		float m_fLuminance = 0.6f;
 	protected:
-		void ComputeTable();
-
+		void ComputeTable( uint8_t uMode );
+		Color BlendColors( const Color& color1, const Color& color2, float fFadeFactor );
+		Color IncreaseLuminance( const Color& color, float fLuminanceFactor );
 	private:
 		uint8_t m_Data[Cliff::k_uWidth * Cliff::k_uHeight];
 		CPalette m_Palette;
