@@ -45,4 +45,16 @@ namespace ImEditor
 			ImGui::Image( pTexture->GetTexture(), size, uv0, uv1, tint_col, border_col );
 	}
 
+	bool ImageButton( CTexture2D* pTexture, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_col )
+	{
+		assert( pTexture != nullptr && "pTexture in ImageButton is nullptr" );
+
+		ImVec2 imageSize = size;
+		if ( size.x == 0 && size.y == 0 ) {
+			imageSize.x = pTexture->GetWidth();
+			imageSize.y = pTexture->GetHeight();
+		}
+
+		return ImGui::ImageButton( pTexture->GetTexture(), imageSize, uv0, uv1, frame_padding, bg_col, tint_col );
+	}
 };
