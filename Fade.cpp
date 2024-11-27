@@ -63,34 +63,36 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
-	void CFade::FadeDark( uint8_t* pPalette, uint8_t* pData, uint32_t uLights, uint32_t uDarkness )
+	void CFade::FadeColor( Color& color, float fFadeFactor )
 	{
-		// TODO
-		assert( false && "Missing implementation" );
+		color.R = std::clamp( static_cast<int32_t>(color.R * fFadeFactor), 0, 255 );
+		color.G = std::clamp( static_cast<int32_t>(color.G * fFadeFactor), 0, 255 );
+		color.B = std::clamp( static_cast<int32_t>(color.B * fFadeFactor), 0, 255 );
 	}
 
-	void CFade::FadeLight( uint8_t* pPalette, uint8_t* pData, uint32_t uLights, uint32_t uLightness )
-	{
-		// TODO
-		assert( false && "Missing implementation" );
-	}
-
-	void CFade::FadeColor( uint8_t& r, uint8_t& g, uint8_t& b, float fFadeFactor )
-	{
-		r = std::clamp( static_cast<int32_t>(r * fFadeFactor), 0, 255 );
-		g = std::clamp( static_cast<int32_t>(g * fFadeFactor), 0, 255 );
-		b = std::clamp( static_cast<int32_t>(b * fFadeFactor), 0, 255 );
-	}
-
-	uint8_t CFade::GetLuminance( uint8_t r, uint8_t g, uint8_t b )
-	{
-		return static_cast<uint8_t>(0.299 * r + 0.587 * g + 0.114 * b);
-	}
-
+	// This does not match Bullfrog's implementation
 	void CFade::ComputeTable()
 	{
-		// TODO
-		assert( false && "Missing implementation" );
+		uint8_t* pData = &m_Data[0];
+		for ( uint32_t y = 0; y < k_uHeight; y++ ) {
+			Color* pPalette = m_Palette.GetColorTable();
+			for ( uint32_t x = 0; x < k_uWidth; x++, pData++, pPalette++ ) {
+				*pData = m_Palette.FindClosestColor( *pPalette, true );
+			}
+		}
+
+		pData = &m_Data[0];
+		for ( uint32_t y = 0; y < k_uHeight; y++ ) {
+			Color* pPalette = m_Palette.GetColorTable();
+			float fRowFade = 0.1f + 0.6f * (static_cast<float>(y) / (k_uHeight - 1));
+			for ( uint32_t x = 0; x < k_uWidth; x++, pData++, pPalette++ ) {
+				float fColumnFade = 2.0f + (static_cast<float>(k_uWidth - x - 1) / k_uWidth) * 2.0f;
+				float fFinalFade = std::clamp( fRowFade * fColumnFade, 0.0f, 3.0f );
+				Color color = *pPalette;
+				FadeColor( color, fFinalFade );
+				*pData = m_Palette.FindClosestColor( color, true );
+			}
+		}
 	}
 
 	Result CFade::Generate( std::string& sFilePath )

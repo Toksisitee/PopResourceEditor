@@ -35,10 +35,7 @@ namespace Assets
 		}
 
 	protected:
-		void FadeDark( uint8_t* pPalette, uint8_t* pData, uint32_t uLights, uint32_t uDarkness );
-		void FadeLight( uint8_t* pPalette, uint8_t* pData, uint32_t uLights, uint32_t uLightness );
-		void FadeColor( uint8_t& r, uint8_t& g, uint8_t& b, float fFadeFactor );
-		uint8_t GetLuminance( uint8_t r, uint8_t g, uint8_t b );
+		void FadeColor( Color& color, float fFadeFactor );
 		void ComputeTable();
 	private:
 		uint8_t m_Data[Fade::k_uWidth * Fade::k_uHeight];
