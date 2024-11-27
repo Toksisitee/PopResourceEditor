@@ -30,8 +30,23 @@ void CBlocksWnd::Render()
 	}
 	else {
 		ImEditor::SetPointFiltering( m_pd3dDevice );
-		ImEditor::RenderTexture( m_Blocks.GetTexture( 0 ) );
-		ImEditor::RenderTexture( m_Blocks.GetTexture() );
+
+		ImGui::Checkbox( "Draw Atlas", &m_bDrawAtlas );
+		if (m_bDrawAtlas) {
+			ImEditor::RenderTexture( m_Blocks.GetTexture() );
+		}
+		else {
+			size_t uTexturesCountRow = Assets::Blocks::k_uWidth / Assets::Blocks::k_uBlockWidth;
+			size_t uTexturesCountCol = Assets::Blocks::k_uHeight / Assets::Blocks::k_uBlockHeight;
+			for ( size_t i = 0; i < uTexturesCountCol; i++ ) {
+				for ( size_t j = 0; j < uTexturesCountRow; j++ ) {
+					ImEditor::ImageButton( m_Blocks.GetTexture( j * uTexturesCountRow + i ) );
+					ImGui::SameLine();
+				}
+				ImGui::NewLine();
+			}
+		}
+
 		ImEditor::ResetRenderState();
 	}
 
