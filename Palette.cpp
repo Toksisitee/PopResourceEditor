@@ -161,7 +161,7 @@ namespace Assets
 		}
 
 		// Fallback
-		if ( bClosest ) {
+		if ( bFallback ) {
 			return FindClosestColor( clr, true );
 		}
 
