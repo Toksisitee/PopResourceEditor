@@ -63,7 +63,6 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, A
 		}
 	}
 
-	// Unlock the texture
 	m_pD3DTexture->UnlockRect( 0 );
 }
 
@@ -84,7 +83,6 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, u
 		}
 	}
 
-	// Unlock the texture
 	m_pD3DTexture->UnlockRect( 0 );
 }
 
