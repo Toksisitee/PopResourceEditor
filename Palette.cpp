@@ -150,7 +150,7 @@ namespace Assets
 		return (uint8_t)uIndex;
 	}
 
-	uint8_t CPalette::FindColorAll( const Color& clr, bool bClosest )
+	uint8_t CPalette::FindExactColor( const Color& clr, bool bFallback )
 	{
 		for ( size_t i = 0; i < k_uNumColors; i++ ) {
 			if ( clr.R == m_ColorTable[i].R &&

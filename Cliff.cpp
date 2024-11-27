@@ -99,7 +99,6 @@ namespace Assets
 
 			float fFade = static_cast<float>(y) / (k_uHeight - 1);
 			fFade = fFade * fFade;
-
 			float fLuminance = static_cast<float>(y) / (k_uHeight - 1);
 			fLuminance = fLuminance * fLuminance;
 
