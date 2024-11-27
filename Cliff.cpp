@@ -63,7 +63,7 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
-	Color CCliff::BlendColors( const Color& color1, const Color& color2, float fFadeFactor )
+	Color CCliff::BlendColors( const Color& color1, const Color& color2, const float fFadeFactor )
 	{
 		const float fBlendFactor = fFadeFactor * 0.6f;
 		Color blended;
@@ -75,7 +75,7 @@ namespace Assets
 		return blended;
 	}
 
-	Color CCliff::IncreaseLuminance( const Color& color, float fLuminanceFactor )
+	Color CCliff::IncreaseLuminance( const Color& color, const float fLuminanceFactor )
 	{
 		Color boostedColor;
 		const float fLuminance = 0.2126f * color.R + 0.7152f * color.G + 0.0722f * color.B;
@@ -92,7 +92,7 @@ namespace Assets
 	{
 		Color blendedColor;
 		uint8_t* pData = &m_Data[0];
-		Color ditherColor = *m_Palette.GetColor( 244 );
+		const Color ditherColor = *m_Palette.GetColor( 244 );
 
 		for ( uint32_t y = 0; y < k_uHeight; y++ ) {
 			auto pPalette = m_Palette.GetColorTable();
@@ -118,7 +118,7 @@ namespace Assets
 					blendedColor = BlendColors( blendedColor, ditherColor, fFade );
 				}
 
-				*pData = m_Palette.FindClosestColor( blendedColor );
+				*pData = m_Palette.FindColor( blendedColor );
 			}
 		}
 	}

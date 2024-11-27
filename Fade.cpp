@@ -77,7 +77,7 @@ namespace Assets
 		for ( uint32_t y = 0; y < k_uHeight; y++ ) {
 			Color* pPalette = m_Palette.GetColorTable();
 			for ( uint32_t x = 0; x < k_uWidth; x++, pData++, pPalette++ ) {
-				*pData = m_Palette.FindClosestColor( *pPalette, true );
+				*pData = m_Palette.FindColor( *pPalette );
 			}
 		}
 
@@ -90,7 +90,7 @@ namespace Assets
 				float fFinalFade = std::clamp( fRowFade * fColumnFade, 0.0f, 3.0f );
 				Color color = *pPalette;
 				FadeColor( color, fFinalFade );
-				*pData = m_Palette.FindClosestColor( color, true );
+				*pData = m_Palette.FindColor( color );
 			}
 		}
 	}

@@ -310,21 +310,6 @@ void CEditorApp::Run()
 				bLoaded = true;
 			}
 
-			{
-				ImGui::Begin( "Sky Texture" );
-				if ( g_Sky.GetTexture() == nullptr ) {
-					g_Sky.CreateTexture( g_Editor.m_pd3dDevice, &g_Palette );
-				}
-				else {
-					ImEditor::SetPointFiltering( g_Editor.m_pd3dDevice );
-					auto pSkyTex = g_Sky.GetTexture();
-					const ImVec2 texSize = ImVec2( pSkyTex->GetWidth(), pSkyTex->GetHeight() );
-					ImEditor::RenderTexture( pSkyTex, texSize );
-					ImEditor::ResetRenderState();
-
-				}
-				ImGui::End();
-			}
 #endif
 
 			{

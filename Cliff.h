@@ -36,8 +36,8 @@ namespace Assets
 		float m_fLuminance = 0.6f;
 	protected:
 		void ComputeTable( uint8_t uMode );
-		Color BlendColors( const Color& color1, const Color& color2, float fFadeFactor );
-		Color IncreaseLuminance( const Color& color, float fLuminanceFactor );
+		Color BlendColors( const Color& color1, const Color& color2, const float fFadeFactor );
+		Color IncreaseLuminance( const Color& color, const float fLuminanceFactor );
 	private:
 		uint8_t m_Data[Cliff::k_uWidth * Cliff::k_uHeight];
 		CPalette m_Palette;

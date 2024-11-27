@@ -85,4 +85,14 @@ namespace Assets
 		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], &m_Palette );
 		return true;
 	}
+
+	uint8_t CBigFade::FindColor( const Color& color )
+	{
+		for ( size_t i = 0; i < k_uNumColors; i++ ) {
+			if ( std::memcmp( &color, m_Palette.GetColor(i), sizeof( Color ) ) == 0 ) {
+				return (uint8_t)i;
+			}
+		}
+		return m_Palette.GetColorKey(0);
+	}
 }

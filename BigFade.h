@@ -9,6 +9,7 @@ namespace Assets
 	{
 		constexpr uint32_t	k_uWidth = 256;
 		constexpr uint32_t	k_uHeight = 1152;
+		constexpr uint32_t	k_uNumColors = 112;		// Max numbers of colors in the palette reserved for the BigFade texture
 	}
 
 	class CBigFade
@@ -20,6 +21,7 @@ namespace Assets
 		Result	Generate( std::string& sFilePath );
 		Result	Export( std::string& sFilePath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
+		uint8_t FindColor( const Color& color );
 
 		inline void DestroyTexture()
 		{

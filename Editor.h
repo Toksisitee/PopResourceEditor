@@ -20,6 +20,7 @@
 
 typedef unsigned char BYTE;
 
+#pragma pack(push, 1)
 struct Color {
 	Color() = default;
 	Color( uint8_t r, uint8_t g, uint8_t b ) : R( r ), G( g ), B( b ) {}
@@ -36,6 +37,7 @@ struct Color {
 
 	uint8_t R, G, B;
 };
+#pragma pack(pop)
 
 enum eImFont : uint8_t
 {

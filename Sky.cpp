@@ -29,12 +29,13 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
-	Result CSky::Export( std::string& fFilepath, Color* pColorTable )
+	Result CSky::Export( std::string& fFilepath )
 	{
 		g_ErrHandler.SetFileType( FileType::Sky );
 
 		BMP BMP;
 		size_t uIndex = 0;
+		auto pColorTable = m_Palette.GetColorTable();
 
 		BMP.SetSize( k_uWidth, k_uHeight );
 		BMP.SetBitDepth( 24 );
@@ -59,7 +60,7 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
-	Result CSky::Generate( std::string& fFilepath, CPalette* pPalette )
+	Result CSky::Generate( std::string& fFilepath )
 	{
 		g_ErrHandler.SetFileType( FileType::Sky );
 
@@ -83,10 +84,10 @@ namespace Assets
 		return Result::FAIL_GENERATE;
 	}
 
-	bool CSky::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice, CPalette* pPalette )
+	bool CSky::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
 		D3DLOCKED_RECT rc;
-		auto pColorTable = pPalette->GetColorTable();
+		auto pColorTable = m_Palette.GetColorTable();
 
 		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight );
 		m_pTexture->GetTexture()->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
@@ -105,4 +106,13 @@ namespace Assets
 		return true;
 	}
 
+	uint8_t CSky::FindColor( const Color& color )
+	{
+		for ( size_t i = k_uColorStart; i < k_uColorStart + k_uNumColors; i++ ) {
+			if ( std::memcmp( &color, m_Palette.GetColor( i ), sizeof( Color ) ) == 0 ) {
+				return (uint8_t)i;
+			}
+		}
+		return m_Palette.GetColorKey( 0 );
+	}
 }

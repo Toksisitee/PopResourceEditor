@@ -49,7 +49,7 @@ namespace Assets
 	private:
 		uint8_t m_Data[Blocks::k_uWidth * Blocks::k_uHeight];
 		CPalette m_Palette;
-		CTexture2D* m_pTexture;
-		CTexture2D* m_pSubTextures[256];
+		CTexture2D* m_pTexture;	// Atlas
+		CTexture2D* m_pSubTextures[256]; // Split textures (32x32)
 	};
 }

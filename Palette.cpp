@@ -75,6 +75,8 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
+#if 0
+	// TODO: This is slow, use CPalette::FindColor instead?
 	uint8_t CPalette::FindClosestColor( const Color& clr, bool bFullSearch )
 	{
 		uint8_t uIndex = m_uColorKeys[0];
@@ -95,6 +97,7 @@ namespace Assets
 
 		return uIndex;
 	}
+#endif
 
 #if 0
 	uint8_t CPalette::FindColor( const Color& clr, bool bClosest )
@@ -153,47 +156,12 @@ namespace Assets
 	uint8_t CPalette::FindExactColor( const Color& clr, bool bFallback )
 	{
 		for ( size_t i = 0; i < k_uNumColors; i++ ) {
-			if ( clr.R == m_ColorTable[i].R &&
-				clr.G == m_ColorTable[i].G &&
-				clr.B == m_ColorTable[i].B ) {
-				return (uint8_t)i;
+			if ( std::memcmp( &clr, &m_ColorTable[i], sizeof( Color ) ) == 0 ) {
+				return static_cast<uint8_t>(i);
 			}
 		}
 
-		// Fallback
-		if ( bFallback ) {
-			return FindClosestColor( clr, true );
-		}
-
-		return m_uColorKeys[0];
-	}
-
-	uint8_t CPalette::FindBigFadeColor( const Color& clr )
-	{
-		// TODO: avoid magic numbers
-		for ( size_t i = 0; i < 112; i++ ) {
-			if ( clr.R == m_ColorTable[i].R &&
-				clr.G == m_ColorTable[i].G &&
-				clr.B == m_ColorTable[i].B ) {
-				return (uint8_t)i;
-			}
-		}
-
-		return m_uColorKeys[0];
-	}
-
-	uint8_t CPalette::FindSkyColor( const Color& clr )
-	{
-		// TODO: avoid magic numbers
-		for ( size_t i = 112; i < 128; i++ ) {
-			if ( clr.R == m_ColorTable[i].R &&
-				clr.G == m_ColorTable[i].G &&
-				clr.B == m_ColorTable[i].B ) {
-				return (uint8_t)i;
-			}
-		}
-
-		return m_uColorKeys[0];
+		return bFallback ? FindColor( clr, 0, k_uNumColors ) : m_uColorKeys[0];
 	}
 
 	bool CPalette::IndexIsColorKey( size_t uIndex )

@@ -17,12 +17,10 @@ namespace Assets
 		[[nodiscard]] Color* GetColor( uint8_t uIndex ) { return &m_ColorTable[uIndex]; }
 		[[nodiscard]] uint8_t* GetPtr();
 		[[nodiscard]] Color* GetColorTable();
-		[[nodiscard]] uint8_t FindClosestColor( const Color& clr, bool bFullSearch = false );
+		//[[nodiscard]] uint8_t FindClosestColor( const Color& clr, bool bFullSearch = false );
 		[[nodiscard]] uint8_t FindColor( const Color& clr, size_t uMin = 0, size_t uMax = Palette::k_uNumColors );
 		//uint8_t FindColor( const RGB& clr, bool bClosest = false );
 		[[nodiscard]] uint8_t FindExactColor( const Color& clr, bool bFallback = false );
-		[[nodiscard]] uint8_t FindBigFadeColor( const Color& clr );
-		[[nodiscard]] uint8_t FindSkyColor( const Color& clr );
 		[[nodiscard]] uint8_t GetColorKey( size_t uSlot = 0 );
 		[[nodiscard]] bool IndexIsColorKey( size_t uIndex );
 	private:
