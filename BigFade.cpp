@@ -96,11 +96,11 @@ namespace Assets
 				uint8_t uIndex = m_Data[y * k_uWidth + x];
 				Color clr = pColorTable[uIndex];
 
-				size_t iTexelIndex = (y * rc.Pitch) + (x * 4);
-				pTexels[iTexelIndex] = clr.B;
-				pTexels[iTexelIndex + 1] = clr.G;
-				pTexels[iTexelIndex + 2] = clr.R;
-				pTexels[iTexelIndex + 3] = 255;
+				size_t uTexelIndex = (y * rc.Pitch) + (x * 4);
+				pTexels[uTexelIndex] = clr.B;
+				pTexels[uTexelIndex + 1] = clr.G;
+				pTexels[uTexelIndex + 2] = clr.R;
+				pTexels[uTexelIndex + 3] = 255;
 			}
 		}
 

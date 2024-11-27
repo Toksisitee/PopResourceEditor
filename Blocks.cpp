@@ -1,4 +1,5 @@
 #include <fstream>
+#include <assert.h>
 
 #include "EasyBMP/EasyBMP.h"
 
@@ -64,6 +65,9 @@ namespace Assets
 	{
 		g_ErrHandler.SetFileType( FileType::Blocks );
 
+		for ( size_t i = 0; i < 256; i++ ) {
+			DestroyTexture( i );
+		}
 		DestroyTexture();
 
 #if 0
@@ -80,30 +84,54 @@ namespace Assets
 
 	bool CBlocks::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
-		auto pColorTable = m_Palette.GetColorTable();
-
-		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight );
-
 		D3DLOCKED_RECT rc;
+		auto pColorTable = m_Palette.GetColorTable();
+		
+		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight );
 		m_pTexture->GetTexture()->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
-
+		
 		BYTE* pTexels = static_cast<BYTE*>(rc.pBits);
-
+		
 		for ( size_t y = 0; y < k_uHeight; y++ ) {
 			for ( size_t x = 0; x < k_uWidth; x++ ) {
 				uint8_t paletteIndex = m_Data[y * k_uWidth + x];
-				Color clr = pColorTable[paletteIndex];
-
-				size_t iTexelIndex = (y * rc.Pitch) + (x * 4);
-				pTexels[iTexelIndex] = clr.B;
-				pTexels[iTexelIndex + 1] = clr.G;
-				pTexels[iTexelIndex + 2] = clr.R;
-				pTexels[iTexelIndex + 3] = 255;
+				Color* clr = &pColorTable[paletteIndex];
+				WriteRGBTexel( pTexels, x, y, rc.Pitch, clr );
 			}
 		}
 
 		m_pTexture->GetTexture()->UnlockRect( 0 );
+		return true;
+	}
+
+	bool CBlocks::CreateSubTexture( LPDIRECT3DDEVICE9 pD3DDevice, size_t index )
+	{
+		if ( index >= k_uNumBlocks ) {
+			assert( false && "CBlocks::CreateSubTexture oob" );
+			return false;
+		}
+
+		D3DLOCKED_RECT rc;
+		size_t uRow = index / (k_uWidth / k_uBlockWidth);
+		size_t uCol = index % (k_uWidth / k_uBlockWidth);
+		auto pColorTable = m_Palette.GetColorTable();
+
+		m_pSubTextures[index] = new CTexture2D( pD3DDevice, k_uBlockWidth, k_uBlockHeight );
+		m_pSubTextures[index]->GetTexture()->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
+		BYTE* pTexels = static_cast<BYTE*>(rc.pBits);
+
+		for ( size_t y = 0; y < k_uBlockHeight; y++ ) {
+			for ( size_t x = 0; x < k_uBlockWidth; x++ ) {
+				const auto atlasX = uRow * k_uBlockWidth + x;
+				const auto atlasY = uCol * k_uBlockHeight + y;
+				Color* clr = &pColorTable[m_Data[atlasY * k_uWidth + atlasX]];
+				WriteRGBTexel( pTexels, x, y, rc.Pitch, clr );
+			}
+		}
+
+		m_pSubTextures[index]->GetTexture()->UnlockRect( 0 );
 
 		return true;
 	}
+
 }

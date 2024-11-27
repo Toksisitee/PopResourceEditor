@@ -53,3 +53,12 @@ inline void WriteRGBTexel( BYTE* pTexels, size_t x, size_t y, size_t pitch, cons
 	pTexels[i + 2] = rgb.R;
 	pTexels[i + 3] = 255;
 };
+
+inline void WriteRGBTexel( BYTE* pTexels, size_t x, size_t y, size_t pitch, Color* rgb )
+{
+	size_t i = (y * pitch) + (x * 4);
+	pTexels[i] = rgb->B;
+	pTexels[i + 1] = rgb->G;
+	pTexels[i + 2] = rgb->R;
+	pTexels[i + 3] = 255;
+};

@@ -23,10 +23,14 @@ void CBlocksWnd::Render()
 	}
 
 	if ( m_Blocks.GetTexture() == nullptr ) {
+		for ( size_t i = 0; i < 256; i++ ) {
+			m_Blocks.CreateSubTexture( m_pd3dDevice, i );
+		}
 		m_Blocks.CreateTexture( m_pd3dDevice );
 	}
 	else {
 		ImEditor::SetPointFiltering( m_pd3dDevice );
+		ImEditor::RenderTexture( m_Blocks.GetTexture( 0 ) );
 		ImEditor::RenderTexture( m_Blocks.GetTexture() );
 		ImEditor::ResetRenderState();
 	}
