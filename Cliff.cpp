@@ -87,7 +87,7 @@ namespace Assets
 		return boostedColor;
 	}
 
-	// This does not match Bullfrog's implementation.
+	// TODO: This does not match Bullfrog's implementation.
 	void CCliff::ComputeTable( uint8_t uMode )
 	{
 		Color blendedColor;

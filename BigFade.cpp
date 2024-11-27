@@ -89,10 +89,10 @@ namespace Assets
 	uint8_t CBigFade::FindColor( const Color& color )
 	{
 		for ( size_t i = 0; i < k_uNumColors; i++ ) {
-			if ( std::memcmp( &color, m_Palette.GetColor(i), sizeof( Color ) ) == 0 ) {
+			if ( std::memcmp( &color, m_Palette.GetColor( i ), sizeof( Color ) ) == 0 ) {
 				return (uint8_t)i;
 			}
 		}
-		return m_Palette.GetColorKey(0);
+		return m_Palette.GetColorKey( 0 );
 	}
 }

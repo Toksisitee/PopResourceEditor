@@ -18,8 +18,7 @@ public:
 	}
 
 	void Cleanup() override
-	{
-	}
+	{}
 
 private:
 	Assets::CPalette m_Palette;

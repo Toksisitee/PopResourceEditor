@@ -22,9 +22,8 @@ void CGhostWnd::Render()
 		m_Ghost.Generate( f );
 	}
 
-	if ( ImEditor::InputScalar( "Opacity", &m_Ghost.m_uOpacity ) ) {
-		if ( m_Ghost.m_uOpacity > 100 ) 
-			m_Ghost.m_uOpacity = 100;
+	  uint8_t uMaxOpacity = 100;
+	if ( ImEditor::SliderScalar( "Opacity", &m_Ghost.m_uOpacity, NULL, &uMaxOpacity ) ) {
 		std::string f;
 		m_Ghost.Generate( f );
 	}

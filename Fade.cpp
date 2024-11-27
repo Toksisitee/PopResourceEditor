@@ -70,7 +70,7 @@ namespace Assets
 		color.B = std::clamp( static_cast<int32_t>(color.B * fFadeFactor), 0, 255 );
 	}
 
-	// This does not match Bullfrog's implementation
+	// TODO: This does not match Bullfrog's implementation
 	void CFade::ComputeTable()
 	{
 		uint8_t* pData = &m_Data[0];

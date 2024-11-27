@@ -5,14 +5,34 @@
 
 namespace ImEditor
 {
-	const int8_t k_s8_one = 1;
-	const int16_t k_s16_one = 1;
-	const int32_t k_s32_one = 1;
-	const uint8_t k_u8_one = 1;
-	const uint16_t k_u16_one = 1;
-	const uint32_t k_u32_one = 1;
-	const float k_f_one = 1.0f;
-	const double k_d_one = 1.0;
+	namespace Constants
+	{
+		namespace Step
+		{
+			const int8_t	s8_one = 1;
+			const uint8_t	u8_one = 1;
+			const int16_t	s16_one = 1;
+			const uint16_t	u16_one = 1;
+			const int32_t	s32_one = 1;
+			const uint32_t	u32_one = 1;
+			const float		f_one = 1.0f;
+			const double	d_one = 1.0;
+		}
+
+		namespace Limits
+		{
+			const int8_t	s8_min = -128, s8_max = 127;
+			const uint8_t	u8_min = 0, u8_max = 255;
+			const int16_t	s16_min = SHRT_MIN, s16_max = SHRT_MAX;
+			const uint16_t	u16_min = 0, u16_max = USHRT_MAX;
+			const int32_t	s32_min = INT_MIN, s32_max = INT_MAX;
+			const uint32_t	u32_min = 0, u32_max = UINT_MAX;
+			const int64_t	s64_min = LLONG_MIN, s64_max = LLONG_MAX;
+			const uint64_t	u64_min = 0, u64_max = ULLONG_MAX;
+			const float		f_min = FLT_MIN, f_max = FLT_MAX;
+			const double	d_min = DBL_MIN, d_max = DBL_MAX;
+		}
+	}
 
 	void SetPointFiltering( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
