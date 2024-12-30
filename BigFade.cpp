@@ -1,4 +1,5 @@
 #include <fstream>
+#include <assert.h>
 
 #include "EasyBMP/EasyBMP.h"
 
@@ -94,5 +95,16 @@ namespace Assets
 			}
 		}
 		return m_Palette.GetColorKey( 0 );
+	}
+
+	// TODO: Rename to "GetPal"?
+	uint8_t CBigFade::GetColor( const uint32_t uIndex )
+	{
+		if ( uIndex > BigFade::k_uWidth * BigFade::k_uHeight ) {
+			assert( false && "CBigFade: GetColor index out of bounds!" );
+			return m_Data[0];
+		}
+
+		return m_Data[uIndex];
 	}
 }
