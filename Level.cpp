@@ -15,13 +15,6 @@ namespace Assets
 {
 	using namespace Level;
 
-	std::string CharToHexString( char c )
-	{
-		char buffer[2];
-		sprintf_s( buffer, sizeof( buffer ), "%x", static_cast<unsigned char>(c) & 0xF );
-		return std::string( 1, buffer[0] );
-	}
-
 	// TODO: Load starting positions
 	Result CLevel::Load( std::string& sFilePath )
 	{
@@ -169,6 +162,43 @@ namespace Assets
 		return h;
 	}
 
+	std::pair<int32_t, int32_t> CLevel::CalculateCentroid()
+	{
+		fVec2 fSin = { 0.0f, 0.0f };
+		fVec2 fCos = { 0.0f, 0.0f };
+		int64_t nTotalHeight = 0;
+
+		for ( uint32_t y = 0; y < k_uHeight; y++ ) {
+			for ( uint32_t x = 0; x < k_uWidth; x++ ) {
+				auto h = GetThresholdFilteredHeightAt( x, y );
+				if ( h > 0 ) {
+					double dAngleX = 2.0 * EDITOR_PI * x / k_uWidth;
+					double dAngleY = 2.0 * EDITOR_PI * y / k_uHeight;
+					fSin.x += std::sin( dAngleX ) * h;
+					fCos.x += std::cos( dAngleX ) * h;
+					fSin.y += std::sin( dAngleY ) * h;
+					fCos.y += std::cos( dAngleY ) * h;
+					nTotalHeight += h;
+				}
+			}
+		}
+
+		if ( nTotalHeight == 0 ) {
+			return { 0, 0 };
+		}
+
+		float fAvgAngleX = std::atan2( fSin.x, fCos.x );
+		float fAvgAngleY = std::atan2( fSin.y, fCos.y );
+
+		if ( fAvgAngleX < 0 ) fAvgAngleX += 2.0 * EDITOR_PI;
+		if ( fAvgAngleY < 0 ) fAvgAngleY += 2.0 * EDITOR_PI;
+
+		auto cx = static_cast<int32_t>(std::round( (fAvgAngleX * k_uWidth) / (2.0 * EDITOR_PI) ));
+		auto cy = static_cast<int32_t>(std::round( (fAvgAngleY * k_uHeight) / (2.0 * EDITOR_PI) ));
+
+		return { cx, cy };
+	}
+
 	void CLevel::MapToDisp( uint8_t* pData, int32_t x, int32_t y )
 	{
 		uint8_t* pDisp = m_Disp.GetPtr();
@@ -224,44 +254,6 @@ namespace Assets
 
 		*pData = m_BigFade.GetColor( uv );
 	}
-
-	std::pair<int32_t, int32_t> CLevel::CalculateCentroid()
-	{
-		fVec2 fSin = { 0.0f, 0.0f };
-		fVec2 fCos = { 0.0f, 0.0f };
-		int64_t nTotalHeight = 0;
-
-		for ( uint32_t y = 0; y < k_uHeight; y++ ) {
-			for ( uint32_t x = 0; x < k_uWidth; x++ ) {
-				auto h = GetThresholdFilteredHeightAt( x, y );
-				if ( h > 0 ) {
-					double dAngleX = 2.0 * EDITOR_PI * x / k_uWidth;
-					double dAngleY = 2.0 * EDITOR_PI * y / k_uHeight;
-					fSin.x += std::sin( dAngleX ) * h;
-					fCos.x += std::cos( dAngleX ) * h;
-					fSin.y += std::sin( dAngleY ) * h;
-					fCos.y += std::cos( dAngleY ) * h;
-					nTotalHeight += h;
-				}
-			}
-		}
-
-		if ( nTotalHeight == 0 ) {
-			return { 0, 0 };
-		}
-
-		float fAvgAngleX = std::atan2( fSin.x, fCos.x );
-		float fAvgAngleY = std::atan2( fSin.y, fCos.y );
-
-		if ( fAvgAngleX < 0 ) fAvgAngleX += 2.0 * EDITOR_PI;
-		if ( fAvgAngleY < 0 ) fAvgAngleY += 2.0 * EDITOR_PI;
-
-		auto cx = static_cast<int32_t>(std::round( (fAvgAngleX * k_uWidth) / (2.0 * EDITOR_PI) ));
-		auto cy = static_cast<int32_t>(std::round( (fAvgAngleY * k_uHeight) / (2.0 * EDITOR_PI) ));
-
-		return { cx, cy };
-	}
-
 
 	Result CLevel::GeneratePreview( uint16_t uCliff, float fLightX, float fLightY, bool bWater )
 	{
