@@ -94,35 +94,49 @@ namespace Assets
 		uint8_t* pData = &m_Data[0];
 		const Color ditherColor = *m_Palette.GetColor( 244 );
 
+		const float fCenter = static_cast<float>(k_uHeight) / 2.0f;
+
 		for ( uint32_t y = 0; y < k_uHeight; y++ ) {
 			auto pPalette = m_Palette.GetColorTable();
 
 			float fFade = static_cast<float>(y) / (k_uHeight - 1);
 			fFade = fFade * fFade;
+
 			float fLuminance = static_cast<float>(y) / (k_uHeight - 1);
 			fLuminance = fLuminance * fLuminance;
 
+			float fDistCenter = fabs( static_cast<float>(y) - fCenter ) / fCenter;
+			float fMiddleFade = 1.0f - pow( 1.0f - fDistCenter, 3 );
+			fLuminance *= fMiddleFade;
+
 			for ( uint32_t x = 0; x < k_uWidth; x++, pData++, pPalette++ ) {
+				float fColumnFade = pow( static_cast<float>(y) / (k_uHeight - 1), 3.0f );
+				fColumnFade *= 1.5f;
+
+				float fFinalLuminance = std::clamp( fLuminance + fColumnFade, 0.0f, 2.0f );
+
 				Color originalColor = *pPalette;
 
+				// TODO: temp uMode switch
 				if ( uMode == 0 ) {
 					blendedColor = BlendColors( originalColor, ditherColor, fFade );
 				}
-				else if (uMode == 1) {
+				else if ( uMode == 1 ) {
 					blendedColor = BlendColors( originalColor, ditherColor, fFade );
-					blendedColor = IncreaseLuminance( blendedColor, fLuminance );
+					blendedColor = IncreaseLuminance( blendedColor, fFinalLuminance );
 					blendedColor = BlendColors( blendedColor, ditherColor, fFade );
 				}
 				else {
-					blendedColor = IncreaseLuminance( originalColor, fLuminance );
-					blendedColor = BlendColors( blendedColor, ditherColor, fFade );
+					blendedColor = IncreaseLuminance( originalColor, fFinalLuminance );
+					float fDitherStrength = 0.7f;
+					blendedColor = BlendColors( blendedColor, ditherColor, fFade * fDitherStrength );
+					blendedColor = BlendColors( blendedColor, ditherColor, fFade * fDitherStrength );
 				}
 
 				*pData = m_Palette.FindColor( blendedColor );
 			}
 		}
 	}
-
 
 	Result CCliff::Generate( uint8_t uMode )
 	{
