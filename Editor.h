@@ -13,6 +13,7 @@
 #define	EDITOR_DATE		__DATE__ " " __TIME__
 
 #define EDITOR_DEBUG_FONTS	(0)
+#define EDITOR_PI (3.14159265358979323846)
 
 
 #define SAFE_FREE(pBuffer) if (pBuffer) \
@@ -38,6 +39,13 @@ struct Color {
 	uint8_t R, G, B;
 };
 #pragma pack(pop)
+
+struct fVec2 {
+	fVec2() = default;
+	fVec2( float _x, float _y ) : x( _x ), y( _y ) {}
+	float x;
+	float y;
+};
 
 enum eImFont : uint8_t
 {
