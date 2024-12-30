@@ -28,6 +28,10 @@ namespace Assets
 		{
 			return m_pTexture;
 		}
+		[[nodiscard]] inline uint8_t* GetPtr()
+		{
+			return &m_Data[0];
+		}
 
 	private:
 		const uint8_t k_uGrayscaleOffset = 128;
