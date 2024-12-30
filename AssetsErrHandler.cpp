@@ -136,6 +136,8 @@ namespace Assets
 				return "Cliff";
 			case Assets::FileType::Blocks:
 				return "Blocks";
+			case Assets::FileType::Level:
+				return "Level";
 		}
 
 		return "Unknown";

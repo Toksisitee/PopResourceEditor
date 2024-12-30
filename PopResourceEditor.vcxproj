@@ -175,6 +175,8 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="imgui\imsink\imsink.cpp" />
     <ClCompile Include="include\EasyBMP\EasyBMP.cpp" />
+    <ClCompile Include="Level.cpp" />
+    <ClCompile Include="LevelWnd.cpp" />
     <ClCompile Include="Palette.cpp" />
     <ClCompile Include="PopResourceEditor.cpp" />
     <ClCompile Include="Sky.cpp" />
@@ -220,6 +222,8 @@
     <ClInclude Include="include\EasyBMP\EasyBMP_BMP.h" />
     <ClInclude Include="include\EasyBMP\EasyBMP_DataStructures.h" />
     <ClInclude Include="include\EasyBMP\EasyBMP_VariousBMPutilities.h" />
+    <ClInclude Include="Level.h" />
+    <ClInclude Include="LevelWnd.h" />
     <ClInclude Include="Palette.h" />
     <ClInclude Include="Sky.h" />
     <ClInclude Include="SkyWnd.h" />

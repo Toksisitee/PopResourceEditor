@@ -31,6 +31,7 @@
 #include "AlphaWnd.h"
 #include "DispWnd.h"
 #include "BlocksWnd.h"
+#include "LevelWnd.h"
 
 #include "App.h"
 
@@ -55,7 +56,10 @@ CCliffWnd g_CliffWnd( nullptr );
 CCliffWnd g_CliffWnd2( nullptr );
 CAlphaWnd g_AlphaWnd( nullptr );
 CDispWnd g_DispWnd( nullptr );
+CDispWnd g_DispWnd2( nullptr );
 CBlocksWnd g_BlocksWnd( nullptr );
+CLevelWnd g_LevelWnd( nullptr, "levl2017" );
+CLevelWnd g_LevelWnd2( nullptr, "levl2021" );
 Assets::Sprite::CSprite g_Sprite( nullptr );
 ImFont* g_ImFonts[eImFont::Max] = { 0 };
 
@@ -201,7 +205,10 @@ void CEditorApp::Run()
 	g_CliffWnd2.Initialize( GetDevice() );
 	g_AlphaWnd.Initialize( GetDevice() );
 	g_DispWnd.Initialize( GetDevice() );
+	g_DispWnd2.Initialize( GetDevice() );
 	g_BlocksWnd.Initialize( GetDevice() );
+	g_LevelWnd.Initialize( GetDevice() );
+	g_LevelWnd2.Initialize( GetDevice() );
 	g_SkyWnd.SetWindowName( "Sky Window" );
 	g_GhostWnd.SetWindowName( "Ghost Window" );
 	g_GhostWnd2.SetWindowName( "Ghost Window2" );
@@ -212,7 +219,10 @@ void CEditorApp::Run()
 	g_CliffWnd2.SetWindowName( "Cliff Window2" );
 	g_AlphaWnd.SetWindowName( "Alpha Window" );
 	g_DispWnd.SetWindowName( "Displacement Window" );
+	g_DispWnd2.SetWindowName( "Water Displacement Window" );
 	g_BlocksWnd.SetWindowName( "Blocks Window" );
+	g_LevelWnd.SetWindowName( "Level Window" );
+	g_LevelWnd2.SetWindowName( "Level Window2" );
 
 	bool bDone = false;
 	while ( !bDone ) {
@@ -323,7 +333,10 @@ void CEditorApp::Run()
 				g_CliffWnd2.Render();
 				g_AlphaWnd.Render();
 				g_DispWnd.Render();
+				g_DispWnd2.Render();
 				g_BlocksWnd.Render();
+				g_LevelWnd.Render();
+				g_LevelWnd2.Render();
 			}
 
 			{

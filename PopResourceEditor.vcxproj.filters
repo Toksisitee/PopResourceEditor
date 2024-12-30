@@ -141,6 +141,12 @@
     <ClCompile Include="BlocksWnd.cpp">
       <Filter>Source Files\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelWnd.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3DApp.h">
@@ -267,6 +273,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="BlocksWnd.h">
+      <Filter>Source Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelWnd.h">
       <Filter>Source Files\Windows</Filter>
     </ClInclude>
   </ItemGroup>

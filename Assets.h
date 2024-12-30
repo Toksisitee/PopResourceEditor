@@ -16,6 +16,7 @@ namespace Assets
 		Cliff,
 		Disp,
 		Blocks,
+		Level,
 	};
 
 	enum class Result : uint8_t
