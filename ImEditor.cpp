@@ -29,7 +29,7 @@ namespace ImEditor
 			const uint32_t	u32_min = 0, u32_max = UINT_MAX;
 			const int64_t	s64_min = LLONG_MIN, s64_max = LLONG_MAX;
 			const uint64_t	u64_min = 0, u64_max = ULLONG_MAX;
-			const float		f_min = FLT_MIN, f_max = FLT_MAX;
+			const float		f_min = FLT_MIN, f_max = +10000000000.0f;
 			const double	d_min = DBL_MIN, d_max = DBL_MAX;
 		}
 	}
