@@ -122,6 +122,17 @@ namespace Assets
 		return Result::OK_GENERATE;
 	}
 
+	Color CAlpha::GetAlphaColor( uint8_t uIndex )
+	{
+		if ( uIndex > 16 ) {
+			assert( false && "CAlpha::GetAlphaColor oob index!" );
+			uIndex = 0;
+		}
+		
+		uint8_t i = uIndex * 3;
+		return Color( auColors[i], auColors[i + 1], auColors[i + 2] );
+	}
+
 	bool CAlpha::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
 		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], &m_Palette );

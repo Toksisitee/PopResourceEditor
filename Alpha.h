@@ -19,6 +19,7 @@ namespace Assets
 		Result	Load( std::string& sFilePath );
 		Result	Generate( std::string& sFilePath );
 		Result	Export( std::string& sFilePath );
+		Color	GetAlphaColor( uint8_t uIndex );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
 
 		inline void DestroyTexture()
