@@ -12,6 +12,7 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "imsink/imsink.h"
 
+#include "Debug.h"
 #include "ImEditor.h"
 #include "Utils.h"
 #include "D3DApp.h"
@@ -46,111 +47,18 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT ms
 CEditorApp g_Editor;
 Assets::CPalette g_Palette;
 Assets::CSky g_Sky;
-CSkyWnd g_SkyWnd( nullptr );
-CGhostWnd g_GhostWnd( nullptr );
-CGhostWnd g_GhostWnd2( nullptr );
-CFadeWnd g_FadeWnd( nullptr );
-CFadeWnd g_FadeWnd2( nullptr );
-CBigFadeWnd g_BigFadeWnd( nullptr );
-CCliffWnd g_CliffWnd( nullptr );
-CCliffWnd g_CliffWnd2( nullptr );
-CAlphaWnd g_AlphaWnd( nullptr );
-CDispWnd g_DispWnd( nullptr );
-CDispWnd g_DispWnd2( nullptr );
-CBlocksWnd g_BlocksWnd( nullptr );
-CLevelWnd g_LevelWnd( nullptr, "levl2017" );
-CLevelWnd g_LevelWnd2( nullptr, "levl2021" );
+
 Assets::Sprite::CSprite g_Sprite( nullptr );
 ImFont* g_ImFonts[eImFont::Max] = { 0 };
 
-#if EDITOR_DEBUG_FONTS
-struct FreeTypeTest
-{
-	enum FontBuildMode { FontBuildMode_FreeType, FontBuildMode_Stb };
-
-	FontBuildMode   BuildMode = FontBuildMode_FreeType;
-	bool            WantRebuild = true;
-	float           RasterizerMultiply = 1.0f;
-	unsigned int    FreeTypeBuilderFlags = 0;
-
-	// Call _BEFORE_ NewFrame()
-	bool PreNewFrame()
-	{
-		if ( !WantRebuild )
-			return false;
-
-		ImFontAtlas* atlas = ImGui::GetIO().Fonts;
-		for ( int n = 0; n < atlas->ConfigData.Size; n++ )
-			((ImFontConfig*)&atlas->ConfigData[n])->RasterizerMultiply = RasterizerMultiply;
-
-		// Allow for dynamic selection of the builder. 
-		// In real code you are likely to just define IMGUI_ENABLE_FREETYPE and never assign to FontBuilderIO.
-#ifdef IMGUI_ENABLE_FREETYPE
-		if ( BuildMode == FontBuildMode_FreeType ) {
-			atlas->FontBuilderIO = ImGuiFreeType::GetBuilderForFreeType();
-			atlas->FontBuilderFlags = FreeTypeBuilderFlags;
-		}
-#endif
-#ifdef IMGUI_ENABLE_STB_TRUETYPE
-		if ( BuildMode == FontBuildMode_Stb ) {
-			atlas->FontBuilderIO = ImFontAtlasGetBuilderForStbTruetype();
-			atlas->FontBuilderFlags = 0;
-		}
-#endif
-		atlas->Build();
-		WantRebuild = false;
-		return true;
-	}
-
-	// Call to draw UI
-	void ShowFontsOptionsWindow()
-	{
-		ImFontAtlas* atlas = ImGui::GetIO().Fonts;
-
-		ImGui::Begin( "FreeType Options" );
-		ImGui::ShowFontSelector( "Fonts" );
-		WantRebuild |= ImGui::RadioButton( "FreeType", (int*)&BuildMode, FontBuildMode_FreeType );
-		ImGui::SameLine();
-		WantRebuild |= ImGui::RadioButton( "Stb (Default)", (int*)&BuildMode, FontBuildMode_Stb );
-		WantRebuild |= ImGui::DragInt( "TexGlyphPadding", &atlas->TexGlyphPadding, 0.1f, 1, 16 );
-		WantRebuild |= ImGui::DragFloat( "RasterizerMultiply", &RasterizerMultiply, 0.001f, 0.0f, 2.0f );
-		ImGui::Separator();
-
-		if ( BuildMode == FontBuildMode_FreeType ) {
-#ifndef IMGUI_ENABLE_FREETYPE
-			ImGui::TextColored( ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ), "Error: FreeType builder not compiled!" );
-#endif
-			WantRebuild |= ImGui::CheckboxFlags( "NoHinting", &FreeTypeBuilderFlags, ImGuiFreeTypeBuilderFlags_NoHinting );
-			WantRebuild |= ImGui::CheckboxFlags( "NoAutoHint", &FreeTypeBuilderFlags, ImGuiFreeTypeBuilderFlags_NoAutoHint );
-			WantRebuild |= ImGui::CheckboxFlags( "ForceAutoHint", &FreeTypeBuilderFlags, ImGuiFreeTypeBuilderFlags_ForceAutoHint );
-			WantRebuild |= ImGui::CheckboxFlags( "LightHinting", &FreeTypeBuilderFlags, ImGuiFreeTypeBuilderFlags_LightHinting );
-			WantRebuild |= ImGui::CheckboxFlags( "MonoHinting", &FreeTypeBuilderFlags, ImGuiFreeTypeBuilderFlags_MonoHinting );
-			WantRebuild |= ImGui::CheckboxFlags( "Bold", &FreeTypeBuilderFlags, ImGuiFreeTypeBuilderFlags_Bold );
-			WantRebuild |= ImGui::CheckboxFlags( "Oblique", &FreeTypeBuilderFlags, ImGuiFreeTypeBuilderFlags_Oblique );
-			WantRebuild |= ImGui::CheckboxFlags( "Monochrome", &FreeTypeBuilderFlags, ImGuiFreeTypeBuilderFlags_Monochrome );
-		}
-
-		if ( BuildMode == FontBuildMode_Stb ) {
-#ifndef IMGUI_ENABLE_STB_TRUETYPE
-			ImGui::TextColored( ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ), "Error: stb_truetype builder not compiled!" );
-#endif
-		}
-		ImGui::End();
-	}
-};
-
-#endif
-
 void CEditorApp::Run()
 {
-	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 	//io.ConfigViewportsNoAutoMerge = true;
 	//io.ConfigViewportsNoTaskBarIcon = true;
 
@@ -195,34 +103,7 @@ void CEditorApp::Run()
 	ImGui_ImplWin32_Init( GetHwnd() );
 	ImGui_ImplDX9_Init( GetDevice() );
 
-	g_SkyWnd.Initialize( GetDevice() );
-	g_GhostWnd.Initialize( GetDevice() );
-	g_GhostWnd2.Initialize( GetDevice() );
-	g_FadeWnd.Initialize( GetDevice() );
-	g_FadeWnd2.Initialize( GetDevice() );
-	g_BigFadeWnd.Initialize( GetDevice() );
-	g_CliffWnd.Initialize( GetDevice() );
-	g_CliffWnd2.Initialize( GetDevice() );
-	g_AlphaWnd.Initialize( GetDevice() );
-	g_DispWnd.Initialize( GetDevice() );
-	g_DispWnd2.Initialize( GetDevice() );
-	g_BlocksWnd.Initialize( GetDevice() );
-	g_LevelWnd.Initialize( GetDevice() );
-	g_LevelWnd2.Initialize( GetDevice() );
-	g_SkyWnd.SetWindowName( "Sky Window" );
-	g_GhostWnd.SetWindowName( "Ghost Window" );
-	g_GhostWnd2.SetWindowName( "Ghost Window2" );
-	g_FadeWnd.SetWindowName( "Fade Window" );
-	g_FadeWnd2.SetWindowName( "Fade Window2" );
-	g_BigFadeWnd.SetWindowName( "BigFade Window" );
-	g_CliffWnd.SetWindowName( "Cliff Window" );
-	g_CliffWnd2.SetWindowName( "Cliff Window2" );
-	g_AlphaWnd.SetWindowName( "Alpha Window" );
-	g_DispWnd.SetWindowName( "Displacement Window" );
-	g_DispWnd2.SetWindowName( "Water Displacement Window" );
-	g_BlocksWnd.SetWindowName( "Blocks Window" );
-	g_LevelWnd.SetWindowName( "Level Window" );
-	g_LevelWnd2.SetWindowName( "Level Window2" );
+	Debug::InitializeWindows( GetDevice() );
 
 	bool bDone = false;
 	while ( !bDone ) {
@@ -244,18 +125,15 @@ void CEditorApp::Run()
 		ImGui_ImplDX9_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 
-		//g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_POINT );
-		//g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_POINT );
-		//g_Editor.m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MIPFILTER, D3DTEXF_POINT );
-
 #if EDITOR_DEBUG_FONTS
-		static FreeTypeTest freetype_test;
+		static Debug::CFreeTypeTest freetype_test;
 		if ( freetype_test.PreNewFrame() ) {
 			// REUPLOAD FONT TEXTURE TO GPU
 			ImGui_ImplDX9_InvalidateDeviceObjects();
 			ImGui_ImplDX9_CreateDeviceObjects();
 		}
 #endif
+
 		ImGui::NewFrame();
 #if EDITOR_DEBUG_FONTS
 		freetype_test.ShowFontsOptionsWindow();
@@ -323,20 +201,7 @@ void CEditorApp::Run()
 #endif
 
 			{
-				g_SkyWnd.Render();
-				g_GhostWnd.Render();
-				g_GhostWnd2.Render();
-				g_FadeWnd.Render();
-				g_FadeWnd2.Render();
-				g_BigFadeWnd.Render();
-				g_CliffWnd.Render();
-				g_CliffWnd2.Render();
-				g_AlphaWnd.Render();
-				g_DispWnd.Render();
-				g_DispWnd2.Render();
-				g_BlocksWnd.Render();
-				g_LevelWnd.Render();
-				g_LevelWnd2.Render();
+				Debug::RenderWindows();
 			}
 
 			{
