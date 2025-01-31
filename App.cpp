@@ -19,6 +19,7 @@
 #include "Texture.h"
 
 #include "AssetsErrHandler.h"
+#include "AssetPicker.h"
 
 #include "Palette.h"
 #include "Sprite.h"
@@ -104,6 +105,11 @@ void CEditorApp::Run()
 	ImGui_ImplDX9_Init( GetDevice() );
 
 	Debug::InitializeWindows( GetDevice() );
+
+	std::string basePath = "C:\\Users\\melyg\\AppData\\Roaming\\pop";
+	GetAllFiles( basePath );
+
+
 
 	bool bDone = false;
 	while ( !bDone ) {
@@ -205,6 +211,10 @@ void CEditorApp::Run()
 			}
 
 			{
+				Render();
+			}
+
+			{
 				ImGui::Begin( "Sprite Textures" );
 
 				static bool inputs_step = true;
@@ -244,7 +254,7 @@ void CEditorApp::Run()
 				ImGui::End();
 			}
 		}
-		g_ImGuiSink->render();
+		g_ImGuiSink->Render();
 
 		// Rendering
 		//ImGui::DockSpaceOverViewport();

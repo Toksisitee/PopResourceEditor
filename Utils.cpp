@@ -1,5 +1,5 @@
 #include <windows.h>
-#include <string>
+#include <fstream>
 
 #include "Utils.h"
 
@@ -64,10 +64,60 @@ namespace Util
 			return std::string( szPathBuffer );
 		}
 
-		bool FileExists( const std::string& sFilePath )
+		[[nodiscard]] bool FileExists( const std::string& sFilePath )
 		{
 			struct stat buffer;
 			return (stat( sFilePath.c_str(), &buffer ) == 0);
+		}
+
+		[[nodiscard]] std::string GetFolderName( const std::string& sPath )
+		{
+			size_t uSlash = sPath.find_last_of( "/\\" );
+			if ( uSlash == std::string::npos ) {
+				return sPath;
+			}
+			return sPath.substr( uSlash + 1 );
+		}
+
+		[[nodiscard]] std::vector<uint8_t> ReadFileMagic( const std::string& sFilePath, size_t uMagicSize )
+		{
+			std::ifstream file( sFilePath, std::ios::binary );
+			if ( !file.is_open() ) {
+				return {};
+			}
+
+			std::vector<uint8_t> vecMagic( uMagicSize );
+			file.read( reinterpret_cast<char*>(vecMagic.data()), uMagicSize );
+			file.close();
+
+			return vecMagic;
+		}
+
+		[[nodiscard]] std::string GetFileExtension( const std::string& sFilePath )
+		{
+			size_t uDot = sFilePath.find_last_of( '.' );
+			if ( uDot == std::string::npos || uDot == sFilePath.length() - 1 ) {
+				return "";
+			}
+			return sFilePath.substr( uDot );
+		}
+
+		[[nodiscard]] std::string GetFileName( const std::string& sFilePath )
+		{
+			size_t uSlash = sFilePath.find_last_of( "/\\" );
+			if ( uSlash == std::string::npos ) {
+				return sFilePath;
+			}
+			return sFilePath.substr( uSlash + 1 );
+		}
+
+		[[nodiscard]] size_t GetFileSize( const std::string& sFilePath )
+		{
+			std::ifstream file( sFilePath, std::ios::binary | std::ios::ate );
+			if ( !file.is_open() ) {
+				return 0;
+			}
+			return file.tellg();
 		}
 	}
 }

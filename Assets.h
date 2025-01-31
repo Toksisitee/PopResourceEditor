@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <fstream>
 
 namespace Assets
 {
@@ -109,4 +110,6 @@ namespace Assets
 		char*			m_pBuffer;
 		uint32_t        m_nBufferLength;
 	};
+
+	const char* GetFileTypeSz( FileType eFileType );
 }

@@ -1,5 +1,7 @@
 #pragma once
 #include "AssetsErrHandler.h"
+#include "Editor.h"
+
 namespace Assets
 {
 	namespace Palette
@@ -7,6 +9,7 @@ namespace Assets
 		//namespace Palette TODO
 		constexpr uint8_t k_uNumColorKeys = 2;
 		constexpr size_t k_uNumColors = 256;
+		constexpr size_t k_uSize = k_uNumColors;
 	}
 
 	class CPalette

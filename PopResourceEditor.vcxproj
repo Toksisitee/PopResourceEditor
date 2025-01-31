@@ -163,6 +163,7 @@
     <ClCompile Include="DispWnd.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="FadeWnd.cpp" />
+    <ClCompile Include="AssetPicker.cpp" />
     <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="GhostWnd.cpp" />
     <ClCompile Include="ImEditor.cpp" />
@@ -191,6 +192,7 @@
   <ItemGroup>
     <ClInclude Include="Alpha.h" />
     <ClInclude Include="AlphaWnd.h" />
+    <ClInclude Include="AssetPicker.h" />
     <ClInclude Include="Assets.h" />
     <ClInclude Include="AssetsErrHandler.h" />
     <ClInclude Include="BigFade.h" />

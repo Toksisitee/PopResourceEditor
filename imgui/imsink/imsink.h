@@ -30,14 +30,14 @@ namespace ImSpdlog {
 			m_LogList.reserve( 100 );
 		}
 
-		void render()
+		void Render()
 		{
 			if ( !m_Draw ) {
 				return;
 			}
 
 			std::lock_guard<std::mutex> lock( m_LogMutex );
-			ImGui::Begin( "Console" );
+			ImGui::Begin( "Console", nullptr, ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar );
 			size_t uStart = m_LogList.size() > m_uMaxLogs ? m_LogList.size() - m_uMaxLogs : 0;
 
 			for ( size_t i = uStart; i < m_LogList.size(); ++i ) {
@@ -84,7 +84,7 @@ namespace ImSpdlog {
 	protected:
 		std::mutex m_LogMutex;
 		std::vector<ImLog> m_LogList = {};
-		size_t m_uMaxLogs = 40;
+		size_t m_uMaxLogs = 140;
 		bool m_bScroll = true;
 		bool m_Draw = true;
 	};
