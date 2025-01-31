@@ -6,7 +6,7 @@
 
 void CGhostWnd::Render()
 {
-	ImGui::Begin( m_sWindowName.c_str() );
+	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
 	auto pPalette = m_Ghost.GetPalette();
 
 	if ( !m_bFirstPass ) {

@@ -168,7 +168,7 @@ void RenderDirectory( const FilesContainer& container, std::string& selectedAsse
 			std::string fileName = std::filesystem::path( entry.sFile ).filename().string();
 
 			if ( ImGui::Selectable( fileName.c_str(), selectedAsset == entry.sFile ) ) {
-				Assets::OpenAsset( entry.sFile, entry.eFileType );
+				Assets::OpenWnd( entry.sFile, entry.eFileType );
 				selectedAsset = entry.sFile;
 				spdlog::info( "Selected file: {}", selectedAsset );
 			}

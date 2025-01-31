@@ -48,7 +48,7 @@ namespace Assets
 		return "Unknown";
 	}
 
-	bool OpenAsset( const std::string& sFilePath, FileType eFileType )
+	bool OpenWnd( const std::string& sFilePath, FileType eFileType )
 	{
 		auto pDevice = g_Editor.GetDevice();
 		switch ( eFileType ) {

@@ -6,47 +6,53 @@
 
 class CWindowManager {
 public:
-    CWindowManager() = default;
-    ~CWindowManager()
-    {
-        DestroyAll();
-    }
+	CWindowManager() = default;
+	~CWindowManager()
+	{
+		DestroyAll();
+	}
 
-    template<typename T, typename... Args>
-    T* AddWindow( Args&&... args )
-    {
-        static_assert(std::is_base_of<CWindowBase, T>::value, "T must derive from CWindowBase");
-        auto& wnd = m_Windows.emplace_back( std::make_unique<T>( std::forward<Args>( args )... ) );
-        return static_cast<T*>(wnd.get()); // Return a raw pointer to the added window
-    }
+	template<typename T, typename... Args>
+	T* AddWindow( Args&&... args )
+	{
+		static_assert(std::is_base_of<CWindowBase, T>::value, "T must derive from CWindowBase");
+		auto& pWnd = m_Windows.emplace_back( std::make_unique<T>( std::forward<Args>( args )... ) );
+		return static_cast<T*>(pWnd.get());
+	}
 
-    void Render()
-    {
-        for ( auto& window : m_Windows ) {
-            window->Render();
-        }
-    }
+	void Render()
+	{
+		m_Windows.erase(std::remove_if( m_Windows.begin(), m_Windows.end(),
+			[]( const std::unique_ptr<CWindowBase>& pWnd ) {
+			return !pWnd->IsOpen();
+			} ), m_Windows.end()
+		);
 
-    void DestroyAll()
-    {
-        for ( auto& window : m_Windows ) {
-            window->Cleanup();
-        }
-        m_Windows.clear();
-    }
+		for ( auto& pWnd : m_Windows ) {
+			pWnd->Render();
+		}
+	}
 
-    CWindowBase* GetWindow( const std::string& name )
-    {
-        for ( auto& window : m_Windows ) {
-            if ( window->GetWindowName() == name ) {
-                return window.get();
-            }
-        }
-        return nullptr;
-    }
+	void DestroyAll()
+	{
+		for ( auto& pWnd : m_Windows ) {
+			pWnd->Cleanup();
+		}
+		m_Windows.clear();
+	}
+
+	CWindowBase* GetWindow( const std::string& sWndName )
+	{
+		for ( auto& pWnd : m_Windows ) {
+			if ( pWnd->GetWindowName() == sWndName ) {
+				return pWnd.get();
+			}
+		}
+		return nullptr;
+	}
 
 private:
-    std::vector<std::unique_ptr<CWindowBase>> m_Windows;
+	std::vector<std::unique_ptr<CWindowBase>> m_Windows;
 };
 
 extern CWindowManager g_WndMngr;
