@@ -1,4 +1,6 @@
 #pragma once
+#include "D3DApp.h"
+
 class CEditorApp : public CD3DApp
 {
 public:

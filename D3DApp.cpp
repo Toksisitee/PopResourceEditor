@@ -107,8 +107,9 @@ HRESULT CD3DApp::Create( HINSTANCE hInstance )
 	return hr;
 }
 
-HRESULT CD3DApp::Render3DEnvironment( ImGuiIO* io )
+HRESULT CD3DApp::Render3DEnvironment( void* pIo )
 {
+	ImGuiIO* io = (ImGuiIO*)pIo;
 	HRESULT result;
 	ImVec4 clear_color = ImVec4( 0.45f, 0.55f, 0.60f, 1.00f );
 	D3DCOLOR clear_col_dx = MAKE_D3DCOLOR_RGBA( clear_color );

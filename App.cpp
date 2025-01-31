@@ -25,6 +25,7 @@
 #include "Sprite.h"
 #include "Sky.h"
 
+#include "WindowManager.h"
 #include "SkyWnd.h"
 #include "GhostWnd.h"
 #include "FadeWnd.h"
@@ -211,6 +212,7 @@ void CEditorApp::Run()
 			}
 
 			{
+				g_WndMngr.Render();
 				Render();
 			}
 
@@ -259,7 +261,7 @@ void CEditorApp::Run()
 		// Rendering
 		//ImGui::DockSpaceOverViewport();
 		ImGui::EndFrame();
-		Render3DEnvironment( &io );
+		Render3DEnvironment( (void*)&io );
 	}
 
 	ImGui_ImplDX9_Shutdown();

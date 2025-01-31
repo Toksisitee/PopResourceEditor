@@ -21,7 +21,7 @@ protected:
 	virtual LRESULT			WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	virtual LRESULT			DefWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-	HRESULT					Render3DEnvironment(ImGuiIO* io);
+	HRESULT					Render3DEnvironment(void* pIo);
 	void					Reset3DEnvironment();
 	HRESULT					Initialize3DEnvironment();
 	HRESULT					CreateDeviceD3D(HWND hWnd);

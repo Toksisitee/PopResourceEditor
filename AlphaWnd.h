@@ -7,6 +7,7 @@
 
 class CAlphaWnd : public CWindowBase {
 public:
+	CAlphaWnd() : CWindowBase( nullptr ) {}
 	CAlphaWnd( LPDIRECT3DDEVICE9 pd3dDevice ) :CWindowBase( pd3dDevice ) {}
 
 	void Render() override;

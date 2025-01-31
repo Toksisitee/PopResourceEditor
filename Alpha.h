@@ -9,6 +9,7 @@ namespace Assets
 	{
 		constexpr uint32_t	k_uWidth = 256;
 		constexpr uint32_t	k_uHeight = 256;
+		constexpr uint32_t	k_uSize = k_uWidth * k_uHeight;
 	}
 
 	class CAlpha

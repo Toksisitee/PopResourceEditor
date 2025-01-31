@@ -9,6 +9,7 @@
 #include "Assets.h"
 #include "BigFade.h"
 #include "Fade.h"
+#include "Alpha.h"
 #include "Palette.h"
 #include "AssetPicker.h"
 
@@ -54,6 +55,7 @@ std::unordered_map<std::string, FileTypeSize, CaseInsensitiveHash, CaseInsensiti
 	{"bigf", { Assets::FileType::BigFade, Assets::BigFade::k_uSize }},
 	{"fade", { Assets::FileType::Fade, Assets::Fade::k_uSize }},
 	{"pal", { Assets::FileType::Palette, Assets::Palette::k_uSize}},
+	{"al0", { Assets::FileType::Alpha, Assets::Alpha::k_uSize}},
 };
 
 std::unordered_map<std::string, std::string, CaseInsensitiveHash, CaseInsensitiveEqual> mapExtension = {
@@ -67,8 +69,8 @@ std::unordered_map<std::string, std::string, CaseInsensitiveHash, CaseInsensitiv
 	{".SDT", "Sound Bank"},
 };
 
-std::unordered_map<std::vector<uint8_t>, std::string, VectorHash> mapMagic = {
-	{{0x50, 0x53, 0x46, 0x42}, "Sprite Bank"},
+std::unordered_map<std::vector<uint8_t>, FileAsset, VectorHash> mapMagic = {
+	{{0x50, 0x53, 0x46, 0x42}, {"Sprite Bank", Assets::FileType::Sprite}},
 };
 
 bool FileTypeCorrectSize( Assets::FileType eFileType, size_t uSize )
@@ -80,16 +82,16 @@ bool FileTypeCorrectSize( Assets::FileType eFileType, size_t uSize )
 	}
 }
 
-std::string GetFileType( const std::string& sFilePath, bool& bKnownType )
+std::string GetFileType( const std::string& sFilePath, Assets::FileType& eType )
 {
-	bKnownType = false;
+	eType = Assets::FileType::Unknown;
 	std::string sFileName = Util::FileSystem::GetFileName( sFilePath );
 
-	for ( const auto& [name, entry] : mapName ) {
+	for ( const auto& [name, asset] : mapName ) {
 		if ( sFileName.find( name ) != std::string::npos ) {
-			if ( Util::FileSystem::GetFileSize( sFilePath ) == entry.uSize ) {
-				bKnownType = true;
-				return std::string( Assets::GetFileTypeSz( entry.eFileType ) );
+			if ( Util::FileSystem::GetFileSize( sFilePath ) == asset.uSize ) {
+				eType = asset.eFileType;
+				return std::string( Assets::GetFileTypeSz( asset.eFileType ) );
 			}
 		}
 	}
@@ -99,7 +101,7 @@ std::string GetFileType( const std::string& sFilePath, bool& bKnownType )
 	if ( !sExt.empty() ) {
 		auto it = mapExtension.find( sExt );
 		if ( it != mapExtension.end() ) {
-			bKnownType = true;
+			eType = Assets::FileType::Unknown; // TODO: handle ext based assets
 			return it->second;
 		}
 	}
@@ -107,11 +109,11 @@ std::string GetFileType( const std::string& sFilePath, bool& bKnownType )
 	constexpr size_t uMaxHeaderSize = 8;
 	std::vector<uint8_t> vecHeader = Util::FileSystem::ReadFileMagic( sFilePath, uMaxHeaderSize );
 
-	for ( const auto& [magicNumber, fileType] : mapMagic ) {
+	for ( const auto& [magicNumber, asset] : mapMagic ) {
 		if ( vecHeader.size() >= magicNumber.size() &&
 			std::equal( magicNumber.begin(), magicNumber.end(), vecHeader.begin() ) ) {
-			bKnownType = true;
-			return fileType;
+			eType = asset.eFileType;
+			return asset.sFile;
 		}
 	}
 
@@ -135,12 +137,12 @@ void GetFilesRecursively( const std::string& sPath, FilesContainer& container )
 		}
 		else if ( entry.is_regular_file() ) {
 			std::string sFilePath = entry.path().string();
-			bool bKnownType = false;
-			std::string sFileType = GetFileType( sFilePath, bKnownType );
+			Assets::FileType eType = Assets::FileType::Unknown;
+			std::string sFileType = GetFileType( sFilePath, eType );
 
-			if ( bKnownType ) {
+			if ( eType != Assets::FileType::Unknown ) {
 				spdlog::info( "File: {}, Type: {}", sFilePath, sFileType );
-				container.vsFiles.push_back( sFilePath + " (" + sFileType + ")" );
+				container.vsFiles.push_back( { sFilePath + " (" + sFileType + ")", Assets::FileType::Alpha } );
 			}
 		}
 	}
@@ -162,11 +164,12 @@ void RenderDirectory( const FilesContainer& container, std::string& selectedAsse
 {
 	ImGui::SetNextItemOpen( true );
 	if ( ImGui::TreeNode( container.sDirectory.c_str() ) ) {
-		for ( const auto& filePath : container.vsFiles ) {
-			std::string fileName = std::filesystem::path( filePath ).filename().string();
+		for ( const auto& entry : container.vsFiles ) {
+			std::string fileName = std::filesystem::path( entry.sFile ).filename().string();
 
-			if ( ImGui::Selectable( fileName.c_str(), selectedAsset == filePath ) ) {
-				selectedAsset = filePath;
+			if ( ImGui::Selectable( fileName.c_str(), selectedAsset == entry.sFile ) ) {
+				Assets::OpenAsset( entry.sFile, entry.eFileType );
+				selectedAsset = entry.sFile;
 				spdlog::info( "Selected file: {}", selectedAsset );
 			}
 		}

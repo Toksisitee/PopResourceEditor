@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 #include <vector>
 #include <fstream>
 
@@ -18,6 +19,7 @@ namespace Assets
 		Disp,
 		Blocks,
 		Level,
+		Unknown
 	};
 
 	enum class Result : uint8_t
@@ -112,4 +114,5 @@ namespace Assets
 	};
 
 	const char* GetFileTypeSz( FileType eFileType );
+	extern bool OpenAsset( const std::string& sFilePath, FileType eFileType );
 }

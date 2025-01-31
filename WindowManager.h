@@ -12,9 +12,12 @@ public:
         DestroyAll();
     }
 
-    void AddWindow( std::unique_ptr<CWindowBase> window )
+    template<typename T, typename... Args>
+    T* AddWindow( Args&&... args )
     {
-        m_Windows.push_back( std::move( window ) );
+        static_assert(std::is_base_of<CWindowBase, T>::value, "T must derive from CWindowBase");
+        auto& wnd = m_Windows.emplace_back( std::make_unique<T>( std::forward<Args>( args )... ) );
+        return static_cast<T*>(wnd.get()); // Return a raw pointer to the added window
     }
 
     void Render()
@@ -45,3 +48,5 @@ public:
 private:
     std::vector<std::unique_ptr<CWindowBase>> m_Windows;
 };
+
+extern CWindowManager g_WndMngr;
