@@ -116,7 +116,7 @@ namespace Assets
 		g_ErrHandler.Log( Log::Level::WRN, "Fade generation does not exactly replicate Bullfrog's original algorithm." );
 		ComputeTable( );
 		DestroyTexture();
-		return Result::FAIL_GENERATE;
+		return Result::OK_GENERATE;
 	}
 
 	bool CFade::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
