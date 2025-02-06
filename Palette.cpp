@@ -53,7 +53,7 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
-	Result CPalette::Load( std::string& file )
+	Result CPalette::Load( const std::string& file )
 	{
 		g_ErrHandler.SetFileType( FileType::Palette );
 

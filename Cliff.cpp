@@ -32,7 +32,7 @@ namespace Assets
 	}
 
 
-	Result CCliff::Export( std::string& sFilePath )
+	Result CCliff::Export( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Cliff );
 

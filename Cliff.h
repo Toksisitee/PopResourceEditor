@@ -19,7 +19,7 @@ namespace Assets
 
 		Result	Load( const std::string& sFilePath );
 		Result	Generate( uint8_t uMode );
-		Result	Export( std::string& sFilePath );
+		Result	Export( const std::string& sFilePath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
 
 		inline void DestroyTexture()

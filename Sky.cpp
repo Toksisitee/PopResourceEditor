@@ -29,7 +29,7 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
-	Result CSky::Export( std::string& fFilepath )
+	Result CSky::Export( const std::string& fFilepath )
 	{
 		g_ErrHandler.SetFileType( FileType::Sky );
 
@@ -60,7 +60,7 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
-	Result CSky::Generate( std::string& fFilepath )
+	Result CSky::Generate( const std::string& fFilepath )
 	{
 		g_ErrHandler.SetFileType( FileType::Sky );
 

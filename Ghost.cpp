@@ -29,7 +29,7 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
-	Result CGhost::Export( std::string& sFilePath )
+	Result CGhost::Export( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Ghost );
 
@@ -83,7 +83,7 @@ namespace Assets
 	}
 
 
-	Result CGhost::Generate( std::string& sFilePath )
+	Result CGhost::Generate( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Ghost );
 

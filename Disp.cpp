@@ -31,7 +31,7 @@ namespace Assets
 	}
 
 
-	Result CDisp::Export( std::string& sFilePath )
+	Result CDisp::Export( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Disp );
 
@@ -59,7 +59,7 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
-	Result CDisp::Generate( std::string& sFilePath )
+	Result CDisp::Generate( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Disp );
 

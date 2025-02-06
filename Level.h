@@ -164,7 +164,7 @@ namespace Assets
 
 		Result	Load( const std::string& sFilePath );
 		Result	GeneratePreview( uint16_t uCliff, float fLightX, float fLightY, bool bWater );
-		Result	Export( std::string& sFilePath );
+		Result	Export( const std::string& sFilePath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
 
 		inline void DestroyTexture()

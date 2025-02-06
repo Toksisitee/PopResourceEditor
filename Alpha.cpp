@@ -53,7 +53,7 @@ namespace Assets
 	}
 
 
-	Result CAlpha::Export( std::string& sFilePath )
+	Result CAlpha::Export( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Alpha );
 
@@ -101,7 +101,7 @@ namespace Assets
 		return uRow + 16;
 	}
 
-	Result CAlpha::Generate( std::string& sFilePath )
+	Result CAlpha::Generate( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Alpha );
 

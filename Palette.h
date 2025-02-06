@@ -16,7 +16,7 @@ namespace Assets
 	{
 	public:
 		Result Export( const char* pFilePath );
-		Result Load( std::string& sFilePath );
+		Result Load( const std::string& sFilePath );
 		[[nodiscard]] Color* GetColor( uint8_t uIndex ) { return &m_ColorTable[uIndex]; }
 		[[nodiscard]] uint8_t* GetPtr();
 		[[nodiscard]] Color* GetColorTable();

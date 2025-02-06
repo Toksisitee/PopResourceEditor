@@ -21,8 +21,8 @@ namespace Assets
 		~CBlocks() { SafeDestroyTexture( m_pTexture ); }
 
 		Result	Load( const std::string& sFilePath );
-		Result	Generate( std::string& sFilePath );
-		Result	Export( std::string& sFilePath );
+		Result	Generate( const std::string& sFilePath );
+		Result	Export( const std::string& sFilePath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
 		bool	CreateSubTexture( LPDIRECT3DDEVICE9 pD3DDevice, size_t index );
 

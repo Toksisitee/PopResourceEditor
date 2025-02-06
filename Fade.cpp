@@ -32,7 +32,7 @@ namespace Assets
 	}
 
 
-	Result CFade::Export( std::string& sFilePath )
+	Result CFade::Export( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Fade );
 
@@ -95,7 +95,7 @@ namespace Assets
 		}
 	}
 
-	Result CFade::Generate( std::string& sFilePath )
+	Result CFade::Generate( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Fade );
 

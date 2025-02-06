@@ -64,7 +64,7 @@ namespace Assets
 		return Result::OK_LOAD;
 	}
 
-	Result CLevel::Export( std::string& sFilePath )
+	Result CLevel::Export( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Level );
 
