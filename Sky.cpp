@@ -61,25 +61,15 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
-	Result CSky::ExportBin( const std::string& fFilepath )
+	Result CSky::ExportBin( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Sky );
 
-		std::ofstream ofs( fFilepath, std::ios::binary | std::ios::trunc );
+		std::ofstream ofs( sFilePath, std::ios::binary | std::ios::trunc );
 		if ( ofs.is_open() ) {
-			for ( uint32_t y = 0; y < k_uHeight; y++ ) {
-				for ( uint32_t x = 0; x < k_uWidth; x++ ) {
-					/*
-					auto rgb = bmp->GetPixel( x, y );
-					auto uIndex = pPalette->FindSkyColor( { rgb.R, rgb.G, rgb.B } );
-					uIndex = uIndex - k_uColorStart;
-					ofs.write( reinterpret_cast<const char*>(&uIndex), sizeof( char ) );
-					*/
-				}
-			}
-
+			ofs.write( reinterpret_cast<const char*>(m_Data), sizeof( m_Data ) );
 			ofs.close();
-			return Result::OK_GENERATE;
+			return Result::OK_EXPORT;
 		}
 
 		return Result::FAIL_GENERATE;
