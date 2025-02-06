@@ -64,6 +64,20 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
+	Result CCliff::ExportBin( const std::string& sFilePath )
+	{
+		g_ErrHandler.SetFileType( FileType::Cliff );
+
+		std::ofstream ofs( sFilePath, std::ios::binary | std::ios::trunc );
+		if ( ofs.is_open() ) {
+			ofs.write( reinterpret_cast<const char*>(m_Data), sizeof( m_Data ) );
+			ofs.close();
+			return Result::OK_EXPORT;
+		}
+
+		return Result::FAIL_GENERATE;
+	}
+
 	Color CCliff::BlendColors( const Color& color1, const Color& color2, const float fFadeFactor )
 	{
 		const float fBlendFactor = fFadeFactor * 0.6f;
@@ -142,19 +156,10 @@ namespace Assets
 	Result CCliff::Generate( uint8_t uMode )
 	{
 		g_ErrHandler.SetFileType( FileType::Cliff );
+		g_ErrHandler.Log( Log::Level::WRN, "Cliff generation does not exactly replicate Bullfrog's original algorithm." );
 		ComputeTable( uMode );
 		DestroyTexture();
-
-#if 0
-		std::ofstream ofs( fFilepath, std::ios::binary | std::ios::trunc );
-		if ( ofs.is_open() ) {
-			ofs.write( reinterpret_cast<const char*>(&m_Data), (k_uWidth * k_uHeight) );
-			ofs.close();
-			return Result::OK_GENERATE;
-		}
-#endif
-
-		return Result::FAIL_GENERATE;
+		return Result::OK_GENERATE;
 	}
 
 	bool CCliff::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )

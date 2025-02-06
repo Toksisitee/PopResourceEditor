@@ -20,6 +20,7 @@ namespace Assets
 		Result	LoadBin( const std::string& sFilePath );
 		Result	Generate( uint8_t uMode );
 		Result	ExportImg( const std::string& sFilePath );
+		Result  ExportBin( const std::string& sFilePath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
 
 		inline void DestroyTexture()
