@@ -60,7 +60,7 @@ namespace Assets
 			}
 
 			if ( colors.size() < 112 ) {
-				g_ErrHandler.LogFmt( Log::Level::WRN, "LoadImg: Warning – Image is not optimized. %i additional unique colors could still be used.", k_uNumColors - colors.size() );
+				g_ErrHandler.LogFmt( Log::Level::WRN, "LoadImg: Image is not optimized. %i additional unique colors could still be used.", k_uNumColors - colors.size() );
 			}
 
 			for ( auto y = 0; y < nHeight; y++ ) {
