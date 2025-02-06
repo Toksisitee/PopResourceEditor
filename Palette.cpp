@@ -23,9 +23,9 @@ namespace Assets
 		if ( ifs.is_open() ) {
 			ifs.seekg( 0 );
 			for ( size_t i = 0; i < k_uNumColors; i++ ) {
-				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].R), sizeof( char ) );
-				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].G), sizeof( char ) );
-				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].B), sizeof( char ) );
+				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].r), sizeof( char ) );
+				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].g), sizeof( char ) );
+				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].b), sizeof( char ) );
 				ifs.read( &pad, sizeof( char ) );
 			}
 			ifs.close();
@@ -56,9 +56,9 @@ namespace Assets
 					for ( size_t w = 0; w < k_uCellScale; w++ ) {
 						BMP.SetPixel( x * k_uCellScale + w, y * k_uCellScale + h,
 									  {
-										m_ColorTable[uIndex].B,
-										m_ColorTable[uIndex].G,
-										m_ColorTable[uIndex].R,
+										m_ColorTable[uIndex].b,
+										m_ColorTable[uIndex].g,
+										m_ColorTable[uIndex].r,
 										0
 									  } );
 					}
@@ -85,8 +85,8 @@ namespace Assets
 		for ( size_t i = 0; i < k_uNumColors; i++ ) {
 			auto deltaE = sqrt(
 				pow( clr.R - m_ColorTable[i].R, 2 ) +
-				pow( clr.G - m_ColorTable[i].G, 2 ) +
-				pow( clr.B - m_ColorTable[i].B, 2 ) );
+				pow( clr.g - m_ColorTable[i].g, 2 ) +
+				pow( clr.b - m_ColorTable[i].b, 2 ) );
 
 			if ( deltaE < dClosestDist ) {
 				uIndex = (uint8_t)i;
@@ -103,15 +103,15 @@ namespace Assets
 	uint8_t CPalette::FindColor( const Color& clr, bool bClosest )
 	{
 		if ( clr.R == m_ColorTable[0].R &&
-			clr.G == m_ColorTable[0].G &&
-			clr.B == m_ColorTable[0].B ) {
+			clr.g == m_ColorTable[0].g &&
+			clr.b == m_ColorTable[0].b ) {
 			return (0);
 		}
 
 		for ( uint32_t i = 128; i < k_uNumColors; i++ ) {
 			if ( clr.R == m_ColorTable[i].R &&
-				clr.G == m_ColorTable[i].G &&
-				clr.B == m_ColorTable[i].B ) {
+				clr.g == m_ColorTable[i].g &&
+				clr.b == m_ColorTable[i].b ) {
 				return (i);
 			}
 		}
@@ -132,13 +132,13 @@ namespace Assets
 		size_t uIndex = 0;
 		uint8_t* pptr;
 
-		nDistBest = (clr.R * clr.R + clr.G * clr.G + clr.B * clr.B) * 2;
+		nDistBest = (clr.r * clr.r + clr.g * clr.g + clr.b * clr.b) * 2;
 
 		pptr = &GetPtr()[uMin * 3];
 		for ( size_t i = uMin; i <= uMax; i++ ) {
-			dr = clr.R - *pptr++;
-			dg = clr.G - *pptr++;
-			db = clr.B - *pptr++;
+			dr = clr.r - *pptr++;
+			dg = clr.g - *pptr++;
+			db = clr.b - *pptr++;
 
 			nDist = dr * dr + dg * dg + db * db;
 			if ( nDist < nDistBest ) {

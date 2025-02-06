@@ -170,7 +170,7 @@ void CEditorApp::Run()
 
 		auto getColor = [&pPalette]( uint8_t uIndex ) -> float* {
 			float fColors[4];
-			ImColor col = ImColor( pPalette[uIndex].R, pPalette[uIndex].G, pPalette[uIndex].B );
+			ImColor col = ImColor( pPalette[uIndex].r, pPalette[uIndex].g, pPalette[uIndex].b );
 			memcpy( &fColors, &col, sizeof( float ) * 4 );
 			return fColors;
 		};

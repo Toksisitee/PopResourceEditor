@@ -48,9 +48,9 @@ namespace Assets
 			for ( uint32_t x = 0; x < k_uWidth; x++ ) {
 				BMP.SetPixel( x, y,
 							  {
-								  pColorTable[m_Data[uIndex]].B,
-								  pColorTable[m_Data[uIndex]].G,
-								  pColorTable[m_Data[uIndex]].R,
+								  pColorTable[m_Data[uIndex]].b,
+								  pColorTable[m_Data[uIndex]].g,
+								  pColorTable[m_Data[uIndex]].r,
 								  0
 							  } );
 				uIndex++;
@@ -83,9 +83,9 @@ namespace Assets
 		const float fBlendFactor = fFadeFactor * 0.6f;
 		Color blended;
 
-		blended.R = static_cast<uint8_t>(color1.R * (1 - fBlendFactor) + color2.R * fBlendFactor);
-		blended.G = static_cast<uint8_t>(color1.G * (1 - fBlendFactor) + color2.G * fBlendFactor);
-		blended.B = static_cast<uint8_t>(color1.B * (1 - fBlendFactor) + color2.B * fBlendFactor);
+		blended.r = static_cast<uint8_t>(color1.r * (1 - fBlendFactor) + color2.r * fBlendFactor);
+		blended.g = static_cast<uint8_t>(color1.g * (1 - fBlendFactor) + color2.g * fBlendFactor);
+		blended.b = static_cast<uint8_t>(color1.b * (1 - fBlendFactor) + color2.b * fBlendFactor);
 
 		return blended;
 	}
@@ -93,11 +93,11 @@ namespace Assets
 	Color CCliff::IncreaseLuminance( const Color& color, const float fLuminanceFactor )
 	{
 		Color boostedColor;
-		const float fLuminance = 0.2126f * color.R + 0.7152f * color.G + 0.0722f * color.B;
+		const float fLuminance = 0.2126f * color.r + 0.7152f * color.g + 0.0722f * color.b;
 
-		boostedColor.R = static_cast<uint8_t>(std::min( 255.0f, color.R + fLuminance * fLuminanceFactor ));
-		boostedColor.G = static_cast<uint8_t>(std::min( 255.0f, color.G + fLuminance * fLuminanceFactor ));
-		boostedColor.B = static_cast<uint8_t>(std::min( 255.0f, color.B + fLuminance * fLuminanceFactor ));
+		boostedColor.r = static_cast<uint8_t>(std::min( 255.0f, color.r + fLuminance * fLuminanceFactor ));
+		boostedColor.g = static_cast<uint8_t>(std::min( 255.0f, color.g + fLuminance * fLuminanceFactor ));
+		boostedColor.b = static_cast<uint8_t>(std::min( 255.0f, color.b + fLuminance * fLuminanceFactor ));
 
 		return boostedColor;
 	}

@@ -24,13 +24,13 @@ typedef unsigned char BYTE;
 #pragma pack(push, 1)
 struct Color {
 	Color() = default;
-	Color( uint8_t r, uint8_t g, uint8_t b ) : R( r ), G( g ), B( b ) {}
+	Color( uint8_t r, uint8_t g, uint8_t b ) : r( r ), g( g ), b( b ) {}
 	
-	uint8_t R, G, B;
+	uint8_t r, g, b;
 
 	bool operator==( const Color& o ) const
 	{
-		return R == o.R && G == o.G && B == o.B;
+		return r == o.r && g == o.g && b == o.b;
 	}
 	bool operator!=( const Color& o ) const
 	{
@@ -38,9 +38,9 @@ struct Color {
 	}
 	bool operator<( const Color& o ) const
 	{
-		if ( R != o.R ) return R < o.R;
-		if ( G != o.G ) return G < o.G;
-		return B < o.B;
+		if ( r != o.r ) return r < o.r;
+		if ( g != o.g ) return g < o.g;
+		return b < o.b;
 	}
 };
 #pragma pack(pop)
@@ -63,17 +63,17 @@ enum eImFont : uint8_t
 inline void WriteRGBTexel( BYTE* pTexels, size_t x, size_t y, size_t pitch, const Color& rgb )
 {
 	size_t i = (y * pitch) + (x * 4);
-	pTexels[i] = rgb.B;
-	pTexels[i + 1] = rgb.G;
-	pTexels[i + 2] = rgb.R;
+	pTexels[i] = rgb.b;
+	pTexels[i + 1] = rgb.g;
+	pTexels[i + 2] = rgb.r;
 	pTexels[i + 3] = 255;
 };
 
 inline void WriteRGBTexel( BYTE* pTexels, size_t x, size_t y, size_t pitch, Color* rgb )
 {
 	size_t i = (y * pitch) + (x * 4);
-	pTexels[i] = rgb->B;
-	pTexels[i + 1] = rgb->G;
-	pTexels[i + 2] = rgb->R;
+	pTexels[i] = rgb->b;
+	pTexels[i + 1] = rgb->g;
+	pTexels[i + 2] = rgb->r;
 	pTexels[i + 3] = 255;
 };

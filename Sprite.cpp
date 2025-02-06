@@ -135,7 +135,7 @@ namespace Assets
 					if ( m_pPalette->IndexIsColorKey( uColorIndex ) )
 						uColorIndex = m_pPalette->GetColorKey( 0 );
 
-					BMP.SetPixel( x, y, { pColorTable[uColorIndex].B, pColorTable[uColorIndex].G, pColorTable[uColorIndex].R, 0 } );
+					BMP.SetPixel( x, y, { pColorTable[uColorIndex].b, pColorTable[uColorIndex].g, pColorTable[uColorIndex].r, 0 } );
 				}
 			}
 

@@ -69,9 +69,9 @@ namespace Assets
 			for ( uint32_t x = 0; x < k_uWidth; x++ ) {
 				BMP.SetPixel( x, y,
 							  {
-								  pColorTable[m_Data[uIndex]].B,
-								  pColorTable[m_Data[uIndex]].G,
-								  pColorTable[m_Data[uIndex]].R,
+								  pColorTable[m_Data[uIndex]].b,
+								  pColorTable[m_Data[uIndex]].g,
+								  pColorTable[m_Data[uIndex]].r,
 								  0
 							  } );
 				uIndex++;
@@ -92,9 +92,9 @@ namespace Assets
 		for ( uint32_t y = 0; y < 16; y++ ) {
 			Color* palette = m_Palette.GetColorTable();
 			for ( uint32_t x = 0; x < k_uWidth; x++, palette++, pData++ ) {
-				r = palette->R + ((targetColor.R - palette->R) * y) / 16;
-				g = palette->G + ((targetColor.G - palette->G) * y) / 16;
-				b = palette->B + ((targetColor.B - palette->B) * y) / 16;
+				r = palette->r + ((targetColor.r - palette->r) * y) / 16;
+				g = palette->g + ((targetColor.g - palette->g) * y) / 16;
+				b = palette->b + ((targetColor.b - palette->b) * y) / 16;
 				*pData = m_Palette.FindColor( Color( r, g, b ) );
 			}
 		}

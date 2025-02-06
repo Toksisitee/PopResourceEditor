@@ -91,9 +91,9 @@ namespace Assets
 			for ( uint32_t x = 0; x < k_uWidth; x++ ) {
 				BMP.SetPixel( x, y,
 							  {
-								  pColorTable[m_Data[uIndex]].B,
-								  pColorTable[m_Data[uIndex]].G,
-								  pColorTable[m_Data[uIndex]].R,
+								  pColorTable[m_Data[uIndex]].b,
+								  pColorTable[m_Data[uIndex]].g,
+								  pColorTable[m_Data[uIndex]].r,
 								  0
 							  } );
 				uIndex++;

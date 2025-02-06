@@ -45,9 +45,9 @@ namespace Assets
 			for ( uint32_t x = 0; x < k_uWidth; x++ ) {
 				BMP.SetPixel( x, y,
 							  {
-								  pColorTable[m_Data[uIndex]].B,
-								  pColorTable[m_Data[uIndex]].G,
-								  pColorTable[m_Data[uIndex]].R,
+								  pColorTable[m_Data[uIndex]].b,
+								  pColorTable[m_Data[uIndex]].g,
+								  pColorTable[m_Data[uIndex]].r,
 								  0
 							  } );
 				uIndex++;
@@ -88,9 +88,9 @@ namespace Assets
 				const Color& base = pColorPalette[y % Palette::k_uNumColors];
 				const Color& target = pColorPalette[x % Palette::k_uNumColors];
 
-				blend.R = base.R + ((target.R - base.R) * uOpacity) / 100;
-				blend.G = base.G + ((target.G - base.G) * uOpacity) / 100;
-				blend.B = base.B + ((target.B - base.B) * uOpacity) / 100;
+				blend.r = base.r + ((target.r - base.r) * uOpacity) / 100;
+				blend.g = base.g + ((target.g - base.g) * uOpacity) / 100;
+				blend.b = base.b + ((target.b - base.b) * uOpacity) / 100;
 
 				*pData++ = m_Palette.FindColor( blend );
 			}
