@@ -64,6 +64,20 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
+	Result CFade::ExportBin( const std::string& sFilePath )
+	{
+		g_ErrHandler.SetFileType( FileType::Fade );
+
+		std::ofstream ofs( sFilePath, std::ios::binary | std::ios::trunc );
+		if ( ofs.is_open() ) {
+			ofs.write( reinterpret_cast<const char*>(m_Data), sizeof( m_Data ) );
+			ofs.close();
+			return Result::OK_EXPORT;
+		}
+
+		return Result::FAIL_GENERATE;
+	}
+
 	void CFade::FadeColor( Color& color, float fFadeFactor )
 	{
 		color.R = std::clamp( static_cast<int32_t>(color.R * fFadeFactor), 0, 255 );
@@ -99,20 +113,9 @@ namespace Assets
 	Result CFade::Generate( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Fade );
-
+		g_ErrHandler.Log( Log::Level::WRN, "Fade generation does not exactly replicate Bullfrog's original algorithm." );
 		ComputeTable( );
-
 		DestroyTexture();
-
-#if 0
-		std::ofstream ofs( fFilepath, std::ios::binary | std::ios::trunc );
-		if ( ofs.is_open() ) {
-			ofs.write( reinterpret_cast<const char*>(&m_Data), (k_uWidth * k_uHeight) );
-			ofs.close();
-			return Result::OK_GENERATE;
-		}
-#endif
-
 		return Result::FAIL_GENERATE;
 	}
 
