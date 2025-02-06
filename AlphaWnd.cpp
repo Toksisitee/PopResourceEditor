@@ -18,8 +18,7 @@ void CAlphaWnd::Render()
 	}
 
 	if ( ImGui::Button( "Generate" ) ) {
-		std::string f;
-		m_Alpha.Generate( f );
+		m_Alpha.Generate();
 	}
 
 	if ( m_Alpha.GetTexture() == nullptr ) {

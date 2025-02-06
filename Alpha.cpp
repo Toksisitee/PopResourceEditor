@@ -85,6 +85,20 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
+	Result CAlpha::ExportBin( const std::string& sFilePath )
+	{
+		g_ErrHandler.SetFileType( FileType::Alpha );
+
+		std::ofstream ofs( sFilePath, std::ios::binary | std::ios::trunc );
+		if ( ofs.is_open() ) {
+			ofs.write( reinterpret_cast<const char*>(m_Data), sizeof( m_Data ) );
+			ofs.close();
+			return Result::OK_EXPORT;
+		}
+
+		return Result::FAIL_GENERATE;
+	}
+
 	uint32_t CAlpha::ComputeTable( uint8_t* pData, const Color& targetColor, uint32_t uRow )
 	{
 		uint8_t r, g, b;
@@ -102,7 +116,7 @@ namespace Assets
 		return uRow + 16;
 	}
 
-	Result CAlpha::Generate( const std::string& sFilePath )
+	Result CAlpha::Generate()
 	{
 		g_ErrHandler.SetFileType( FileType::Alpha );
 
