@@ -57,15 +57,15 @@ struct FileTypeSize
 };
 
 std::unordered_map<std::string, FileTypeSize, CaseInsensitiveHash, CaseInsensitiveEqual> mapName = {
-	{"sky0", { Assets::FileType::Sky, Assets::Sky::k_uSize}},
-	{"bigf0", { Assets::FileType::BigFade, Assets::BigFade::k_uSize }},
-	{"fade0", { Assets::FileType::Fade, Assets::Fade::k_uSize }},
-	{"ghost0", { Assets::FileType::Ghost, Assets::Ghost::k_uSize }},
-	{"pal0", { Assets::FileType::Palette, Assets::Palette::k_uSize}},
 	{"al0", { Assets::FileType::Alpha, Assets::Alpha::k_uSize}},
+	{"bigf0", { Assets::FileType::BigFade, Assets::BigFade::k_uSize }},
 	{"bl320", { Assets::FileType::Blocks, Assets::Blocks::k_uSize}},
 	{"cliff0", { Assets::FileType::Cliff, Assets::Cliff::k_uSize}},
 	{"disp0", { Assets::FileType::Disp, Assets::Disp::k_uSize}},
+	{"fade0", { Assets::FileType::Fade, Assets::Fade::k_uSize }},
+	{"ghost0", { Assets::FileType::Ghost, Assets::Ghost::k_uSize }},
+	{"pal0", { Assets::FileType::Palette, Assets::Palette::k_uSize}},
+	{"sky0", { Assets::FileType::Sky, Assets::Sky::k_uSize}},
 };
 
 std::unordered_map<std::string, std::string, CaseInsensitiveHash, CaseInsensitiveEqual> mapExtension = {
@@ -172,8 +172,7 @@ void GetAllFiles( const std::string& sBasePath )
 
 void RenderDirectory( const FilesContainer& container, std::string& selectedAsset )
 {
-	ImGui::SetNextItemOpen( true );
-	if ( ImGui::TreeNode( container.sDirectory.c_str() ) ) {
+	if ( ImGui::TreeNodeEx( container.sDirectory.c_str(), ImGuiTreeNodeFlags_DefaultOpen ) ) {
 		for ( const auto& entry : container.vsFiles ) {
 			std::string fileName = std::filesystem::path( entry.sFile ).filename().string() + " (" + entry.sFileType + ")";
 
@@ -186,7 +185,6 @@ void RenderDirectory( const FilesContainer& container, std::string& selectedAsse
 
 		for ( const auto& subContainer : container.vSubDirs ) {
 			if ( subContainer.vsFiles.size() == 0 ) continue;
-			ImGui::SetNextItemOpen( true );
 			RenderDirectory( subContainer, selectedAsset );
 		}
 
