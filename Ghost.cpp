@@ -61,6 +61,20 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
+	Result CGhost::ExportBin( const std::string& sFilePath )
+	{
+		g_ErrHandler.SetFileType( FileType::Ghost );
+
+		std::ofstream ofs( sFilePath, std::ios::binary | std::ios::trunc );
+		if ( ofs.is_open() ) {
+			ofs.write( reinterpret_cast<const char*>(m_Data), sizeof( m_Data ) );
+			ofs.close();
+			return Result::OK_EXPORT;
+		}
+
+		return Result::FAIL_GENERATE;
+	}
+
 	void CGhost::ComputeTable( uint8_t uOpacity )
 	{
 		if ( uOpacity > 100 ) uOpacity = 100;
@@ -83,25 +97,12 @@ namespace Assets
 		}
 	}
 
-
 	Result CGhost::Generate( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Ghost );
-
 		ComputeTable( m_uOpacity );
-
 		DestroyTexture();
-
-#if 0
-		std::ofstream ofs( fFilepath, std::ios::binary | std::ios::trunc );
-		if ( ofs.is_open() ) {
-			ofs.write( reinterpret_cast<const char*>(&m_Data), (k_uWidth * k_uHeight) );
-			ofs.close();
-			return Result::OK_GENERATE;
-		}
-#endif
-
-		return Result::FAIL_GENERATE;
+		return Result::OK_GENERATE;
 	}
 
 	bool CGhost::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
