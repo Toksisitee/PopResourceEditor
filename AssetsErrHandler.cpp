@@ -12,7 +12,7 @@ Assets::CErrHandler g_ErrHandler;
 
 namespace Assets
 {
-	
+
 	CErrHandler::CErrHandler()
 	{
 		m_szErrBuffer = (char*)malloc( m_kErrBufferSize );
@@ -27,66 +27,49 @@ namespace Assets
 		SAFE_FREE( m_szTypeBuffer );
 	}
 
-	void CErrHandler::LogFmt( const char* fmt, ... )
+	void CErrHandler::LogFmt( const char* pFmt, ... )
 	{
 		char* pszBuffer = (char*)malloc( m_kErrBufferSize );
 		assert( pszBuffer && "CErrHandler: Failed to allocate memory" );
 
 		if ( pszBuffer ) {
 			va_list argptr;
-			va_start( argptr, fmt );
-			vsprintf_s( pszBuffer, m_kErrBufferSize, fmt, argptr );
+			va_start( argptr, pFmt );
+			vsprintf_s( pszBuffer, m_kErrBufferSize, pFmt, argptr );
 			va_end( argptr );
 			Log( pszBuffer );
 			free( pszBuffer );
 		}
 	}
 
-	void CErrHandler::LogFmt( Log::Level eLevel, const char* fmt, ... )
+	void CErrHandler::LogFmt( Log::Level eLevel, const char* pFmt, ... )
 	{
 		char* pszBuffer = (char*)malloc( m_kErrBufferSize );
 		assert( pszBuffer && "CErrHandler: Failed to allocate memory" );
 
 		if ( pszBuffer ) {
 			va_list argptr;
-			va_start( argptr, fmt );
-			vsprintf_s( pszBuffer, m_kErrBufferSize, fmt, argptr );
+			va_start( argptr, pFmt );
+			vsprintf_s( pszBuffer, m_kErrBufferSize, pFmt, argptr );
 			va_end( argptr );
-
-			switch ( eLevel ) {
-				case Log::Level::TRC:
-					spdlog::trace( pszBuffer );
-					break;
-				case Log::Level::DBG:
-					spdlog::debug( pszBuffer );
-					break;
-				case Log::Level::WRN:
-					spdlog::warn( pszBuffer );
-					break;
-				case Log::Level::ERR:
-					spdlog::error( pszBuffer );
-					break;
-				case Log::Level::CRT:
-					spdlog::critical( pszBuffer );
-					break;
-				case Log::Level::INF:
-				default:
-					spdlog::info( pszBuffer );
-					break;
-			}
-
+			EmitLog( pszBuffer, eLevel );
 			free( pszBuffer );
 		}
 	}
 
-	void CErrHandler::Log( const char* pszError )
+	void CErrHandler::Log( const char* psMsg )
 	{
 		assert( m_FileType != FileType::None && "CErrHandler: File type not set" );
-		sprintf_s( m_szErrBuffer, m_kErrBufferSize, "[%s]: %s", GetLastFileTypeSz(), pszError );
-		Flush();
+		sprintf_s( m_szErrBuffer, m_kErrBufferSize, "[%s]: %s", GetLastFileTypeSz(), psMsg );
+		EmitLogBuffer();
 	}
 
-	void CErrHandler::Flush()
+	void CErrHandler::Log( Log::Level eLevel, const char* pszMsg )
+	{
+		EmitLog( pszMsg, eLevel );
+	}
+
+	void CErrHandler::EmitLogBuffer()
 	{
 		switch ( m_Err ) {
 			case Assets::Result::FAIL:
@@ -100,6 +83,31 @@ namespace Assets
 			case Assets::Result::OK:
 			default:
 				spdlog::info( m_szErrBuffer );
+				break;
+		}
+	}
+
+	void CErrHandler::EmitLog( const char* pszMsg, Log::Level eLevel )
+	{
+		switch ( eLevel ) {
+			case Log::Level::TRC:
+				spdlog::trace( pszMsg );
+				break;
+			case Log::Level::DBG:
+				spdlog::debug( pszMsg );
+				break;
+			case Log::Level::WRN:
+				spdlog::warn( pszMsg );
+				break;
+			case Log::Level::ERR:
+				spdlog::error( pszMsg );
+				break;
+			case Log::Level::CRT:
+				spdlog::critical( pszMsg );
+				break;
+			case Log::Level::INF:
+			default:
+				spdlog::info( pszMsg );
 				break;
 		}
 	}
@@ -141,11 +149,10 @@ namespace Assets
 			sprintf_s( m_szErrBuffer, m_kErrBufferSize, "[%s]: %s", GetLastFileTypeSz(), sErrorMsg.value().c_str() );
 		}
 		else {
-			sprintf_s( m_szErrBuffer, m_kErrBufferSize, "[%s]: %s", GetLastFileTypeSz(), szErrCode);
+			sprintf_s( m_szErrBuffer, m_kErrBufferSize, "[%s]: %s", GetLastFileTypeSz(), szErrCode );
 		}
 
-		Flush();
-
+		EmitLogBuffer();
 		return code;
 	}
 
