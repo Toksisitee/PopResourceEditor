@@ -1,11 +1,11 @@
 #pragma once
 #include <utility>
 
+#include "Assets.h"
 #include "Texture.h"
 #include "Palette.h"
 #include "BigFade.h"
 #include "Disp.h"
-#include "AssetsErrHandler.h"
 
 namespace Assets
 {

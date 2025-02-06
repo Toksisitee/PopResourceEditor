@@ -1,8 +1,10 @@
 #include <fstream>
 #include <assert.h>
+#include <set>
 
 #include "EasyBMP/EasyBMP.h"
 
+#include "AssetsErrHandler.h"
 #include "Editor.h"
 #include "Utils.h"
 
@@ -24,6 +26,50 @@ namespace Assets
 				ifs.read( reinterpret_cast<char*>(&m_Data[i]), sizeof( uint8_t ) );
 
 			ifs.close();
+			return Result::OK_LOAD;
+		}
+
+		return Result::FAIL_LOAD;
+	}
+
+	Result CBigFade::LoadImg( const std::string& sFilePath )
+	{
+		g_ErrHandler.SetFileType( FileType::BigFade );
+		BMP BMP;
+		std::set<Color> colors;
+
+
+		if ( BMP.ReadFromFile( sFilePath.c_str() ) ) {
+			auto nWidth = BMP.TellWidth();
+			auto nHeight = BMP.TellHeight();
+			if ( nWidth != k_uWidth || nHeight != k_uHeight ) {
+				g_ErrHandler.LogFmt( Log::Level::CRT, "LoadImg: Image dimensions mismatch. Got: %ix%i, Expected: %ux%u", nWidth, nHeight, k_uWidth, k_uHeight );
+				return Result::FAIL_LOAD;
+			}
+
+			for ( auto x = 0; x < nWidth; x++ ) {
+				for ( auto y = 0; y < nHeight; y++ ) {
+					auto clr = BMP.GetPixel( x, y );
+					colors.insert( { clr.Red, clr.Green, clr.Blue } );
+				}
+			}
+
+			if ( colors.size() > 112 ) {
+				g_ErrHandler.LogFmt( Log::Level::ERR, "LoadImg: Too many unique colors (%i). Maximum allowed: %u", colors.size(), k_uNumColors );
+				return Result::FAIL_LOAD;
+			}
+
+			if ( colors.size() < 112 ) {
+				g_ErrHandler.LogFmt( Log::Level::WRN, "LoadImg: Warning – Image is not optimized. %i additional unique colors could still be used.", k_uNumColors - colors.size() );
+			}
+
+			for ( auto x = 0; x < nWidth; x++ ) {
+				for ( auto y = 0; y < nHeight; y++ ) {
+					auto clr = BMP.GetPixel( x, y );
+					m_Data[y * k_uWidth + x] = m_Palette.FindColor( { clr.Red, clr.Green, clr.Blue }, 0, k_uNumColors );
+				}
+			}
+
 			return Result::OK_LOAD;
 		}
 

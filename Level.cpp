@@ -5,7 +5,7 @@
 
 #include "EasyBMP/EasyBMP.h"
 
-#include "spdlog\spdlog.h"
+#include "AssetsErrHandler.h"
 #include "Editor.h"
 #include "Utils.h"
 
@@ -248,7 +248,7 @@ namespace Assets
 		int32_t uv = u + v;
 
 		if ( uv > BigFade::k_uSize ) {
-			spdlog::error( "MapToTextureColor UV oob!" );
+			g_ErrHandler.LogFmt( Log::Level::ERR, "MapToTextureColor UV oob!" );
 			return;
 		}
 

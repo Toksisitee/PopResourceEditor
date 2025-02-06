@@ -1,7 +1,7 @@
 #pragma once
 #include "Texture.h"
 #include "Palette.h"
-#include "AssetsErrHandler.h"
+#include "Assets.h"
 
 namespace Assets
 {
@@ -19,6 +19,7 @@ namespace Assets
 		~CBigFade() { SafeDestroyTexture( m_pTexture ); }
 
 		Result	Load( const std::string& sFilePath );
+		Result	LoadImg( const std::string& sFilePath );
 		Result	Generate( const std::string& sFilePath );
 		Result	Export( const std::string& sFilePath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );

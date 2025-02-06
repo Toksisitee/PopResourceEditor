@@ -2,7 +2,7 @@
 #define NOMINMAX
 #include <vector>
 
-#include "AssetsErrHandler.h"
+#include "Assets.h"
 #include "Texture.h"
 #include "Palette.h"
 

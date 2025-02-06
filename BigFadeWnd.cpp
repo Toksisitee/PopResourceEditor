@@ -1,6 +1,7 @@
 #include "imgui.h"
 
 #include "Utils.h"
+#include "AssetsErrHandler.h"
 #include "ImEditor.h"
 #include "BigFadeWnd.h"
 
@@ -15,6 +16,15 @@ void CBigFadeWnd::Render()
 		//sFilePath = Util::FileSystem::FormatPath( "bigf0-u.dat" );
 		//g_ErrHandler.HandleResult( m_BigFade.Load( sFilePath ) );
 		m_bFirstPass = true;
+	}
+
+	if ( ImGui::Button( "Load Image" ) ) {
+		g_ErrHandler.HandleResult( m_BigFade.LoadImg( "C:\\Users\\melyg\\Pictures\\bigfade.bmp" ) );
+		m_BigFade.DestroyTexture();
+	}
+
+	if ( ImGui::Button( "Export" ) ) {
+		g_ErrHandler.HandleResult( m_BigFade.Export( "C:\\Users\\melyg\\Pictures\\bigfade.bmp" ) );
 	}
 
 	if ( m_BigFade.GetTexture() == nullptr ) {

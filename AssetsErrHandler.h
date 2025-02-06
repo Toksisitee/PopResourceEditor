@@ -5,6 +5,19 @@
 
 namespace Assets
 {
+	namespace Log
+	{
+		enum class Level
+		{
+			TRC = 0,
+			DBG,
+			INF,
+			WRN,
+			ERR,
+			CRT,
+		};
+	}
+
 	class CErrHandler
 	{
 	public:
@@ -16,9 +29,10 @@ namespace Assets
 
 		CErrHandler();
 		~CErrHandler();
-		
+
 		void Log( const char* pszError );
 		void LogFmt( const char* fmt, ... );
+		void LogFmt( Log::Level eLevel, const char* fmt, ... );
 		void SetFileType( FileType type );
 
 		Result HandleResult( Result code, std::optional<std::string> sErrorMsg = std::nullopt );

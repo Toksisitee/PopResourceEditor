@@ -18,7 +18,7 @@ namespace ImSpdlog {
 		ImColor( 255, 51, 102 ),    // DEBUG
 		ImColor( 0, 255, 204 ),     // INFO
 		ImColor( 255, 255, 102 ),   // WARN
-		ImColor( 255, 51, 102 ),    // ERR
+		ImColor( 235, 39, 89 ),		// ERR
 		ImColor( 255, 51, 102 ),    // CRITICAL
 		ImColor( 0, 255, 204 )      // OFF
 	};
@@ -45,8 +45,15 @@ namespace ImSpdlog {
 				auto pszMsg = sMsg.c_str();
 				ImGui::TextColored( k_LogColors[iLevel], k_pszLogLevels[iLevel] );
 				ImGui::SameLine();
-				if ( iLevel == spdlog::level::level_enum::critical )
+				if ( iLevel == spdlog::level::level_enum::critical ) {
+					float fFlicker = (std::sinf( ImGui::GetTime() * 4.0f ) * 0.5f) + 0.8f;
+					ImVec4 baseColor = k_LogColors[iLevel];
+					ImVec4 finalColor = ImVec4( baseColor.x, baseColor.y, baseColor.z, fFlicker );
+					ImGui::TextColored( finalColor, pszMsg );
+				}
+				else if ( iLevel == spdlog::level::level_enum::err ) {
 					ImGui::TextColored( k_LogColors[iLevel], pszMsg );
+				}
 				else
 					ImGui::Text( pszMsg );
 			}
@@ -76,7 +83,7 @@ namespace ImSpdlog {
 			std::lock_guard<Mutex> lock( m_LogMutex );
 
 			std::string sMsg( msg.payload.begin(), msg.payload.end() );
-			m_LogList.push_back( std::make_tuple( sMsg, msg.level) );
+			m_LogList.push_back( std::make_tuple( sMsg, msg.level ) );
 
 			m_bScroll = true;
 		}

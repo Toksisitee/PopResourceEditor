@@ -3,10 +3,11 @@
 #include <algorithm>
 #include <assert.h>
 
-#include "Utils.h"
-#include "Editor.h"
 #include "EasyBMP/EasyBMP.h"
 
+#include "AssetsErrHandler.h"
+#include "Utils.h"
+#include "Editor.h"
 #include "Sprite.h"
 
 namespace Assets

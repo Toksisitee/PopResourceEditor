@@ -1,6 +1,6 @@
 #pragma once
 #include "Texture.h"
-#include "AssetsErrHandler.h"
+#include "Assets.h"
 
 namespace Assets
 {

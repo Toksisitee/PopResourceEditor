@@ -3,6 +3,7 @@
 
 #include "EasyBMP/EasyBMP.h"
 
+#include "AssetsErrHandler.h"
 #include "Editor.h"
 #include "Utils.h"
 

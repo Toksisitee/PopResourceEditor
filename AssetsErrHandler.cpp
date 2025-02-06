@@ -42,6 +42,42 @@ namespace Assets
 		}
 	}
 
+	void CErrHandler::LogFmt( Log::Level eLevel, const char* fmt, ... )
+	{
+		char* pszBuffer = (char*)malloc( m_kErrBufferSize );
+		assert( pszBuffer && "CErrHandler: Failed to allocate memory" );
+
+		if ( pszBuffer ) {
+			va_list argptr;
+			va_start( argptr, fmt );
+			vsprintf_s( pszBuffer, m_kErrBufferSize, fmt, argptr );
+			va_end( argptr );
+
+			switch ( eLevel ) {
+				case Log::Level::TRC:
+					spdlog::trace( pszBuffer );
+					break;
+				case Log::Level::DBG:
+					spdlog::debug( pszBuffer );
+					break;
+				case Log::Level::WRN:
+					spdlog::warn( pszBuffer );
+					break;
+				case Log::Level::ERR:
+					spdlog::error( pszBuffer );
+					break;
+				case Log::Level::CRT:
+					spdlog::critical( pszBuffer );
+					break;
+				case Log::Level::INF:
+				default:
+					spdlog::info( pszBuffer );
+					break;
+			}
+
+			free( pszBuffer );
+		}
+	}
 
 	void CErrHandler::Log( const char* pszError )
 	{

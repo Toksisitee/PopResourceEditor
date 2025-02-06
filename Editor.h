@@ -25,18 +25,23 @@ typedef unsigned char BYTE;
 struct Color {
 	Color() = default;
 	Color( uint8_t r, uint8_t g, uint8_t b ) : R( r ), G( g ), B( b ) {}
+	
+	uint8_t R, G, B;
 
 	bool operator==( const Color& o ) const
 	{
 		return R == o.R && G == o.G && B == o.B;
 	}
-
 	bool operator!=( const Color& o ) const
 	{
 		return !(*this == o);
 	}
-
-	uint8_t R, G, B;
+	bool operator<( const Color& o ) const
+	{
+		if ( R != o.R ) return R < o.R;
+		if ( G != o.G ) return G < o.G;
+		return B < o.B;
+	}
 };
 #pragma pack(pop)
 
