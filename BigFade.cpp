@@ -47,8 +47,8 @@ namespace Assets
 				return Result::FAIL_LOAD;
 			}
 
-			for ( auto x = 0; x < nWidth; x++ ) {
-				for ( auto y = 0; y < nHeight; y++ ) {
+			for ( auto y = 0; y < nHeight; y++ ) {
+				for ( auto x = 0; x < nWidth; x++ ) {
 					auto clr = BMP.GetPixel( x, y );
 					colors.insert( { clr.Red, clr.Green, clr.Blue } );
 				}
@@ -63,8 +63,8 @@ namespace Assets
 				g_ErrHandler.LogFmt( Log::Level::WRN, "LoadImg: Warning – Image is not optimized. %i additional unique colors could still be used.", k_uNumColors - colors.size() );
 			}
 
-			for ( auto x = 0; x < nWidth; x++ ) {
-				for ( auto y = 0; y < nHeight; y++ ) {
+			for ( auto y = 0; y < nHeight; y++ ) {
+				for ( auto x = 0; x < nWidth; x++ ) {
 					auto clr = BMP.GetPixel( x, y );
 					m_Data[y * k_uWidth + x] = m_Palette.FindColor( { clr.Red, clr.Green, clr.Blue }, 0, k_uNumColors );
 				}
@@ -107,21 +107,15 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
-	// TODO: generate BigFade (raw data) from image
 	Result CBigFade::Generate( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::BigFade );
-		//BMP bmp;
 
 		std::ofstream ofs( sFilePath, std::ios::binary | std::ios::trunc );
 		if ( ofs.is_open() ) {
-			for ( uint32_t y = 0; y < k_uHeight; y++ ) {
-				for ( uint32_t x = 0; x < k_uWidth; x++ ) {
-					//auto uIndex = m_Palette.FindBigFadeColor( color );
-					//ofs.write( reinterpret_cast<const char*>(&uIndex), sizeof( char ) );
-				}
-				ofs.close();
-			}
+			ofs.write( reinterpret_cast<const char*>(m_Data), sizeof( m_Data ) );
+			ofs.close();
+			return Result::OK_EXPORT;
 		}
 
 		return Result::FAIL_GENERATE;

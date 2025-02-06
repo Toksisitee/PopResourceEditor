@@ -27,6 +27,10 @@ void CBigFadeWnd::Render()
 		g_ErrHandler.HandleResult( m_BigFade.Export( "C:\\Users\\melyg\\Pictures\\bigfade.bmp" ) );
 	}
 
+	if ( ImGui::Button( "Generate" ) ) {
+		g_ErrHandler.HandleResult( m_BigFade.Generate( "C:\\Users\\melyg\\Pictures\\bigfade.dat" ) );
+	}
+
 	if ( m_BigFade.GetTexture() == nullptr ) {
 		m_BigFade.CreateTexture( m_pd3dDevice );
 	}
