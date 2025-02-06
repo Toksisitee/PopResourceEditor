@@ -8,8 +8,16 @@
 
 class CLevelWnd : public CWindowBase {
 public:
+	CLevelWnd( LPDIRECT3DDEVICE9 pd3dDevice ) : CWindowBase( pd3dDevice )
+	{
+		Initialize( pd3dDevice );
+	}
 	CLevelWnd( LPDIRECT3DDEVICE9 pd3dDevice, std::string sLevel )
-		: CWindowBase( pd3dDevice ), m_sLevel( sLevel ){}
+		: CWindowBase( pd3dDevice ), m_sLevel( sLevel )
+	{
+		Initialize( pd3dDevice );
+	}
+
 	void Render() override;
 
 	void Initialize( LPDIRECT3DDEVICE9 pd3dDevice ) override
@@ -25,8 +33,14 @@ public:
 		m_uCliffTreshold = 10;
 	}
 
+	Assets::CLevel* GetAsset()
+	{
+		return &m_Level;
+	}
+
 	void Cleanup() override
-	{}
+	{
+	}
 
 private:
 	Assets::CPalette m_Palette;

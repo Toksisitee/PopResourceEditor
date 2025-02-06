@@ -24,6 +24,7 @@ public:
 	{
 		m_Windows.erase(std::remove_if( m_Windows.begin(), m_Windows.end(),
 			[]( const std::unique_ptr<CWindowBase>& pWnd ) {
+			if ( !pWnd->IsOpen() ) pWnd->Cleanup();
 			return !pWnd->IsOpen();
 			} ), m_Windows.end()
 		);

@@ -114,5 +114,5 @@ namespace Assets
 	};
 
 	const char* GetFileTypeSz( FileType eFileType );
-	extern bool OpenWnd( const std::string& sFilePath, FileType eFileType );
+	extern Result OpenWnd( const std::string& sFilePath, FileType eFileType );
 }

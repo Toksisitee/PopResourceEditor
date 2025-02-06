@@ -9,8 +9,8 @@ void CDispWnd::Render()
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
 
 	if ( !m_bFirstPass ) {
-		auto sFilePath = Util::FileSystem::FormatPath( "disp0-u.dat" );
-		g_ErrHandler.HandleResult( m_Disp.Load( sFilePath ) );
+		//auto sFilePath = Util::FileSystem::FormatPath( "disp0-u.dat" );
+		//g_ErrHandler.HandleResult( m_Disp.Load( sFilePath ) );
 		m_bFirstPass = true;
 	}
 

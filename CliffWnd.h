@@ -16,6 +16,11 @@ public:
 		m_pd3dDevice = pd3dDevice;
 	}
 
+	Assets::CCliff* GetAsset()
+	{
+		return &m_Cliff;
+	}
+
 	void Cleanup() override
 	{}
 

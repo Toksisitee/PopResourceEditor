@@ -17,7 +17,7 @@ namespace Assets
 	public:
 		~CFade() { SafeDestroyTexture( m_pTexture ); }
 
-		Result	Load( std::string& sFilePath );
+		Result	Load( const std::string& sFilePath );
 		Result	Generate( std::string& sFilePath );
 		Result	Export( std::string& sFilePath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );

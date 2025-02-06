@@ -10,6 +10,11 @@
 #include "BigFade.h"
 #include "Fade.h"
 #include "Alpha.h"
+#include "Ghost.h"
+#include "Sky.h"
+#include "Blocks.h"
+#include "Cliff.h"
+#include "Disp.h"
 #include "Palette.h"
 #include "AssetPicker.h"
 
@@ -52,10 +57,15 @@ struct FileTypeSize
 };
 
 std::unordered_map<std::string, FileTypeSize, CaseInsensitiveHash, CaseInsensitiveEqual> mapName = {
-	{"bigf", { Assets::FileType::BigFade, Assets::BigFade::k_uSize }},
-	{"fade", { Assets::FileType::Fade, Assets::Fade::k_uSize }},
-	{"pal", { Assets::FileType::Palette, Assets::Palette::k_uSize}},
+	{"sky0", { Assets::FileType::Sky, Assets::Sky::k_uSize}},
+	{"bigf0", { Assets::FileType::BigFade, Assets::BigFade::k_uSize }},
+	{"fade0", { Assets::FileType::Fade, Assets::Fade::k_uSize }},
+	{"ghost0", { Assets::FileType::Ghost, Assets::Ghost::k_uSize }},
+	{"pal0", { Assets::FileType::Palette, Assets::Palette::k_uSize}},
 	{"al0", { Assets::FileType::Alpha, Assets::Alpha::k_uSize}},
+	{"bl320", { Assets::FileType::Blocks, Assets::Blocks::k_uSize}},
+	{"cliff0", { Assets::FileType::Cliff, Assets::Cliff::k_uSize}},
+	{"disp0", { Assets::FileType::Disp, Assets::Disp::k_uSize}},
 };
 
 std::unordered_map<std::string, std::string, CaseInsensitiveHash, CaseInsensitiveEqual> mapExtension = {
@@ -70,7 +80,7 @@ std::unordered_map<std::string, std::string, CaseInsensitiveHash, CaseInsensitiv
 };
 
 std::unordered_map<std::vector<uint8_t>, FileAsset, VectorHash> mapMagic = {
-	{{0x50, 0x53, 0x46, 0x42}, {"Sprite Bank", Assets::FileType::Sprite}},
+	{{0x50, 0x53, 0x46, 0x42}, {"Sprite Bank", "Sprite", Assets::FileType::Sprite}},
 };
 
 bool FileTypeCorrectSize( Assets::FileType eFileType, size_t uSize )
@@ -142,7 +152,7 @@ void GetFilesRecursively( const std::string& sPath, FilesContainer& container )
 
 			if ( eType != Assets::FileType::Unknown ) {
 				spdlog::info( "File: {}, Type: {}", sFilePath, sFileType );
-				container.vsFiles.push_back( { sFilePath + " (" + sFileType + ")", Assets::FileType::Alpha } );
+				container.vsFiles.push_back( { sFilePath, sFileType, eType } );
 			}
 		}
 	}
@@ -165,7 +175,7 @@ void RenderDirectory( const FilesContainer& container, std::string& selectedAsse
 	ImGui::SetNextItemOpen( true );
 	if ( ImGui::TreeNode( container.sDirectory.c_str() ) ) {
 		for ( const auto& entry : container.vsFiles ) {
-			std::string fileName = std::filesystem::path( entry.sFile ).filename().string();
+			std::string fileName = std::filesystem::path( entry.sFile ).filename().string() + " (" + entry.sFileType + ")";
 
 			if ( ImGui::Selectable( fileName.c_str(), selectedAsset == entry.sFile ) ) {
 				Assets::OpenWnd( entry.sFile, entry.eFileType );

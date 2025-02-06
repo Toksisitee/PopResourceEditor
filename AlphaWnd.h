@@ -2,8 +2,8 @@
 #include <string>
 #include <d3d9.h>
 
-#include "Alpha.h"
 #include "WindowBase.h"
+#include "Alpha.h"
 
 class CAlphaWnd : public CWindowBase {
 public:
@@ -14,6 +14,11 @@ public:
 	void Initialize( LPDIRECT3DDEVICE9 pd3dDevice ) override
 	{
 		m_pd3dDevice = pd3dDevice;
+	}
+
+	Assets::CAlpha* GetAsset()
+	{
+		return &m_Alpha;
 	}
 
 	void Cleanup() override

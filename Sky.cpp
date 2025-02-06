@@ -11,7 +11,7 @@ namespace Assets
 {
 	using namespace Sky;
 
-	Result CSky::Load( std::string& sFilePath )
+	Result CSky::Load( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Sky );
 

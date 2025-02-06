@@ -10,10 +10,10 @@ void CBigFadeWnd::Render()
 	auto pPalette = m_BigFade.GetPalette();
 
 	if ( !m_bFirstPass ) {
-		auto sFilePath = Util::FileSystem::FormatPath( "pal0-u.dat" );
-		g_ErrHandler.HandleResult( pPalette->Load( sFilePath ) );
-		sFilePath = Util::FileSystem::FormatPath( "bigf0-u.dat" );
-		g_ErrHandler.HandleResult( m_BigFade.Load( sFilePath ) );
+		//auto sFilePath = Util::FileSystem::FormatPath( "pal0-u.dat" );
+		//g_ErrHandler.HandleResult( pPalette->Load( sFilePath ) );
+		//sFilePath = Util::FileSystem::FormatPath( "bigf0-u.dat" );
+		//g_ErrHandler.HandleResult( m_BigFade.Load( sFilePath ) );
 		m_bFirstPass = true;
 	}
 

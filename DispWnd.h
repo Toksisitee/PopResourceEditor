@@ -16,6 +16,11 @@ public:
 		m_pd3dDevice = pd3dDevice;
 	}
 
+	Assets::CDisp* GetAsset()
+	{
+		return &m_Disp;
+	}
+
 	void Cleanup() override
 	{}
 

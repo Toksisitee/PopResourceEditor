@@ -119,5 +119,16 @@ namespace Util
 			}
 			return file.tellg();
 		}
+
+		[[nodiscard]] std::string GetLastCharacterInFilePath( const std::string& sFilePath )
+		{
+			size_t uDotPos = sFilePath.find_last_of( '.' );
+			if ( uDotPos == std::string::npos || uDotPos == 0 ) return "";
+			size_t uCharPos = uDotPos - 1;
+			if ( uCharPos < sFilePath.size() ) {
+				return std::string( 1, sFilePath[uCharPos] );
+			}
+			return "";
+		}
 	}
 }

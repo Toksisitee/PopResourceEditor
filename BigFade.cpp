@@ -12,7 +12,7 @@ namespace Assets
 {
 	using namespace BigFade;
 
-	Result CBigFade::Load( std::string& sFilePath )
+	Result CBigFade::Load( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::BigFade );
 
@@ -30,7 +30,7 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
-	Result CBigFade::Export( std::string& sFilePath )
+	Result CBigFade::Export( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::BigFade );
 
@@ -62,7 +62,7 @@ namespace Assets
 	}
 
 	// TODO: generate BigFade (raw data) from image
-	Result CBigFade::Generate( std::string& sFilePath )
+	Result CBigFade::Generate( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::BigFade );
 		//BMP bmp;

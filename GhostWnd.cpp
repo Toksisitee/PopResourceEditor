@@ -10,10 +10,10 @@ void CGhostWnd::Render()
 	auto pPalette = m_Ghost.GetPalette();
 
 	if ( !m_bFirstPass ) {
-		auto sFilePath = Util::FileSystem::FormatPath( "pal0-u.dat" );
-		g_ErrHandler.HandleResult( pPalette->Load( sFilePath ) );
-		sFilePath = Util::FileSystem::FormatPath( "ghost0-u.dat" );
-		g_ErrHandler.HandleResult( m_Ghost.Load( sFilePath ) );
+		//auto sFilePath = Util::FileSystem::FormatPath( "pal0-u.dat" );
+		//g_ErrHandler.HandleResult( pPalette->Load( sFilePath ) );
+		//sFilePath = Util::FileSystem::FormatPath( "ghost0-u.dat" );
+		//g_ErrHandler.HandleResult( m_Ghost.Load( sFilePath ) );
 		m_bFirstPass = true;
 	}
 

@@ -12,7 +12,7 @@ namespace Assets
 {
 	using namespace Blocks;
 
-	Result CBlocks::Load( std::string& sFilePath )
+	Result CBlocks::Load( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Blocks );
 
@@ -65,10 +65,7 @@ namespace Assets
 	{
 		g_ErrHandler.SetFileType( FileType::Blocks );
 
-		for ( size_t i = 0; i < 256; i++ ) {
-			DestroyTexture( i );
-		}
-		DestroyTexture();
+		DestroyTextures();
 
 #if 0
 		std::ofstream ofs( fFilepath, std::ios::binary | std::ios::trunc );

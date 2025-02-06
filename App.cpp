@@ -105,7 +105,7 @@ void CEditorApp::Run()
 	ImGui_ImplWin32_Init( GetHwnd() );
 	ImGui_ImplDX9_Init( GetDevice() );
 
-	Debug::InitializeWindows( GetDevice() );
+	//Debug::InitializeWindows( GetDevice() );
 
 	std::string basePath = "C:\\Users\\melyg\\AppData\\Roaming\\pop";
 	GetAllFiles( basePath );
@@ -208,7 +208,7 @@ void CEditorApp::Run()
 #endif
 
 			{
-				Debug::RenderWindows();
+				//Debug::RenderWindows();
 			}
 
 			{

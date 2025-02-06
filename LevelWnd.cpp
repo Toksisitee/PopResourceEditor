@@ -25,10 +25,12 @@ void CLevelWnd::Render()
 		sFilePath = Util::FileSystem::FormatPath( "levl2017" );
 		g_ErrHandler.HandleResult( m_Level.Load( sFilePath ) );
 #endif
+#if 0
 		auto sFilePath = Util::FileSystem::FormatPath( m_sLevel.c_str() );
 		g_ErrHandler.HandleResult( m_Level.Load( sFilePath ) );
 		//sFilePath = Util::FileSystem::FormatPath( "watdisp.dat" );
 		//g_ErrHandler.HandleResult( m_Level.GetDisp()->Load( sFilePath ) );
+#endif
 
 		m_bRegenerate = true;
 		m_bFirstPass = true;

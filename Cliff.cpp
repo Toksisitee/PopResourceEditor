@@ -13,7 +13,7 @@ namespace Assets
 {
 	using namespace Cliff;
 
-	Result CCliff::Load( std::string& sFilePath )
+	Result CCliff::Load( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Cliff );
 

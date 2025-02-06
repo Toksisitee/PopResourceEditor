@@ -13,7 +13,7 @@ namespace Assets
 {
 	using namespace Fade;
 
-	Result CFade::Load( std::string& sFilePath )
+	Result CFade::Load( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Fade );
 

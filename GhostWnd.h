@@ -16,6 +16,11 @@ public:
 		m_pd3dDevice = pd3dDevice;
 	}
 
+	Assets::CGhost* GetAsset()
+	{
+		return &m_Ghost;
+	}
+
 	void Cleanup() override
 	{}
 

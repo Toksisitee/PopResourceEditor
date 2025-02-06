@@ -9,6 +9,7 @@ namespace Assets
 	{
 		constexpr uint32_t	k_uWidth = 256;
 		constexpr uint32_t	k_uHeight = 256;
+		constexpr uint32_t	k_uSize = k_uWidth * k_uHeight;
 		constexpr uint8_t	k_uDefaultOpacity = 66; // Varies for every texture?
 	}
 
@@ -18,7 +19,7 @@ namespace Assets
 		CGhost() : m_uOpacity( Ghost::k_uDefaultOpacity ) {}
 		~CGhost() { SafeDestroyTexture( m_pTexture ); }
 
-		Result	Load( std::string& sFilePath );
+		Result	Load( const std::string& sFilePath );
 		Result	Generate( std::string& sFilePath );
 		Result	Export( std::string& sFilePath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );

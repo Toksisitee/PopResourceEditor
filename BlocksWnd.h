@@ -17,6 +17,11 @@ public:
 		m_bDrawAtlas = false;
 	}
 
+	Assets::CBlocks* GetAsset()
+	{
+		return &m_Blocks;
+	}
+
 	void Cleanup() override
 	{}
 

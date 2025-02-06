@@ -9,6 +9,7 @@ namespace Assets
 	{
 		constexpr uint32_t	k_uWidth = 512;
 		constexpr uint32_t	k_uHeight = 512;
+		constexpr uint32_t	k_uSize = k_uWidth * k_uHeight;
 		constexpr uint32_t	k_uNumColors = 16;		// Max numbers of colors in the palette reserved for the sky texture
 		constexpr uint32_t	k_uColorStart = 112;	// Starting index in the palette for the sky texture
 	}
@@ -16,7 +17,7 @@ namespace Assets
 	class CSky
 	{
 	public:
-		Result	Load( std::string& sFilePath );
+		Result	Load( const std::string& sFilePath );
 		Result	Generate( std::string& fFilepath );
 		Result	Export( std::string& fFilepath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
@@ -38,5 +39,6 @@ namespace Assets
 		uint8_t m_Data[Sky::k_uWidth * Sky::k_uHeight];
 		CPalette m_Palette;
 		CTexture2D* m_pTexture;
+		uint8_t	m_uFlags;
 	};
 }

@@ -16,7 +16,7 @@ namespace Assets
 	using namespace Level;
 
 	// TODO: Load starting positions
-	Result CLevel::Load( std::string& sFilePath )
+	Result CLevel::Load( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Level );
 

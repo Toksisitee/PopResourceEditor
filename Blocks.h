@@ -11,6 +11,7 @@ namespace Assets
 		constexpr uint32_t	k_uBlockHeight = 32;
 		constexpr uint32_t	k_uWidth = 256;
 		constexpr uint32_t	k_uHeight = 1024;
+		constexpr uint32_t	k_uSize = k_uWidth * k_uHeight;
 		constexpr size_t	k_uNumBlocks = (k_uWidth / k_uBlockWidth) * (k_uHeight / k_uBlockHeight);
 	}
 
@@ -19,7 +20,7 @@ namespace Assets
 	public:
 		~CBlocks() { SafeDestroyTexture( m_pTexture ); }
 
-		Result	Load( std::string& sFilePath );
+		Result	Load( const std::string& sFilePath );
 		Result	Generate( std::string& sFilePath );
 		Result	Export( std::string& sFilePath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
@@ -32,6 +33,13 @@ namespace Assets
 		inline void DestroyTexture()
 		{
 			SafeDestroyTexture( m_pTexture );
+		}
+		inline void DestroyTextures()
+		{
+			for ( size_t i = 0; i < Blocks::k_uNumBlocks; i++ ) {
+				DestroyTexture( i );
+			}
+			DestroyTexture();
 		}
 		[[nodiscard]] inline CTexture2D* GetTexture( size_t uIndex )
 		{

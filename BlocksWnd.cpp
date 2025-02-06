@@ -10,10 +10,10 @@ void CBlocksWnd::Render()
 	auto pPalette = m_Blocks.GetPalette();
 
 	if ( !m_bFirstPass ) {
-		auto sFilePath = Util::FileSystem::FormatPath( "pal0-u.dat" );
-		g_ErrHandler.HandleResult( pPalette->Load( sFilePath ) );
-		sFilePath = Util::FileSystem::FormatPath( "BL320-U.dat" );
-		g_ErrHandler.HandleResult( m_Blocks.Load( sFilePath ) );
+		//auto sFilePath = Util::FileSystem::FormatPath( "pal0-u.dat" );
+		//g_ErrHandler.HandleResult( pPalette->Load( sFilePath ) );
+		//sFilePath = Util::FileSystem::FormatPath( "BL320-U.dat" );
+		//g_ErrHandler.HandleResult( m_Blocks.Load( sFilePath ) );
 		m_bFirstPass = true;
 	}
 
@@ -23,7 +23,7 @@ void CBlocksWnd::Render()
 	}
 
 	if ( m_Blocks.GetTexture() == nullptr ) {
-		for ( size_t i = 0; i < 256; i++ ) {
+		for ( size_t i = 0; i < Assets::Blocks::k_uNumBlocks; i++ ) {
 			m_Blocks.CreateSubTexture( m_pd3dDevice, i );
 		}
 		m_Blocks.CreateTexture( m_pd3dDevice );

@@ -16,6 +16,11 @@ public:
 		m_pd3dDevice = pd3dDevice;
 	}
 
+	Assets::CBigFade* GetAsset()
+	{
+		return &m_BigFade;
+	}
+
 	void Cleanup() override
 	{}
 

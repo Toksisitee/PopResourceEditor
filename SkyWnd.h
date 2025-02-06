@@ -2,9 +2,8 @@
 #include <string>
 #include <d3d9.h>
 
-#include "Palette.h"
-#include "Sky.h"
 #include "WindowBase.h"
+#include "Sky.h"
 
 class CSkyWnd : public CWindowBase {
 public:
@@ -17,10 +16,14 @@ public:
 		m_pd3dDevice = pd3dDevice;
 	}
 
+	Assets::CSky* GetAsset()
+	{
+		return &m_Sky;
+	}
+
 	void Cleanup() override
 	{}
 
 private:
-	Assets::CPalette m_Palette;
 	Assets::CSky m_Sky;
 };

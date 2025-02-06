@@ -9,6 +9,7 @@ namespace Assets
 	{
 		constexpr uint32_t	k_uWidth = 128;
 		constexpr uint32_t	k_uHeight = 64;
+		constexpr uint32_t	k_uSize = k_uWidth * k_uHeight;
 	}
 
 	class CCliff
@@ -16,7 +17,7 @@ namespace Assets
 	public:
 		~CCliff() { SafeDestroyTexture( m_pTexture ); }
 
-		Result	Load( std::string& sFilePath );
+		Result	Load( const std::string& sFilePath );
 		Result	Generate( uint8_t uMode );
 		Result	Export( std::string& sFilePath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );

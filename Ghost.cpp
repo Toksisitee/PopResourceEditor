@@ -11,7 +11,7 @@ namespace Assets
 {
 	using namespace Ghost;
 
-	Result CGhost::Load( std::string& sFilePath )
+	Result CGhost::Load( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Ghost );
 

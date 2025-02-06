@@ -17,7 +17,7 @@ namespace Assets
 	public:
 		~CAlpha() { SafeDestroyTexture( m_pTexture ); }
 
-		Result	Load( std::string& sFilePath );
+		Result	Load( const std::string& sFilePath );
 		Result	Generate( std::string& sFilePath );
 		Result	Export( std::string& sFilePath );
 		Color	GetAlphaColor( uint8_t uIndex );

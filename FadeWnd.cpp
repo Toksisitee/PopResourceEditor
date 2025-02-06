@@ -10,10 +10,10 @@ void CFadeWnd::Render()
 	auto pPalette = m_Fade.GetPalette();
 
 	if ( !m_bFirstPass ) {
-		auto sFilePath = Util::FileSystem::FormatPath( "pal0-u.dat" );
-		g_ErrHandler.HandleResult( pPalette->Load( sFilePath ) );
-		sFilePath = Util::FileSystem::FormatPath( "fade0-u.dat" );
-		g_ErrHandler.HandleResult( m_Fade.Load( sFilePath ) );
+		//auto sFilePath = Util::FileSystem::FormatPath( "pal0-u.dat" );
+		//g_ErrHandler.HandleResult( pPalette->Load( sFilePath ) );
+		//sFilePath = Util::FileSystem::FormatPath( "fade0-u.dat" );
+		//g_ErrHandler.HandleResult( m_Fade.Load( sFilePath ) );
 		m_bFirstPass = true;
 	}
 

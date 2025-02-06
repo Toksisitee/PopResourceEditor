@@ -34,7 +34,7 @@ namespace Assets
 			0, 0, 0
 	};
 
-	Result CAlpha::Load( std::string& sFilePath )
+	Result CAlpha::Load( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Alpha );
 

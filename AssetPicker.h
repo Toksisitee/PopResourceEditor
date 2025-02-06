@@ -7,6 +7,7 @@
 struct FileAsset
 {
 	std::string sFile;
+	std::string sFileType;
 	Assets::FileType eFileType;
 };
 
