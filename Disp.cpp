@@ -60,6 +60,20 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
+	Result CDisp::ExportBin( const std::string& sFilePath )
+	{
+		g_ErrHandler.SetFileType( FileType::Disp );
+
+		std::ofstream ofs( sFilePath, std::ios::binary | std::ios::trunc );
+		if ( ofs.is_open() ) {
+			ofs.write( reinterpret_cast<const char*>(m_Data), sizeof( m_Data ) );
+			ofs.close();
+			return Result::OK_EXPORT;
+		}
+
+		return Result::FAIL_GENERATE;
+	}
+
 	Result CDisp::Generate( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Disp );
