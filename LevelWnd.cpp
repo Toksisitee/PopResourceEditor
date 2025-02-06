@@ -41,7 +41,7 @@ void CLevelWnd::Render()
 	ImGui::SameLine();
 	if ( ImGui::Button( "Regenerate" ) ) {
 		auto sFilePath = Util::FileSystem::FormatPath( m_sLevel.c_str() );
-		g_ErrHandler.HandleResult( m_Level.Load( sFilePath ) );
+		g_ErrHandler.HandleResult( m_Level.LoadBin( sFilePath ) );
 		m_bRegenerate = true;
 	}
 

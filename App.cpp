@@ -154,9 +154,9 @@ void CEditorApp::Run()
 
 		if ( ImGui::Button( "Test" ) ) {
 			auto sFilePath = Util::FileSystem::FormatPath( "pal0-0.dat" );
-			g_ErrHandler.HandleResult( g_Palette.Load( sFilePath ) );
+			g_ErrHandler.HandleResult( g_Palette.LoadBin( sFilePath ) );
 			sFilePath = Util::FileSystem::FormatPath( "pal.bmp" );
-			g_ErrHandler.HandleResult( g_Palette.Export( sFilePath.c_str() ) );
+			g_ErrHandler.HandleResult( g_Palette.ExportImg( sFilePath.c_str() ) );
 
 		}
 		static float col2[4] = { 0.4f, 0.7f, 0.0f, 0.5f };
@@ -194,12 +194,12 @@ void CEditorApp::Run()
 #if 1
 			if ( !bLoaded ) {
 				auto sFilePath = Util::FileSystem::FormatPath( "pal0-b.dat" );
-				g_ErrHandler.HandleResult( g_Palette.Load( sFilePath ) );
+				g_ErrHandler.HandleResult( g_Palette.LoadBin( sFilePath ) );
 				sFilePath = Util::FileSystem::FormatPath( "pal.bmp" );
-				g_ErrHandler.HandleResult( g_Palette.Export( sFilePath.c_str() ) );
+				g_ErrHandler.HandleResult( g_Palette.ExportImg( sFilePath.c_str() ) );
 
 				sFilePath = Util::FileSystem::FormatPath( "sky0-b.dat" );
-				if ( g_ErrHandler.HandleResult( g_Sky.Load( sFilePath ) ) != Assets::Result::OK_LOAD ) {
+				if ( g_ErrHandler.HandleResult( g_Sky.LoadBin( sFilePath ) ) != Assets::Result::OK_LOAD ) {
 
 				}
 				bLoaded = true;

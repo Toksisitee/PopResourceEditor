@@ -13,7 +13,7 @@ namespace Assets
 {
 	using namespace Blocks;
 
-	Result CBlocks::Load( const std::string& sFilePath )
+	Result CBlocks::LoadBin( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Blocks );
 
@@ -31,7 +31,7 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
-	Result CBlocks::Export( const std::string& sFilePath )
+	Result CBlocks::ExportImg( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Blocks );
 
@@ -62,7 +62,7 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
-	Result CBlocks::Generate( const std::string& sFilePath )
+	Result CBlocks::ExportBin( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Blocks );
 

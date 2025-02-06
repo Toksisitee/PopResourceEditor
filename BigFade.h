@@ -18,10 +18,10 @@ namespace Assets
 	public:
 		~CBigFade() { SafeDestroyTexture( m_pTexture ); }
 
-		Result	Load( const std::string& sFilePath );
+		Result	LoadBin( const std::string& sFilePath );
 		Result	LoadImg( const std::string& sFilePath );
-		Result	Generate( const std::string& sFilePath );
-		Result	Export( const std::string& sFilePath );
+		Result	ExportImg( const std::string& sFilePath );
+		Result	ExportBin( const std::string& sFilePath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
 		uint8_t FindColor( const Color& color );
 		uint8_t GetColor( const uint32_t uIndex );

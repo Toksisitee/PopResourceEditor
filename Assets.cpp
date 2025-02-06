@@ -123,7 +123,7 @@ namespace Assets
 
 	Result QuickLoadPalette( CPalette* pPalette, std::string& sFilePath )
 	{
-		return pPalette->Load( sFilePath );
+		return pPalette->LoadBin( sFilePath );
 	}
 
 	Result QuickLoadAlpha( CAlpha* pAlpha, const std::string& sFilePath )
@@ -151,7 +151,7 @@ namespace Assets
 		}
 
 		pSky->DestroyTexture();
-		return pSky->Load( sFilePath );
+		return pSky->LoadBin( sFilePath );
 	}
 
 	Result QuickLoadGhost( CGhost* pGhost, const std::string& sFilePath )
@@ -165,7 +165,7 @@ namespace Assets
 		}
 
 		pGhost->DestroyTexture();
-		return pGhost->Load( sFilePath );
+		return pGhost->LoadBin( sFilePath );
 	}
 
 	Result QuickLoadFade( CFade* pFade, const std::string& sFilePath )
@@ -179,7 +179,7 @@ namespace Assets
 		}
 
 		pFade->DestroyTexture();
-		return pFade->Load( sFilePath );
+		return pFade->LoadBin( sFilePath );
 	}
 
 	Result QuickLoadBigFade( CBigFade* pBigFade, const std::string& sFilePath )
@@ -193,13 +193,13 @@ namespace Assets
 		}
 
 		pBigFade->DestroyTexture();
-		return pBigFade->Load( sFilePath );
+		return pBigFade->LoadBin( sFilePath );
 	}
 
 	Result QuickLoadDisp( CDisp* pDisp, const std::string& sFilePath )
 	{
 		pDisp->DestroyTexture();
-		return pDisp->Load( sFilePath );
+		return pDisp->LoadBin( sFilePath );
 	}
 
 	Result QuickLoadCliff( CCliff* pCliff, const std::string& sFilePath )
@@ -213,7 +213,7 @@ namespace Assets
 		}
 
 		pCliff->DestroyTexture();
-		return pCliff->Load( sFilePath );
+		return pCliff->LoadBin( sFilePath );
 	}
 
 	Result QuickLoadBlocks( CBlocks* pBlocks, const std::string& sFilePath )
@@ -227,7 +227,7 @@ namespace Assets
 		}
 
 		pBlocks->DestroyTextures();
-		return pBlocks->Load( sFilePath );
+		return pBlocks->LoadBin( sFilePath );
 	}
 
 	Result QuickLoadLevel( CLevel* pLevel, const std::string& sFilePath )
@@ -241,7 +241,7 @@ namespace Assets
 		}
 
 		pLevel->DestroyTexture();
-		return pLevel->Load( sFilePath );
+		return pLevel->LoadBin( sFilePath );
 	}
 
 	Result OpenWnd( const std::string& sFilePath, FileType eFileType )

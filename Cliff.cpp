@@ -14,7 +14,7 @@ namespace Assets
 {
 	using namespace Cliff;
 
-	Result CCliff::Load( const std::string& sFilePath )
+	Result CCliff::LoadBin( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Cliff );
 
@@ -33,7 +33,7 @@ namespace Assets
 	}
 
 
-	Result CCliff::Export( const std::string& sFilePath )
+	Result CCliff::ExportImg( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Cliff );
 

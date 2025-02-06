@@ -16,7 +16,7 @@ namespace Assets
 	using namespace Level;
 
 	// TODO: Load starting positions
-	Result CLevel::Load( const std::string& sFilePath )
+	Result CLevel::LoadBin( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Level );
 
@@ -52,19 +52,19 @@ namespace Assets
 		char szBuffer[256];
 		sprintf_s( szBuffer, sizeof( szBuffer ), "pal0-%c.dat", szType );
 		auto sFileDataPath = Util::FileSystem::FormatPath( szBuffer );
-		g_ErrHandler.HandleResult( m_Palette.Load( sFileDataPath ) );
+		g_ErrHandler.HandleResult( m_Palette.LoadBin( sFileDataPath ) );
 		sprintf_s( szBuffer, sizeof( szBuffer ), "bigf0-%c.dat", szType );
 		sFileDataPath = Util::FileSystem::FormatPath( szBuffer );
-		g_ErrHandler.HandleResult( m_BigFade.Load( sFileDataPath ) );
+		g_ErrHandler.HandleResult( m_BigFade.LoadBin( sFileDataPath ) );
 
 		// TODO: this only has to be loaded once
 		sFileDataPath = Util::FileSystem::FormatPath( "watdisp.dat" );
-		g_ErrHandler.HandleResult( m_Disp.Load( sFileDataPath ) );
+		g_ErrHandler.HandleResult( m_Disp.LoadBin( sFileDataPath ) );
 
 		return Result::OK_LOAD;
 	}
 
-	Result CLevel::Export( const std::string& sFilePath )
+	Result CLevel::ExportImg( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Level );
 

@@ -110,7 +110,7 @@ namespace Assets
 			}
 		}
 
-		void CSprite::Export( uint16_t uIndex )
+		void CSprite::ExportImg( uint16_t uIndex )
 		{
 			auto pColorTable = m_pPalette->GetColorTable();
 			uint8_t uColorIndex;

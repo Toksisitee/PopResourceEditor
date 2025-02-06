@@ -15,8 +15,8 @@ namespace Assets
 	class CPalette
 	{
 	public:
-		Result Export( const char* pFilePath );
-		Result Load( const std::string& sFilePath );
+		Result LoadBin( const std::string& sFilePath );
+		Result ExportImg( const char* pFilePath );
 		[[nodiscard]] Color* GetColor( uint8_t uIndex ) { return &m_ColorTable[uIndex]; }
 		[[nodiscard]] uint8_t* GetPtr();
 		[[nodiscard]] Color* GetColorTable();

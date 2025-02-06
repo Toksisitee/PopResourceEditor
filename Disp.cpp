@@ -13,7 +13,7 @@ namespace Assets
 {
 	using namespace Disp;
 
-	Result CDisp::Load( const std::string& sFilePath )
+	Result CDisp::LoadBin( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Disp );
 
@@ -32,7 +32,7 @@ namespace Assets
 	}
 
 
-	Result CDisp::Export( const std::string& sFilePath )
+	Result CDisp::ExportImg( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Disp );
 

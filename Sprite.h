@@ -50,7 +50,7 @@ namespace Assets
 			Bank Bank;
 			Result Load( const std::string& file );
 			void Map( uint16_t index );
-			void Export( uint16_t index );
+			void ExportImg( uint16_t index );
 			void CreateTextures( LPDIRECT3DDEVICE9 pD3DDevice );
 			void Clear();
 

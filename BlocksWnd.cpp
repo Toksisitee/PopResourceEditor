@@ -19,7 +19,7 @@ void CBlocksWnd::Render()
 
 	if ( ImGui::Button( "Generate" ) ) {
 		std::string f;
-		m_Blocks.Generate( f );
+		m_Blocks.ExportBin( f );
 	}
 
 	if ( m_Blocks.GetTexture() == nullptr ) {

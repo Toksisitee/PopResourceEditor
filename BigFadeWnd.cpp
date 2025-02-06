@@ -24,11 +24,11 @@ void CBigFadeWnd::Render()
 	}
 
 	if ( ImGui::Button( "Export" ) ) {
-		g_ErrHandler.HandleResult( m_BigFade.Export( "C:\\Users\\melyg\\Pictures\\bigfade.bmp" ) );
+		g_ErrHandler.HandleResult( m_BigFade.ExportImg( "C:\\Users\\melyg\\Pictures\\bigfade.bmp" ) );
 	}
 
 	if ( ImGui::Button( "Generate" ) ) {
-		g_ErrHandler.HandleResult( m_BigFade.Generate( "C:\\Users\\melyg\\Pictures\\bigfade.dat" ) );
+		g_ErrHandler.HandleResult( m_BigFade.ExportBin( "C:\\Users\\melyg\\Pictures\\bigfade.dat" ) );
 	}
 
 	if ( m_BigFade.GetTexture() == nullptr ) {

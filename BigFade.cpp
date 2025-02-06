@@ -14,7 +14,7 @@ namespace Assets
 {
 	using namespace BigFade;
 
-	Result CBigFade::Load( const std::string& sFilePath )
+	Result CBigFade::LoadBin( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::BigFade );
 
@@ -76,7 +76,7 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
-	Result CBigFade::Export( const std::string& sFilePath )
+	Result CBigFade::ExportImg( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::BigFade );
 
@@ -107,7 +107,7 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
-	Result CBigFade::Generate( const std::string& sFilePath )
+	Result CBigFade::ExportBin( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::BigFade );
 

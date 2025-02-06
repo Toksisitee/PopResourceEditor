@@ -162,9 +162,9 @@ namespace Assets
 	public:
 		~CLevel() { SafeDestroyTexture( m_pTexture ); }
 
-		Result	Load( const std::string& sFilePath );
+		Result	LoadBin( const std::string& sFilePath );
 		Result	GeneratePreview( uint16_t uCliff, float fLightX, float fLightY, bool bWater );
-		Result	Export( const std::string& sFilePath );
+		Result	ExportImg( const std::string& sFilePath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
 
 		inline void DestroyTexture()

@@ -17,9 +17,9 @@ namespace Assets
 	class CSky
 	{
 	public:
-		Result	Load( const std::string& sFilePath );
-		Result	Generate( const std::string& fFilepath );
-		Result	Export( const std::string& fFilepath );
+		Result	LoadBin( const std::string& sFilePath );
+		Result	ExportBin( const std::string& fFilepath );
+		Result	ExportImg( const std::string& fFilepath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
 		uint8_t FindColor( const Color& color );
 

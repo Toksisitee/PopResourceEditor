@@ -13,7 +13,29 @@ namespace Assets
 {
 	using namespace Palette;
 
-	Result CPalette::Export( const char* pFilePath )
+	Result CPalette::LoadBin( const std::string& file )
+	{
+		g_ErrHandler.SetFileType( FileType::Palette );
+
+		char pad;
+		std::ifstream ifs( file, std::ios::binary );
+
+		if ( ifs.is_open() ) {
+			ifs.seekg( 0 );
+			for ( size_t i = 0; i < k_uNumColors; i++ ) {
+				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].R), sizeof( char ) );
+				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].G), sizeof( char ) );
+				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].B), sizeof( char ) );
+				ifs.read( &pad, sizeof( char ) );
+			}
+			ifs.close();
+			return Result::OK_LOAD;
+		}
+
+		return Result::FAIL_LOAD;
+	}
+
+	Result CPalette::ExportImg( const char* pFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Palette );
 
@@ -51,28 +73,6 @@ namespace Assets
 
 		g_ErrHandler.LogFmt( "Successfully exported as image: %s", pFilePath );
 		return Result::OK_EXPORT;
-	}
-
-	Result CPalette::Load( const std::string& file )
-	{
-		g_ErrHandler.SetFileType( FileType::Palette );
-
-		char pad;
-		std::ifstream ifs( file, std::ios::binary );
-
-		if ( ifs.is_open() ) {
-			ifs.seekg( 0 );
-			for ( size_t i = 0; i < k_uNumColors; i++ ) {
-				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].R), sizeof( char ) );
-				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].G), sizeof( char ) );
-				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].B), sizeof( char ) );
-				ifs.read( &pad, sizeof( char ) );
-			}
-			ifs.close();
-			return Result::OK_LOAD;
-		}
-
-		return Result::FAIL_LOAD;
 	}
 
 #if 0

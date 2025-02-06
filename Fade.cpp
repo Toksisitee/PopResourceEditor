@@ -14,7 +14,7 @@ namespace Assets
 {
 	using namespace Fade;
 
-	Result CFade::Load( const std::string& sFilePath )
+	Result CFade::LoadBin( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Fade );
 
@@ -33,7 +33,7 @@ namespace Assets
 	}
 
 
-	Result CFade::Export( const std::string& sFilePath )
+	Result CFade::ExportImg( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Fade );
 

@@ -12,7 +12,7 @@ namespace Assets
 {
 	using namespace Ghost;
 
-	Result CGhost::Load( const std::string& sFilePath )
+	Result CGhost::LoadBin( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Ghost );
 
@@ -30,7 +30,7 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
-	Result CGhost::Export( const std::string& sFilePath )
+	Result CGhost::ExportImg( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Ghost );
 
