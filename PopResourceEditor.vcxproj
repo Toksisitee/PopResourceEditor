@@ -195,6 +195,7 @@
     <ClInclude Include="AssetPicker.h" />
     <ClInclude Include="Assets.h" />
     <ClInclude Include="AssetsErrHandler.h" />
+    <ClInclude Include="AssetTypes.h" />
     <ClInclude Include="BigFade.h" />
     <ClInclude Include="BigFadeWnd.h" />
     <ClInclude Include="Blocks.h" />

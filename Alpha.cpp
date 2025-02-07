@@ -35,7 +35,7 @@ namespace Assets
 			0, 0, 0
 	};
 
-	Result CAlpha::Load( const std::string& sFilePath )
+	Result CAlpha::LoadBin( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Alpha );
 
@@ -54,7 +54,7 @@ namespace Assets
 	}
 
 
-	Result CAlpha::Export( const std::string& sFilePath )
+	Result CAlpha::ExportImg( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Alpha );
 

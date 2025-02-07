@@ -2,46 +2,52 @@
 #include <cstdint>
 #include <vector>
 #include <fstream>
+#include <d3d9.h>
+
+#include "Texture.h"
+#include "AssetTypes.h"
+
+class CPalette;
 
 namespace Assets
 {
-	enum class FileType : uint8_t
-	{
-		None = 0,
-		Palette,
-		Alpha,
-		Sky,
-		Sprite,
-		Ghost,
-		Fade,
-		BigFade,
-		Cliff,
-		Disp,
-		Blocks,
-		Level,
-		Unknown
-	};
-
-	enum class Result : uint8_t
-	{
-		OK = 0,
-		FAIL,
-		OK_LOAD,
-		FAIL_LOAD,
-		OK_PARSE,
-		FAIL_PARSE,
-		OK_EXPORT,
-		FAIL_EXPORT,
-		OK_GENERATE,
-		FAIL_GENERATE,
-	};
-
 	template <typename T>
 	struct Bank {
 		uint32_t Entries;
 		std::vector<std::pair<uint32_t, T>> Entry;
 	};
 
+	class CAsset
+	{
+	public:
+		~CAsset() { SafeDestroyTexture( m_pTexture ); }
+
+		virtual Result	LoadBin( const std::string& sFilePath ) = 0;
+		virtual Result	LoadImg( const std::string& sFilePath ) = 0;
+		virtual Result	ExportImg( const std::string& sFilePath ) = 0;
+		virtual Result	ExportBin( const std::string& sFilePath ) = 0;
+		virtual bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice ) = 0;
+		inline virtual void* GetPtr() = 0;
+		
+		inline void DestroyTexture()
+		{
+			SafeDestroyTexture( m_pTexture );
+		}
+		[[nodiscard]] inline CTexture2D* GetTexture()
+		{
+			return m_pTexture;
+		}
+		[[nodiscard]] inline CPalette* GetPalette()
+		{
+			return &m_Palette;
+		}
+
+	protected:
+		CPalette m_Palette;
+		CTexture2D* m_pTexture;
+	};
+
+#if 0
 	class CAsset
 	{
 	public:
@@ -112,7 +118,9 @@ namespace Assets
 		char*			m_pBuffer;
 		uint32_t        m_nBufferLength;
 	};
+#endif
 
 	const char* GetFileTypeSz( FileType eFileType );
 	extern Result OpenWnd( const std::string& sFilePath, FileType eFileType );
+	extern Result QuickLoad( void* pAsset, const std::string& sFilePath, FileType eFileType );
 }

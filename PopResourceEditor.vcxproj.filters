@@ -293,5 +293,8 @@
     <ClInclude Include="AssetPicker.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="AssetTypes.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

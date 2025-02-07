@@ -1,7 +1,7 @@
 #pragma once
 #include "Texture.h"
-#include "Palette.h"
 #include "Assets.h"
+#include "Palette.h"
 
 namespace Assets
 {
@@ -12,36 +12,27 @@ namespace Assets
 		constexpr uint32_t	k_uSize = k_uWidth * k_uHeight;
 	}
 
-	class CAlpha
+	class CAlpha : public CAsset
 	{
 	public:
 		~CAlpha() { SafeDestroyTexture( m_pTexture ); }
 
-		Result	Load( const std::string& sFilePath );
-		Result	Generate();
-		Result	Export( const std::string& sFilePath );
-		Result	ExportBin( const std::string& sFilePath );
-		Color	GetAlphaColor( uint8_t uIndex );
-		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
+		// ====== Virtual Overrides  ======
+		Result	LoadBin( const std::string& sFilePath ) override;
+		Result	LoadImg( const std::string& sFilePath ) override { return Result::FAIL_LOAD; }
+		Result	ExportImg( const std::string& sFilePath ) override;
+		Result	ExportBin( const std::string& sFilePath ) override;
+		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice ) override;
+		inline void* GetPtr() override { return static_cast<void*>(&m_Data); }
+		// ================================
 
-		inline void DestroyTexture()
-		{
-			SafeDestroyTexture( m_pTexture );
-		}
-		[[nodiscard]] inline CTexture2D* GetTexture()
-		{
-			return m_pTexture;
-		}
-		[[nodiscard]] inline CPalette* GetPalette()
-		{
-			return &m_Palette;
-		}
+		Result	Generate();
+		Color	GetAlphaColor( uint8_t uIndex );
+
 	protected:
 		uint32_t ComputeTable( uint8_t* pData, const Color& targetColor, uint32_t uRow );
 
 	private:
 		uint8_t m_Data[Alpha::k_uWidth * Alpha::k_uHeight];
-		CPalette m_Palette;
-		CTexture2D* m_pTexture;
 	};
 }

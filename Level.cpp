@@ -201,7 +201,7 @@ namespace Assets
 
 	void CLevel::MapToDisp( uint8_t* pData, int32_t x, int32_t y )
 	{
-		uint8_t* pDisp = m_Disp.GetPtr();
+		uint8_t* pDisp = static_cast<uint8_t*>(m_Disp.GetPtr());
 		const float fFrequency = 0.1f;
 		const float fAmplitude = 10.0f;
 

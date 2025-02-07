@@ -157,15 +157,22 @@ namespace Assets
 		uint16_t StartAngle;
 	};
 #pragma pack(pop)
-	class CLevel
+	class CLevel : public CAsset
 	{
 	public:
 		~CLevel() { SafeDestroyTexture( m_pTexture ); }
 
-		Result	LoadBin( const std::string& sFilePath );
+
+		// ====== Virtual Overrides  ======
+		Result	LoadBin( const std::string& sFilePath ) override;
+		Result	LoadImg( const std::string& sFilePath ) override { return Result::FAIL_LOAD; }
+		Result	ExportImg( const std::string& sFilePath ) override;
+		Result  ExportBin( const std::string& sFilePath ) override { return Result::FAIL; }
+		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice ) override;
+		inline void* GetPtr() override { return static_cast<void*>(&m_Data); }
+		// ================================
+
 		Result	GeneratePreview( uint16_t uCliff, float fLightX, float fLightY, bool bWater );
-		Result	ExportImg( const std::string& sFilePath );
-		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
 
 		inline void DestroyTexture()
 		{

@@ -121,7 +121,7 @@ namespace Assets
 		return std::nullopt;
 	}
 
-	Result QuickLoadPalette( CPalette* pPalette, std::string& sFilePath )
+	Result QuickLoadPalette( CPalette* pPalette, const std::string& sFilePath )
 	{
 		return pPalette->LoadBin( sFilePath );
 	}
@@ -137,7 +137,7 @@ namespace Assets
 		}
 
 		pAlpha->DestroyTexture();
-		return pAlpha->Load( sFilePath );
+		return pAlpha->LoadBin( sFilePath );
 	}
 
 	Result QuickLoadSky( CSky* pSky, const std::string& sFilePath )
@@ -244,6 +244,34 @@ namespace Assets
 		return pLevel->LoadBin( sFilePath );
 	}
 
+	Result QuickLoad( void* pAsset, const std::string& sFilePath, FileType eFileType )
+	{
+		switch ( eFileType ) {
+			case Assets::FileType::Alpha:
+				return QuickLoadAlpha( static_cast<CAlpha*>(pAsset), sFilePath );
+			case Assets::FileType::BigFade:
+				return QuickLoadBigFade( static_cast<CBigFade*>(pAsset), sFilePath );
+			case Assets::FileType::Blocks:
+				return QuickLoadBlocks( static_cast<CBlocks*>(pAsset), sFilePath );
+			case Assets::FileType::Cliff:
+				return QuickLoadCliff( static_cast<CCliff*>(pAsset), sFilePath );
+			case Assets::FileType::Disp:
+				return QuickLoadDisp( static_cast<CDisp*>(pAsset), sFilePath );
+			case Assets::FileType::Fade:
+				return QuickLoadFade( static_cast<CFade*>(pAsset), sFilePath );
+			case Assets::FileType::Ghost:
+				return QuickLoadGhost( static_cast<CGhost*>(pAsset), sFilePath );
+			case Assets::FileType::Level:
+				return QuickLoadLevel( static_cast<CLevel*>(pAsset), sFilePath );
+			case Assets::FileType::Palette:
+				return QuickLoadPalette( static_cast<CPalette*>(pAsset), sFilePath );
+			case Assets::FileType::Sky:
+				return QuickLoadSky( static_cast<CSky*>(pAsset), sFilePath );
+		}
+
+		return Result::FAIL_LOAD;
+	}
+
 	Result OpenWnd( const std::string& sFilePath, FileType eFileType )
 	{
 		auto pDevice = g_Editor.GetDevice();
@@ -252,49 +280,49 @@ namespace Assets
 			{
 				auto pWnd = g_WndMngr.AddWindow<CAlphaWnd>( pDevice );
 				pWnd->SetWindowName( sFilePath );
-				return QuickLoadAlpha( pWnd->GetAsset(), sFilePath );
+				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::BigFade:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CBigFadeWnd>( pDevice );
 				pWnd->SetWindowName( sFilePath );
-				return QuickLoadBigFade( pWnd->GetAsset(), sFilePath );
+				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Blocks:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CBlocksWnd>( pDevice );
 				pWnd->SetWindowName( sFilePath );
-				return QuickLoadBlocks( pWnd->GetAsset(), sFilePath );
+				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Cliff:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CCliffWnd>( pDevice );
 				pWnd->SetWindowName( sFilePath );
-				return QuickLoadCliff( pWnd->GetAsset(), sFilePath );
+				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Disp:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CDispWnd>( pDevice );
 				pWnd->SetWindowName( sFilePath );
-				return QuickLoadDisp( pWnd->GetAsset(), sFilePath );
+				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Fade:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CFadeWnd>( pDevice );
 				pWnd->SetWindowName( sFilePath );
-				return QuickLoadFade( pWnd->GetAsset(), sFilePath );
+				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Ghost:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CGhostWnd>( pDevice );
 				pWnd->SetWindowName( sFilePath );
-				return QuickLoadGhost( pWnd->GetAsset(), sFilePath );
+				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Level:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CLevelWnd>( pDevice );
 				pWnd->SetWindowName( sFilePath );
-				return QuickLoadLevel( pWnd->GetAsset(), sFilePath );
+				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Palette:
 			{
@@ -305,7 +333,7 @@ namespace Assets
 			{
 				auto pWnd = g_WndMngr.AddWindow<CSkyWnd>( pDevice );
 				pWnd->SetWindowName( sFilePath );
-				return QuickLoadSky( pWnd->GetAsset(), sFilePath );
+				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Sprite:
 				assert( false && "TODO: Implement SpriteWnd" );

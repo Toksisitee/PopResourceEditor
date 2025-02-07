@@ -13,34 +13,24 @@ namespace Assets
 		constexpr uint32_t	k_uNumColors = 112;		// Max numbers of colors in the palette reserved for the BigFade texture
 	}
 
-	class CBigFade
+	class CBigFade : public CAsset
 	{
 	public:
 		~CBigFade() { SafeDestroyTexture( m_pTexture ); }
 
-		Result	LoadBin( const std::string& sFilePath );
-		Result	LoadImg( const std::string& sFilePath );
-		Result	ExportImg( const std::string& sFilePath );
-		Result	ExportBin( const std::string& sFilePath );
-		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
+		// ====== Virtual Overrides  ======
+		Result	LoadBin( const std::string& sFilePath ) override;
+		Result	LoadImg( const std::string& sFilePath ) override;
+		Result	ExportImg( const std::string& sFilePath ) override;
+		Result	ExportBin( const std::string& sFilePath ) override;
+		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice ) override;
+		inline void* GetPtr() override { return static_cast<void*>(&m_Data); }
+		// ================================
+
 		uint8_t FindColor( const Color& color );
 		uint8_t GetColor( const uint32_t uIndex );
 
-		inline void DestroyTexture()
-		{
-			SafeDestroyTexture( m_pTexture );
-		}
-		[[nodiscard]] inline CTexture2D* GetTexture()
-		{
-			return m_pTexture;
-		}
-		[[nodiscard]] inline CPalette* GetPalette()
-		{
-			return &m_Palette;
-		}
 	private:
 		uint8_t m_Data[BigFade::k_uWidth * BigFade::k_uHeight];
-		CPalette m_Palette;
-		CTexture2D* m_pTexture;
 	};
 }

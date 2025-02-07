@@ -1,5 +1,5 @@
 #pragma once
-#include "Assets.h"
+#include "AssetTypes.h"
 #include "Editor.h"
 
 namespace Assets

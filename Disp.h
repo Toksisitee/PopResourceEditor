@@ -11,33 +11,24 @@ namespace Assets
 		constexpr uint32_t	k_uSize = k_uWidth * k_uHeight;
 	}
 
-	class CDisp
+	class CDisp : public CAsset
 	{
 	public:
 		~CDisp() { SafeDestroyTexture( m_pTexture ); }
 
-		Result	LoadBin( const std::string& sFilePath );
-		Result	Generate( const std::string& sFilePath );
-		Result	ExportImg( const std::string& sFilePath );
-		Result  ExportBin( const std::string& sFilePath );
-		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
+		// ====== Virtual Overrides  ======
+		Result	LoadBin( const std::string& sFilePath ) override;
+		Result	LoadImg( const std::string& sFilePath ) override { return Result::FAIL_LOAD; }
+		Result	ExportImg( const std::string& sFilePath ) override;
+		Result  ExportBin( const std::string& sFilePath ) override;
+		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice ) override;
+		inline void* GetPtr() override { return static_cast<void*>(&m_Data); }
+		// ================================
 
-		inline void DestroyTexture()
-		{
-			SafeDestroyTexture( m_pTexture );
-		}
-		[[nodiscard]] inline CTexture2D* GetTexture()
-		{
-			return m_pTexture;
-		}
-		[[nodiscard]] inline uint8_t* GetPtr()
-		{
-			return &m_Data[0];
-		}
+		Result	Generate( const std::string& sFilePath );
 
 	private:
 		const uint8_t k_uGrayscaleOffset = 128;
 		uint8_t m_Data[Disp::k_uWidth * Disp::k_uHeight];
-		CTexture2D* m_pTexture;
 	};
 }

@@ -15,24 +15,27 @@ namespace Assets
 		constexpr size_t	k_uNumBlocks = (k_uWidth / k_uBlockWidth) * (k_uHeight / k_uBlockHeight);
 	}
 
-	class CBlocks
+	class CBlocks : public CAsset
 	{
 	public:
+		using CAsset::GetTexture;
+		using CAsset::DestroyTexture;
+
 		~CBlocks() { SafeDestroyTexture( m_pTexture ); }
+		
+		// ====== Virtual Overrides  ======
+		Result	LoadBin( const std::string& sFilePath ) override;
+		Result	LoadImg( const std::string& sFilePath ) override { return Result::FAIL_LOAD; }
+		Result	ExportBin( const std::string& sFilePath ) override;
+		Result	ExportImg( const std::string& sFilePath ) override;
+		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice ) override;
+		inline void* GetPtr() override { return static_cast<void*>(&m_Data); }
+		// ================================
 
-		Result	LoadBin( const std::string& sFilePath );
-		Result	ExportBin( const std::string& sFilePath );
-		Result	ExportImg( const std::string& sFilePath );
-		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
 		bool	CreateSubTexture( LPDIRECT3DDEVICE9 pD3DDevice, size_t index );
-
 		inline void DestroyTexture( size_t uIndex )
 		{
 			SafeDestroyTexture( m_pSubTextures[uIndex] );
-		}
-		inline void DestroyTexture()
-		{
-			SafeDestroyTexture( m_pTexture );
 		}
 		inline void DestroyTextures()
 		{
@@ -45,19 +48,9 @@ namespace Assets
 		{
 			return m_pSubTextures[uIndex];
 		}
-		[[nodiscard]] inline CTexture2D* GetTexture()
-		{
-			return m_pTexture;
-		}
-		[[nodiscard]] inline CPalette* GetPalette()
-		{
-			return &m_Palette;
-		}
 
 	private:
 		uint8_t m_Data[Blocks::k_uWidth * Blocks::k_uHeight];
-		CPalette m_Palette;
-		CTexture2D* m_pTexture;	// Atlas
 		CTexture2D* m_pSubTextures[256]; // Split textures (32x32)
 	};
 }
