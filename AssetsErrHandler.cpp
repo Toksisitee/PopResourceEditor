@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-
 #include "spdlog/spdlog.h"
-#include "imgui.h"
 
 #include "Editor.h"
 #include "AssetsErrHandler.h"

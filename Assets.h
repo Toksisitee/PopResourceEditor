@@ -1,7 +1,5 @@
 #pragma once
-#include <cstdint>
-#include <vector>
-#include <fstream>
+//#include <vector>
 
 #include "Palette.h"
 
@@ -11,11 +9,11 @@ extern inline void SafeDestroyTexture( CTexture2D*& pTexture );
 
 namespace Assets
 {
-	template <typename T>
-	struct Bank {
-		uint32_t Entries;
-		std::vector<std::pair<uint32_t, T>> Entry;
-	};
+	//template <typename T>
+	//struct Bank {
+	//	uint32_t Entries;
+	//	std::vector<std::pair<uint32_t, T>> Entry;
+	//};
 
 	class CAsset
 	{
