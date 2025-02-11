@@ -342,4 +342,46 @@ namespace Assets
 
 		return Result::FAIL;
 	}
+
+	CTexture2D* LoadTexture( const std::string& sFilePath, const Assets::FileType eType )
+	{
+		CTexture2D* pTex = nullptr;
+		auto pDevice = g_Editor.GetDevice();
+
+		if ( (pTex = g_TextureManager.GetTexture2D( sFilePath )) ) {
+			return pTex;
+		}
+
+		Assets::CAsset* pAsset = nullptr;
+
+		switch ( eType ) {
+			case Assets::FileType::Alpha: pAsset = new Assets::CAlpha(); break;
+			case Assets::FileType::BigFade: pAsset = new Assets::CBigFade(); break;
+			case Assets::FileType::Blocks: pAsset = new Assets::CBlocks(); break;
+			case Assets::FileType::Cliff: pAsset = new Assets::CCliff(); break;
+			case Assets::FileType::Disp: pAsset = new Assets::CDisp(); break;
+			case Assets::FileType::Fade: pAsset = new Assets::CFade(); break;
+			case Assets::FileType::Ghost: pAsset = new Assets::CGhost(); break;
+			case Assets::FileType::Level: pAsset = new Assets::CLevel(); break;
+			case Assets::FileType::Sky: pAsset = new Assets::CSky(); break;
+			default: return nullptr;
+		}
+
+		if ( !pAsset ) {
+			g_ErrHandler.LogFmt( Log::Level::CRT, "Failed to create asset: %s", sFilePath );
+			return nullptr;
+		}
+
+		Assets::QuickLoad( pAsset, sFilePath, eType );
+
+		if ( !pAsset->CreateTexture( pDevice ) ) {
+			g_ErrHandler.LogFmt( Log::Level::ERR, "Failed to create texture for asset: %s", sFilePath );
+			delete pAsset;
+			return nullptr;
+		}
+
+		pTex = g_TextureManager.CopyTexture( pDevice, pAsset->GetTexture(), sFilePath );
+		delete pAsset;
+		return pTex;
+	}
 }

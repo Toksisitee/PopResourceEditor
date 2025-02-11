@@ -17,9 +17,12 @@
 #include "Disp.h"
 #include "Palette.h"
 #include "AssetPicker.h"
+#include "ImEditor.h"
 
 std::vector<FilesContainer> g_vFilesContainer;
 using recursive_directory_iterator = std::filesystem::recursive_directory_iterator;
+enum class ViewMode { List, Grid };
+ViewMode g_ViewMode = ViewMode::Grid;
 
 struct VectorHash {
 	std::size_t operator()( const std::vector<uint8_t>& vec ) const
@@ -69,12 +72,6 @@ std::unordered_map<std::string, FileTypeSize, CaseInsensitiveHash, CaseInsensiti
 };
 
 std::unordered_map<std::string, std::string, CaseInsensitiveHash, CaseInsensitiveEqual> mapExtension = {
-	{".txt", "Text"},
-	{".png", "Image"},
-	{".jpg", "Image"},
-	{".jpeg", "Image"},
-	{".gif", "Image"},
-	{".bmp", "Image"},
 	{".SF2", "Sound Bank"},
 	{".SDT", "Sound Bank"},
 };
@@ -92,6 +89,7 @@ bool FileTypeCorrectSize( Assets::FileType eFileType, size_t uSize )
 	}
 }
 
+// TODO: Add support for search type. Full (Slow) and Fast (Name+Ext only)
 std::string GetFileType( const std::string& sFilePath, Assets::FileType& eType )
 {
 	eType = Assets::FileType::Unknown;
@@ -170,36 +168,91 @@ void GetAllFiles( const std::string& sBasePath )
 	g_vFilesContainer.push_back( baseContainer );
 }
 
-void RenderDirectory( const FilesContainer& container, std::string& selectedAsset )
+void RenderDirectory( const FilesContainer& container, std::string& sSelectedAsset )
 {
 	if ( ImGui::TreeNodeEx( container.sDirectory.c_str(), ImGuiTreeNodeFlags_DefaultOpen ) ) {
 		for ( const auto& entry : container.vsFiles ) {
 			std::string fileName = std::filesystem::path( entry.sFile ).filename().string() + " (" + entry.sFileType + ")";
 
-			if ( ImGui::Selectable( fileName.c_str(), selectedAsset == entry.sFile ) ) {
+			if ( ImGui::Selectable( fileName.c_str(), sSelectedAsset == entry.sFile ) ) {
 				Assets::OpenWnd( entry.sFile, entry.eFileType );
-				selectedAsset = entry.sFile;
-				spdlog::info( "Selected file: {}", selectedAsset );
+				sSelectedAsset = entry.sFile;
+				spdlog::info( "Selected file: {}", sSelectedAsset );
 			}
 		}
 
 		for ( const auto& subContainer : container.vSubDirs ) {
 			if ( subContainer.vsFiles.size() == 0 ) continue;
-			RenderDirectory( subContainer, selectedAsset );
+			RenderDirectory( subContainer, sSelectedAsset );
 		}
 
 		ImGui::TreePop();
 	}
 }
 
+void RenderDirectoryGrid( const FilesContainer& container, std::string& sSelectedAsset, const std::string& sParentFolder = "" )
+{
+	const float fIconSize = 64.0f;
+	const int nColumns = 7;
+
+	std::string currentFolder = sParentFolder.empty() ? container.sDirectory : sParentFolder + "/" + container.sDirectory;
+	if ( !container.vsFiles.empty() || !container.vSubDirs.empty() ) {
+		if ( ImGui::TreeNodeEx( currentFolder.c_str(), ImGuiTreeNodeFlags_DefaultOpen ) ) {
+			ImGui::Columns( nColumns, nullptr, false );
+			for ( const auto& entry : container.vsFiles ) {
+				
+				ImVec2 v2IconPos = ImGui::GetCursorScreenPos(); 
+
+				auto pTex2D = Assets::LoadTexture( entry.sFile, entry.eFileType );
+				if ( pTex2D ) {
+					ImEditor::RenderTexture( pTex2D, ImVec2( fIconSize, fIconSize ) );
+				}
+				else {
+					ImGui::Button( "?", ImVec2( fIconSize, fIconSize ) );
+				}
+
+				if ( ImGui::IsItemHovered() ) {
+					ImDrawList* drawList = ImGui::GetWindowDrawList();
+					drawList->AddRect( v2IconPos, ImVec2( v2IconPos.x + fIconSize, v2IconPos.y + fIconSize ), IM_COL32( 255, 255, 255, 255 ), 0.0f, 0, 2.0f );
+				}
+
+				if ( ImGui::IsItemClicked() ) {
+					sSelectedAsset = entry.sFile;
+					spdlog::info( "Selected file: {}", sSelectedAsset );
+				}
+
+				ImGui::TextWrapped( "%s", std::filesystem::path( entry.sFile ).filename().string().c_str() );
+				ImGui::NextColumn();
+			}
+			ImGui::Columns( 1 );
+
+			for ( const auto& subContainer : container.vSubDirs ) {
+				if ( subContainer.vsFiles.size() == 0 ) continue;
+				RenderDirectoryGrid( subContainer, sSelectedAsset, currentFolder );
+			}
+
+			ImGui::TreePop();
+		}
+	}
+}
+
+
 void Render()
 {
 	ImGui::Begin( "Asset Picker" );
-
 	static std::string sSelectedAsset = "";
 
+	if ( ImGui::Button( "Toggle View" ) ) {
+		g_ViewMode = (g_ViewMode == ViewMode::List) ? ViewMode::Grid : ViewMode::List;
+	}
+
 	for ( const auto& container : g_vFilesContainer ) {
-		RenderDirectory( container, sSelectedAsset );
+		if ( g_ViewMode == ViewMode::List ) {
+			RenderDirectory( container, sSelectedAsset );
+		}
+		else {
+			RenderDirectoryGrid( container, sSelectedAsset );
+		}
 	}
 
 	ImGui::Separator();
