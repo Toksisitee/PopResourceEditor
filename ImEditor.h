@@ -3,9 +3,10 @@
 #include <utility>
 
 #include "imgui.h"
-
 #include "Editor.h"
-#include "Texture.h"
+
+class CTexture2D;
+typedef struct IDirect3DDevice9* LPDIRECT3DDEVICE9, * PDIRECT3DDEVICE9;
 
 namespace ImEditor
 {

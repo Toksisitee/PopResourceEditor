@@ -1,9 +1,6 @@
 #pragma once
-#include <string>
-#include <d3d9.h>
-
-#include "Cliff.h"
 #include "WindowBase.h"
+#include "Cliff.h"
 
 class CCliffWnd : public CWindowBase {
 public:

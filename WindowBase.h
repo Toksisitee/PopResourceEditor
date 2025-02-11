@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
-#include <d3d9.h>
+
+typedef struct IDirect3DDevice9* LPDIRECT3DDEVICE9, * PDIRECT3DDEVICE9;
 
 class CWindowBase {
 public:

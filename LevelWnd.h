@@ -1,10 +1,6 @@
 #pragma once
-#include <string>
-#include <d3d9.h>
-
-#include "Palette.h"
-#include "Level.h"
 #include "WindowBase.h"
+#include "Level.h"
 
 class CLevelWnd : public CWindowBase {
 public:

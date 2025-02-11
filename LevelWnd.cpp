@@ -1,5 +1,6 @@
 #include "imgui.h"
 
+#include "Texture.h"
 #include "AssetsErrHandler.h"
 #include "Utils.h"
 #include "ImEditor.h"

@@ -1,9 +1,12 @@
 #pragma once
-#include <D3dx9tex.h>
+#//include <D3dx9tex.h>
 #include <string>
 #include <map>
 
 #include "Palette.h"
+
+typedef struct IDirect3DTexture9* LPDIRECT3DTEXTURE9, * PDIRECT3DTEXTURE9;
+typedef struct IDirect3DDevice9* LPDIRECT3DDEVICE9, * PDIRECT3DDEVICE9;
 
 class CTexture2D
 {

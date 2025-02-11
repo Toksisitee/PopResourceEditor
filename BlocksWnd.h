@@ -1,9 +1,6 @@
 #pragma once
-#include <string>
-#include <d3d9.h>
-
-#include "Blocks.h"
 #include "WindowBase.h"
+#include "Blocks.h"
 
 class CBlocksWnd : public CWindowBase {
 public:

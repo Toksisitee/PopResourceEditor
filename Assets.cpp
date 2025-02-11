@@ -1,6 +1,6 @@
 #include <assert.h>
 
-#include "Assets.h"
+#include "Texture.h"
 #include "Editor.h"
 #include "App.h"
 #include "AssetsErrHandler.h"
@@ -15,6 +15,8 @@
 #include "DispWnd.h"
 #include "BlocksWnd.h"
 #include "LevelWnd.h"
+
+#include "Assets.h"
 
 namespace Assets
 {

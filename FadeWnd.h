@@ -1,9 +1,6 @@
 #pragma once
-#include <string>
-#include <d3d9.h>
-
-#include "Fade.h"
 #include "WindowBase.h"
+#include "Fade.h"
 
 class CFadeWnd : public CWindowBase {
 public:

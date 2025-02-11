@@ -1,9 +1,6 @@
 #pragma once
-#include <string>
-#include <d3d9.h>
-
-#include "BigFade.h"
 #include "WindowBase.h"
+#include "BigFade.h"
 
 class CBigFadeWnd : public CWindowBase {
 public:

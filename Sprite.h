@@ -3,8 +3,6 @@
 #include <vector>
 
 #include "Assets.h"
-#include "Texture.h"
-#include "Palette.h"
 
 namespace Assets
 {

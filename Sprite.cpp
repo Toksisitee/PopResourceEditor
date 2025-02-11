@@ -2,9 +2,11 @@
 #include <fstream>
 #include <algorithm>
 #include <assert.h>
+#include <D3dx9tex.h>
 
 #include "EasyBMP/EasyBMP.h"
 
+#include "Texture.h"
 #include "AssetsErrHandler.h"
 #include "Utils.h"
 #include "Editor.h"

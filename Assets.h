@@ -2,12 +2,12 @@
 #include <cstdint>
 #include <vector>
 #include <fstream>
-#include <d3d9.h>
 
-#include "Texture.h"
-#include "AssetTypes.h"
+#include "Palette.h"
 
-class CPalette;
+class CTexture2D;
+typedef struct IDirect3DDevice9* LPDIRECT3DDEVICE9, * PDIRECT3DDEVICE9;
+extern inline void SafeDestroyTexture( CTexture2D*& pTexture );
 
 namespace Assets
 {
@@ -28,7 +28,7 @@ namespace Assets
 		virtual Result	ExportBin( const std::string& sFilePath ) = 0;
 		virtual bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice ) = 0;
 		inline virtual void* GetPtr() = 0;
-		
+
 		inline void DestroyTexture()
 		{
 			SafeDestroyTexture( m_pTexture );
@@ -115,7 +115,7 @@ namespace Assets
 		}
 	private:
 		struct Bank<T>  m_Bank;
-		char*			m_pBuffer;
+		char* m_pBuffer;
 		uint32_t        m_nBufferLength;
 	};
 #endif

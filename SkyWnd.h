@@ -1,7 +1,4 @@
 #pragma once
-#include <string>
-#include <d3d9.h>
-
 #include "WindowBase.h"
 #include "Sky.h"
 

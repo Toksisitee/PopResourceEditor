@@ -2,8 +2,6 @@
 #include <utility>
 
 #include "Assets.h"
-#include "Texture.h"
-#include "Palette.h"
 #include "BigFade.h"
 #include "Disp.h"
 

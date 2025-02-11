@@ -1,9 +1,6 @@
 #pragma once
-#include <string>
-#include <d3d9.h>
-
-#include "Ghost.h"
 #include "WindowBase.h"
+#include "Ghost.h"
 
 class CGhostWnd : public CWindowBase {
 public:

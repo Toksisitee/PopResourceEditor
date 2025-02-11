@@ -1,9 +1,6 @@
 #pragma once
-#include <string>
-#include <d3d9.h>
-
-#include "Disp.h"
 #include "WindowBase.h"
+#include "Disp.h"
 
 class CDispWnd : public CWindowBase {
 public:
