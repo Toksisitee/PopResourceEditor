@@ -34,6 +34,7 @@ public:
 
 	CTexture2D* LoadTexture( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirectory, const std::string& sName, int nWidth, int nHeight );
 	CTexture2D* LoadTexture( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirectory, const std::string& sName );
+	CTexture2D*	CopyTexture( LPDIRECT3DDEVICE9 pd3dDevice, CTexture2D* pSrcTex2D, const std::string& sName );
 	CTexture2D* GetTexture2D( const std::string& sName );
 	void DeleteAll();
 	void ClearAll();

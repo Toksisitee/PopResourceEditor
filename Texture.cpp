@@ -50,7 +50,7 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, A
 	m_pd3dDevice( pd3dDevice ), m_nWidth( nWidth ), m_nHeight( nHeight )
 {
 	D3DLOCKED_RECT rc;
-	
+
 	pd3dDevice->CreateTexture( nWidth, nHeight, 1, 0, D3DFMT_X8R8G8B8, D3DPOOL_MANAGED, &m_pD3DTexture, NULL );
 	m_pD3DTexture->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
 	BYTE* pTexels = static_cast<BYTE*>(rc.pBits);
@@ -151,6 +151,43 @@ CTexture2D* CTextureManager::GetTexture2D( const std::string& sName )
 		return iter->second;
 	}
 	return nullptr;
+}
+
+CTexture2D* CTextureManager::CopyTexture( LPDIRECT3DDEVICE9 pd3dDevice, CTexture2D* pSrcTex2D, const std::string& sName )
+{
+	if ( !pSrcTex2D || !pSrcTex2D->GetTexture() ) {
+		spdlog::error( "CopyTexture: Source texture is nullptr." );
+		return nullptr;
+	}
+
+	IDirect3DTexture9* pSrcD3DTex = pSrcTex2D->GetTexture();
+	D3DSURFACE_DESC desc;
+	pSrcD3DTex->GetLevelDesc( 0, &desc );
+
+	CTexture2D* pTexture2D = new CTexture2D( pd3dDevice, desc.Width, desc.Height );
+	IDirect3DTexture9* pDstD3DTex = pTexture2D->GetTexture();
+
+	if ( !pDstD3DTex ) {
+		spdlog::error( "CopyTexture: Failed to create destination texture." );
+		delete pTexture2D;
+		return nullptr;
+	}
+
+	IDirect3DSurface9* pSrcSurface = nullptr;
+	IDirect3DSurface9* pDstSurface = nullptr;
+
+	if ( SUCCEEDED( pSrcD3DTex->GetSurfaceLevel( 0, &pSrcSurface ) ) &&
+		SUCCEEDED( pDstD3DTex->GetSurfaceLevel( 0, &pDstSurface ) ) ) {
+		if ( FAILED( D3DXLoadSurfaceFromSurface( pDstSurface, nullptr, nullptr, pSrcSurface, nullptr, nullptr, D3DX_FILTER_NONE, 0 ) ) ) {
+			spdlog::error( "CopyTexture: Failed to copy texture data." );
+		}
+	}
+	
+	if ( pSrcSurface ) pSrcSurface->Release();
+	if ( pDstSurface ) pDstSurface->Release();
+
+	m_TextureMap[sName] = pTexture2D;
+	return GetTexture2D( sName );
 }
 
 void CTextureManager::DeleteAll()
