@@ -22,10 +22,7 @@ namespace Assets
 		std::ifstream ifs( sFilePath, std::ios::binary );
 		if ( ifs.is_open() ) {
 			ifs.seekg( 0 );
-
-			for ( size_t i = 0; i < k_uWidth * k_uHeight; i++ )
-				ifs.read( reinterpret_cast<char*>(&m_Data[i]), sizeof( uint8_t ) );
-
+			ifs.read( reinterpret_cast<char*>(&m_Data[0]), sizeof( m_Data ) );
 			ifs.close();
 			return Result::OK_LOAD;
 		}
@@ -115,7 +112,7 @@ namespace Assets
 	{
 		g_ErrHandler.SetFileType( FileType::Fade );
 		g_ErrHandler.Log( Log::Level::WRN, "Fade generation does not exactly replicate Bullfrog's original algorithm." );
-		ComputeTable( );
+		ComputeTable();
 		DestroyTexture();
 		return Result::OK_GENERATE;
 	}
