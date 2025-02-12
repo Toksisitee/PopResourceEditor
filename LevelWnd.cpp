@@ -38,7 +38,7 @@ void CLevelWnd::Render()
 		m_bFirstPass = true;
 	}
 
-	if ( ImGui::InputText( "###Level", (char*)m_sLevel.c_str(), sizeof( m_sLevel ) ) );
+	ImGui::InputText( "###Level", (char*)m_sLevel.c_str(), sizeof( m_sLevel ) );
 	ImGui::SameLine();
 	if ( ImGui::Button( "Regenerate" ) ) {
 		auto sFilePath = Util::FileSystem::FormatPath( m_sLevel.c_str() );
@@ -86,8 +86,8 @@ void CLevelWnd::Render()
 		auto pTex = m_Level.GetTexture();
 		ImVec2 texSize = ImVec2( 512, 512 );
 		if ( !m_bHighRes ) {
-			texSize.x = pTex->GetWidth();
-			texSize.y = pTex->GetHeight();
+			texSize.x = static_cast<float>(pTex->GetWidth());
+			texSize.y = static_cast<float>(pTex->GetHeight());
 		}
 		float fTexelU = 0.5f / texSize.x;
 		float fTexelV = 0.5f / texSize.y;

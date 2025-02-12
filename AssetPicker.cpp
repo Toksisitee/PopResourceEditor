@@ -82,15 +82,6 @@ std::unordered_map<std::vector<uint8_t>, FileAsset, VectorHash> mapMagic = {
 	{{0x50, 0x53, 0x46, 0x42}, {"Sprite Bank", "Sprite", Assets::FileType::Sprite}},
 };
 
-bool FileTypeCorrectSize( Assets::FileType eFileType, size_t uSize )
-{
-	switch ( eFileType ) {
-		case Assets::FileType::BigFade:
-			return true;
-			break;
-	}
-}
-
 // TODO: Add support for search type. Full (Slow) and Fast (Name+Ext only)
 std::string GetFileType( const std::string& sFilePath, Assets::FileType& eType )
 {

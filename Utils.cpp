@@ -16,11 +16,14 @@ namespace Util
 
 				wchar_t* pwszLastSlash = wcsrchr( wszPath, L'\\' );
 				if ( pwszLastSlash != nullptr ) {
-					*pwszLastSlash = L'\0'; // truncate
+					*pwszLastSlash = L'\0';
 				}
 
-				std::wstring wStr( wszPath );
-				sFinalPath = std::string( wStr.begin(), wStr.end() );
+				int nSize = WideCharToMultiByte( CP_UTF8, 0, wszPath, -1, NULL, 0, NULL, NULL );
+				std::string str( nSize, 0 );
+				WideCharToMultiByte( CP_UTF8, 0, wszPath, -1, &str[0], nSize, NULL, NULL );
+
+				sFinalPath = str;
 			}
 			return sFinalPath;
 		}
@@ -117,7 +120,13 @@ namespace Util
 			if ( !file.is_open() ) {
 				return 0;
 			}
-			return file.tellg();
+
+			std::streamoff fileSize = file.tellg();
+			if ( fileSize < 0 ) {
+				return 0;
+			}
+
+			return static_cast<size_t>(fileSize);
 		}
 
 		[[nodiscard]] std::string GetLastCharacterInFilePath( const std::string& sFilePath )
@@ -145,19 +154,19 @@ namespace Util
 
 		[[nodiscard]] std::string GetParentDirectory( const std::string& sFilePath )
 		{
-			size_t lastSlash = sFilePath.find_last_of( "/\\" );
-			if ( lastSlash == std::string::npos ) {
+			size_t uLastSlash = sFilePath.find_last_of( "/\\" );
+			if ( uLastSlash == std::string::npos ) {
 				return "";
 			}
 
-			size_t secondLastSlash = sFilePath.find_last_of( "/\\", lastSlash - 1 );
-			if ( secondLastSlash == std::string::npos ) {
+			size_t uSecondLastSlash = sFilePath.find_last_of( "/\\", uLastSlash - 1 );
+			if ( uSecondLastSlash == std::string::npos ) {
 				return "";
 			}
 
-			return sFilePath.substr( 0, secondLastSlash + 1 );
+			return sFilePath.substr( 0, uSecondLastSlash + 1 );
 		}
-		
+
 		[[nodiscard]] bool PathExists( const std::string& sPath )
 		{
 			DWORD dwAttr = GetFileAttributesA( sPath.c_str() );

@@ -98,9 +98,9 @@ namespace Assets
 
 	uint8_t CSky::FindColor( const Color& color )
 	{
-		for ( size_t i = k_uColorStart; i < k_uColorStart + k_uNumColors; i++ ) {
+		for ( auto i = k_uColorStart; i < k_uColorStart + k_uNumColors; i++ ) {
 			if ( std::memcmp( &color, m_Palette.GetColor( i ), sizeof( Color ) ) == 0 ) {
-				return (uint8_t)i;
+				return static_cast<uint8_t>(i);
 			}
 		}
 		return m_Palette.GetColorKey( 0 );

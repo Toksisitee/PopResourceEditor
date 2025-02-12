@@ -234,7 +234,7 @@ void CEditorApp::Run()
 					ImEditor::InputScalar( "##SpriteEditor", &uSprIndex );
 					//ImGui::InputScalar( "##SpriteIndex", ImGuiDataType_U16, &uSprIndex, inputs_step ? &u16_one : NULL, NULL, "%u" );
 					auto pTex = g_Sprite.GetTexture( uSprIndex );
-					ImVec2 texSize = ImVec2( pTex->GetWidth(), pTex->GetHeight() );
+					ImVec2 texSize = ImVec2( static_cast<float>(pTex->GetWidth()), static_cast<float>(pTex->GetHeight()) );
 					texSize.x = 256;
 					texSize.y = 256;
 

@@ -55,9 +55,9 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, A
 	m_pD3DTexture->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
 	BYTE* pTexels = static_cast<BYTE*>(rc.pBits);
 
-	for ( size_t y = 0; y < nHeight; y++ ) {
-		for ( size_t x = 0; x < nWidth; x++ ) {
-			const size_t uIndex = y * nWidth + x;
+	for ( int y = 0; y < nHeight; y++ ) {
+		for ( int x = 0; x < nWidth; x++ ) {
+			const uint8_t uIndex = y * nWidth + x;
 			Color* clr = pPalette->GetColor( uIndex );
 			WriteRGBTexel( pTexels, x, y, rc.Pitch, clr );
 		}
@@ -75,9 +75,9 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, u
 	m_pD3DTexture->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
 	BYTE* pTexels = static_cast<BYTE*>(rc.pBits);
 
-	for ( size_t y = 0; y < nHeight; y++ ) {
-		for ( size_t x = 0; x < nWidth; x++ ) {
-			const size_t uIndex = y * nWidth + x;
+	for ( int y = 0; y < nHeight; y++ ) {
+		for ( int x = 0; x < nWidth; x++ ) {
+			const uint8_t uIndex = y * nWidth + x;
 			Color* clr = pPalette->GetColor( pData[uIndex] );
 			WriteRGBTexel( pTexels, x, y, rc.Pitch, clr );
 		}

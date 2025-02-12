@@ -75,7 +75,7 @@ namespace Assets
 				if ( g_ErrHandler.HandleResult( m_Disp.LoadBin( sFileDataPath ) ) != Result::OK_LOAD ) {
 					return Result::FAIL_LOAD;
 				}
-			} 
+			}
 			else return Result::FAIL_LOAD;
 		}
 
@@ -192,10 +192,10 @@ namespace Assets
 				if ( h > 0 ) {
 					double dAngleX = 2.0 * EDITOR_PI * x / k_uWidth;
 					double dAngleY = 2.0 * EDITOR_PI * y / k_uHeight;
-					fSin.x += std::sin( dAngleX ) * h;
-					fCos.x += std::cos( dAngleX ) * h;
-					fSin.y += std::sin( dAngleY ) * h;
-					fCos.y += std::cos( dAngleY ) * h;
+					fSin.x += static_cast<float>(std::sin( dAngleX ) * h);
+					fCos.x += static_cast<float>(std::cos( dAngleX ) * h);
+					fSin.y += static_cast<float>(std::sin( dAngleY ) * h);
+					fCos.y += static_cast<float>(std::cos( dAngleY ) * h);
 					nTotalHeight += h;
 				}
 			}
@@ -208,8 +208,8 @@ namespace Assets
 		float fAvgAngleX = std::atan2( fSin.x, fCos.x );
 		float fAvgAngleY = std::atan2( fSin.y, fCos.y );
 
-		if ( fAvgAngleX < 0 ) fAvgAngleX += 2.0 * EDITOR_PI;
-		if ( fAvgAngleY < 0 ) fAvgAngleY += 2.0 * EDITOR_PI;
+		if ( fAvgAngleX < 0 ) fAvgAngleX += static_cast<float>(2.0 * EDITOR_PI);
+		if ( fAvgAngleY < 0 ) fAvgAngleY += static_cast<float>(2.0 * EDITOR_PI);
 
 		auto cx = static_cast<int32_t>(std::round( (fAvgAngleX * k_uWidth) / (2.0 * EDITOR_PI) ));
 		auto cy = static_cast<int32_t>(std::round( (fAvgAngleY * k_uHeight) / (2.0 * EDITOR_PI) ));

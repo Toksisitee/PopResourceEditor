@@ -63,7 +63,7 @@ namespace ImEditor
 	{
 		assert( pTexture != nullptr && "pTexture in RenderTexture is nullptr" );
 		if ( size.x == 0 && size.y == 0 )
-			ImGui::Image( pTexture->GetTexture(), ImVec2( pTexture->GetWidth(), pTexture->GetHeight() ), uv0, uv1, tint_col, border_col );
+			ImGui::Image( pTexture->GetTexture(), ImVec2( static_cast<float>(pTexture->GetWidth()), static_cast<float>(pTexture->GetHeight()) ), uv0, uv1, tint_col, border_col );
 		else
 			ImGui::Image( pTexture->GetTexture(), size, uv0, uv1, tint_col, border_col );
 	}
@@ -74,8 +74,8 @@ namespace ImEditor
 
 		ImVec2 imageSize = size;
 		if ( size.x == 0 && size.y == 0 ) {
-			imageSize.x = pTexture->GetWidth();
-			imageSize.y = pTexture->GetHeight();
+			imageSize.x = static_cast<float>(pTexture->GetWidth());
+			imageSize.y = static_cast<float>(pTexture->GetHeight());
 		}
 
 		return ImGui::ImageButton( pTexture->GetTexture(), imageSize, uv0, uv1, frame_padding, bg_col, tint_col );

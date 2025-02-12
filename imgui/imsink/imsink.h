@@ -46,7 +46,7 @@ namespace ImSpdlog {
 				ImGui::TextColored( k_LogColors[iLevel], k_pszLogLevels[iLevel] );
 				ImGui::SameLine();
 				if ( iLevel == spdlog::level::level_enum::critical ) {
-					float fFlicker = (std::sinf( ImGui::GetTime() * 4.0f ) * 0.5f) + 0.8f;
+					float fFlicker = (std::sinf( static_cast<float>(ImGui::GetTime() * 4.0f) ) * 0.5f) + 0.8f;
 					ImVec4 baseColor = k_LogColors[iLevel];
 					ImVec4 finalColor = ImVec4( baseColor.x, baseColor.y, baseColor.z, fFlicker );
 					ImGui::TextColored( finalColor, pszMsg );

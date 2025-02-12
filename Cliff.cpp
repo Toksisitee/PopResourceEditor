@@ -119,7 +119,7 @@ namespace Assets
 			fLuminance = fLuminance * fLuminance;
 
 			float fDistCenter = fabs( static_cast<float>(y) - fCenter ) / fCenter;
-			float fMiddleFade = 1.0f - pow( 1.0f - fDistCenter, 3 );
+			float fMiddleFade = static_cast<float>(1.0f - pow( 1.0f - fDistCenter, 3 ));
 			fLuminance *= fMiddleFade;
 
 			for ( uint32_t x = 0; x < k_uWidth; x++, pData++, pPalette++ ) {
