@@ -99,7 +99,8 @@ std::string GetFileType( const std::string& sFilePath, Assets::FileType& eType )
 	std::string sFileName = Util::FileSystem::GetFileName( sFilePath );
 
 	for ( const auto& [name, asset] : mapName ) {
-		if ( sFileName.find( name ) != std::string::npos ) {
+		auto sLower = Util::StringToLowerCopy( sFileName );
+		if ( sLower.find( name ) != std::string::npos ) {
 			if ( Util::FileSystem::GetFileSize( sFilePath ) == asset.uSize ) {
 				eType = asset.eFileType;
 				return std::string( Assets::GetFileTypeSz( asset.eFileType ) );
@@ -278,7 +279,7 @@ void Render()
 			else
 				g_AssetPicker.uShowFileType &= ~bit;
 		}
-			uCount++;
+		uCount++;
 		if ( uCount % 6 != 0 ) {
 			ImGui::SameLine();
 		}
