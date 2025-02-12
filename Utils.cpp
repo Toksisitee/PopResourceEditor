@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <fstream>
+#include <algorithm>
 
 #include "Utils.h"
 
@@ -174,5 +175,12 @@ namespace Util
 			return (dwAttr != INVALID_FILE_ATTRIBUTES && (dwAttr & FILE_ATTRIBUTE_DIRECTORY));
 		}
 
+	}
+
+	std::string StringToLowerCopy( const std::string& sStr )
+	{
+		std::string sLower = sStr;
+		std::transform( sLower.begin(), sLower.end(), sLower.begin(), []( unsigned char c ) { return std::tolower( c ); } );
+		return sLower;
 	}
 }

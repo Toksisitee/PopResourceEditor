@@ -22,4 +22,6 @@ namespace Util
 		[[nodiscard]] extern std::string GetParentDirectory( const std::string& sFilePath );
 		[[nodiscard]] extern bool PathExists( const std::string& sPath );
 	}
+
+	extern std::string StringToLowerCopy( const std::string& str );
 }
