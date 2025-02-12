@@ -58,6 +58,10 @@ namespace Assets
 		size_t uDash = sFilePath.find( '-' );
 		size_t uDot = sFilePath.find( ".dat" );
 
+		if ( uDot == std::string::npos ) {
+			uDot = sFilePath.find( ".DAT" );
+		}
+		
 		if ( uDash == std::string::npos || uDot == std::string::npos || uDash + 1 >= uDot ) {
 			return std::nullopt;
 		}
