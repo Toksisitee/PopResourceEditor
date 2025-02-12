@@ -77,7 +77,7 @@ CTexture2D::CTexture2D( LPDIRECT3DDEVICE9 pd3dDevice, int nWidth, int nHeight, u
 
 	for ( int y = 0; y < nHeight; y++ ) {
 		for ( int x = 0; x < nWidth; x++ ) {
-			const uint8_t uIndex = y * nWidth + x;
+			const size_t uIndex = y * nWidth + x;
 			Color* clr = pPalette->GetColor( pData[uIndex] );
 			WriteRGBTexel( pTexels, x, y, rc.Pitch, clr );
 		}
