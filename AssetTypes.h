@@ -5,17 +5,17 @@ namespace Assets
 	enum class FileType : uint8_t
 	{
 		None = 0,
-		Palette,
 		Alpha,
-		Sky,
-		Sprite,
-		Ghost,
-		Fade,
 		BigFade,
+		Blocks,
 		Cliff,
 		Disp,
-		Blocks,
+		Fade,
+		Ghost,
 		Level,
+		Palette,
+		Sky,
+		Sprite,
 		Unknown
 	};
 

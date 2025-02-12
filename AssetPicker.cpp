@@ -20,10 +20,15 @@
 #include "AssetPicker.h"
 #include "ImEditor.h"
 
+enum class ViewMode { List, Grid };
+struct AssetPicker
+{
+	ViewMode	eViewMode = ViewMode::Grid;
+	uint16_t	uShowFileType = 0xFFFF;
+};
 std::vector<FilesContainer> g_vFilesContainer;
 using recursive_directory_iterator = std::filesystem::recursive_directory_iterator;
-enum class ViewMode { List, Grid };
-ViewMode g_ViewMode = ViewMode::Grid;
+AssetPicker g_AssetPicker;
 
 struct VectorHash {
 	std::size_t operator()( const std::vector<uint8_t>& vec ) const
@@ -53,6 +58,11 @@ struct CaseInsensitiveEqual {
 			[]( char a, char b ) { return std::tolower( a ) == std::tolower( b ); } );
 	}
 };
+
+constexpr uint16_t FileTypeToBit( Assets::FileType eType )
+{
+	return 1 << static_cast<uint8_t>(eType);
+}
 
 struct FileTypeSize
 {
@@ -165,9 +175,12 @@ void RenderDirectory( const FilesContainer& container, std::string& sSelectedAss
 {
 	if ( ImGui::TreeNodeEx( container.sDirectory.c_str(), ImGuiTreeNodeFlags_DefaultOpen ) ) {
 		for ( const auto& entry : container.vsFiles ) {
-			std::string fileName = std::filesystem::path( entry.sFile ).filename().string() + " (" + entry.sFileType + ")";
+			if ( !(g_AssetPicker.uShowFileType & FileTypeToBit( entry.eFileType )) ) {
+				continue;
+			}
 
-			if ( ImGui::Selectable( fileName.c_str(), sSelectedAsset == entry.sFile ) ) {
+			std::string sFileName = std::filesystem::path( entry.sFile ).filename().string() + " (" + entry.sFileType + ")";
+			if ( ImGui::Selectable( sFileName.c_str(), sSelectedAsset == entry.sFile ) ) {
 				Assets::OpenWnd( entry.sFile, entry.eFileType );
 				sSelectedAsset = entry.sFile;
 				spdlog::info( "Selected file: {}", sSelectedAsset );
@@ -193,9 +206,11 @@ void RenderDirectoryGrid( const FilesContainer& container, std::string& sSelecte
 		if ( ImGui::TreeNodeEx( currentFolder.c_str(), ImGuiTreeNodeFlags_DefaultOpen ) ) {
 			ImGui::Columns( nColumns, nullptr, false );
 			for ( const auto& entry : container.vsFiles ) {
+				if ( !(g_AssetPicker.uShowFileType & FileTypeToBit( entry.eFileType )) ) {
+					continue;
+				}
 
 				ImVec2 v2IconPos = ImGui::GetCursorScreenPos();
-
 				auto pTex2D = Assets::LoadTexture( entry.sFile, entry.eFileType, static_cast<int>(fIconSize) );
 				if ( pTex2D ) {
 					ImEditor::RenderTexture( pTex2D, ImVec2( fIconSize, fIconSize ) );
@@ -230,18 +245,47 @@ void RenderDirectoryGrid( const FilesContainer& container, std::string& sSelecte
 	}
 }
 
-
 void Render()
 {
 	ImGui::Begin( "Asset Picker" );
 	static std::string sSelectedAsset = "";
 
 	if ( ImGui::Button( "Toggle View" ) ) {
-		g_ViewMode = (g_ViewMode == ViewMode::List) ? ViewMode::Grid : ViewMode::List;
-	}
+		g_AssetPicker.eViewMode = (g_AssetPicker.eViewMode == ViewMode::List) ? ViewMode::Grid : ViewMode::List;
+	}  ImGui::NewLine();
+
+	static const Assets::FileType sarrFileTypeOpt[] = {
+		{ Assets::FileType::Palette},
+		{ Assets::FileType::Alpha},
+		{ Assets::FileType::Sky},
+		{ Assets::FileType::Sprite},
+		{ Assets::FileType::Ghost},
+		{ Assets::FileType::Fade},
+		{ Assets::FileType::BigFade},
+		{ Assets::FileType::Cliff},
+		{ Assets::FileType::Disp},
+		{ Assets::FileType::Blocks},
+		{ Assets::FileType::Level},
+	};
+
+	uint8_t uCount = 0;
+	for ( const auto& eFileType : sarrFileTypeOpt ) {
+		uint16_t bit = FileTypeToBit( eFileType );
+		bool isChecked = (g_AssetPicker.uShowFileType & bit) != 0;
+		if ( ImGui::Checkbox( Assets::GetFileTypeSz( eFileType ), &isChecked ) ) {
+			if ( isChecked )
+				g_AssetPicker.uShowFileType |= bit;
+			else
+				g_AssetPicker.uShowFileType &= ~bit;
+		}
+			uCount++;
+		if ( uCount % 6 != 0 ) {
+			ImGui::SameLine();
+		}
+	} ImGui::NewLine();
 
 	for ( const auto& container : g_vFilesContainer ) {
-		if ( g_ViewMode == ViewMode::List ) {
+		if ( g_AssetPicker.eViewMode == ViewMode::List ) {
 			RenderDirectory( container, sSelectedAsset );
 		}
 		else {
