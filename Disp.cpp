@@ -70,7 +70,7 @@ namespace Assets
 			return Result::OK_EXPORT;
 		}
 
-		return Result::FAIL_GENERATE;
+		return Result::FAIL_EXPORT;
 	}
 
 	Result CDisp::Generate( const std::string& sFilePath )

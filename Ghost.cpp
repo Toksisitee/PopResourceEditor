@@ -70,7 +70,7 @@ namespace Assets
 			return Result::OK_EXPORT;
 		}
 
-		return Result::FAIL_GENERATE;
+		return Result::FAIL_EXPORT;
 	}
 
 	void CGhost::ComputeTable( uint8_t uOpacity )

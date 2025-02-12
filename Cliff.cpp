@@ -73,7 +73,7 @@ namespace Assets
 			return Result::OK_EXPORT;
 		}
 
-		return Result::FAIL_GENERATE;
+		return Result::FAIL_EXPORT;
 	}
 
 	Color CCliff::BlendColors( const Color& color1, const Color& color2, const float fFadeFactor )

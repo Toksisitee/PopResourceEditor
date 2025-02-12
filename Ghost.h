@@ -15,8 +15,6 @@ namespace Assets
 	{
 	public:
 		CGhost() : m_uOpacity( Ghost::k_uDefaultOpacity ) {}
-		~CGhost() { SafeDestroyTexture( m_pTexture ); }
-
 		// ====== Virtual Overrides  ======
 		Result	LoadBin( const std::string& sFilePath ) override;
 		Result	LoadImg( const std::string& sFilePath ) override { return Result::FAIL_LOAD; }

@@ -15,7 +15,6 @@ namespace Assets
 	class CSky : public CAsset
 	{
 	public:
-
 		// ====== Virtual Overrides  ======
 		Result	LoadBin( const std::string& sFilePath );
 		Result	LoadImg( const std::string& sFilePath ) override { return Result::FAIL_LOAD; }

@@ -82,56 +82,6 @@ namespace Assets
 		return true;
 	}
 
-#if 0
-	// TODO: This is slow, use CPalette::FindColor instead?
-	uint8_t CPalette::FindClosestColor( const Color& clr, bool bFullSearch )
-	{
-		uint8_t uIndex = m_uColorKeys[0];
-		double dClosestDist = DBL_MAX;
-
-		for ( size_t i = 0; i < k_uNumColors; i++ ) {
-			auto deltaE = sqrt(
-				pow( clr.R - m_ColorTable[i].R, 2 ) +
-				pow( clr.g - m_ColorTable[i].g, 2 ) +
-				pow( clr.b - m_ColorTable[i].b, 2 ) );
-
-			if ( deltaE < dClosestDist ) {
-				uIndex = (uint8_t)i;
-				dClosestDist = deltaE;
-			}
-
-		}
-
-		return uIndex;
-	}
-#endif
-
-#if 0
-	uint8_t CPalette::FindColor( const Color& clr, bool bClosest )
-	{
-		if ( clr.R == m_ColorTable[0].R &&
-			clr.g == m_ColorTable[0].g &&
-			clr.b == m_ColorTable[0].b ) {
-			return (0);
-		}
-
-		for ( uint32_t i = 128; i < k_uNumColors; i++ ) {
-			if ( clr.R == m_ColorTable[i].R &&
-				clr.g == m_ColorTable[i].g &&
-				clr.b == m_ColorTable[i].b ) {
-				return (i);
-			}
-		}
-
-		// Fallback
-		if ( bClosest ) {
-			return FindClosestColor( clr );
-		}
-
-		return m_uColorKeys[0];
-	}
-#endif
-
 	uint8_t CPalette::FindColor( const Color& clr, size_t uMin, size_t uMax )
 	{
 		int32_t dr, dg, db;

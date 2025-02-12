@@ -76,7 +76,7 @@ namespace Assets
 		}
 #endif
 
-		return Result::FAIL_GENERATE;
+		return Result::FAIL_EXPORT;
 	}
 
 	bool CBlocks::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )

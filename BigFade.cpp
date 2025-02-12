@@ -116,7 +116,7 @@ namespace Assets
 			return Result::OK_EXPORT;
 		}
 
-		return Result::FAIL_GENERATE;
+		return Result::FAIL_EXPORT;
 	}
 
 	bool CBigFade::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )

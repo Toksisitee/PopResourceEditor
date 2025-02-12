@@ -15,8 +15,6 @@ namespace Assets
 	class CBigFade : public CAsset
 	{
 	public:
-		~CBigFade() { SafeDestroyTexture( m_pTexture ); }
-
 		// ====== Virtual Overrides  ======
 		Result	LoadBin( const std::string& sFilePath ) override;
 		Result	LoadImg( const std::string& sFilePath ) override;

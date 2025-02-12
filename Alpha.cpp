@@ -94,7 +94,7 @@ namespace Assets
 			return Result::OK_EXPORT;
 		}
 
-		return Result::FAIL_GENERATE;
+		return Result::FAIL_EXPORT;
 	}
 
 	uint32_t CAlpha::ComputeTable( uint8_t* pData, const Color& targetColor, uint32_t uRow )

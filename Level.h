@@ -156,14 +156,11 @@ namespace Assets
 	class CLevel : public CAsset
 	{
 	public:
-		~CLevel() { SafeDestroyTexture( m_pTexture ); }
-
-
 		// ====== Virtual Overrides  ======
 		Result	LoadBin( const std::string& sFilePath ) override;
 		Result	LoadImg( const std::string& sFilePath ) override { return Result::FAIL_LOAD; }
 		Result	ExportImg( const std::string& sFilePath ) override;
-		Result  ExportBin( const std::string& sFilePath ) override { return Result::FAIL; }
+		Result  ExportBin( const std::string& sFilePath ) override { return Result::FAIL_EXPORT; }
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice ) override;
 		inline void* GetPtr() override { return static_cast<void*>(&m_Data); }
 		// ================================

@@ -17,7 +17,6 @@ namespace Assets
 		constexpr size_t	k_uSize = k_uNumColors * 4;
 	}
 
-	// TODO: Use CAsset as base?
 	class CPalette
 	{
 	public:
@@ -37,9 +36,7 @@ namespace Assets
 
 		[[nodiscard]] Color* GetColor( uint8_t uIndex ) { return &m_ColorTable[uIndex]; }
 		[[nodiscard]] Color* GetColorTable();
-		//[[nodiscard]] uint8_t FindClosestColor( const Color& clr, bool bFullSearch = false );
 		[[nodiscard]] uint8_t FindColor( const Color& clr, size_t uMin = 0, size_t uMax = Palette::k_uNumColors );
-		//uint8_t FindColor( const RGB& clr, bool bClosest = false );
 		[[nodiscard]] uint8_t FindExactColor( const Color& clr, bool bFallback = false );
 		[[nodiscard]] uint8_t GetColorKey( size_t uSlot = 0 );
 		[[nodiscard]] bool IndexIsColorKey( size_t uIndex );
@@ -50,4 +47,3 @@ namespace Assets
 		CTexture2D* m_pTexture;
 	};
 };
-//extern uint8_t FindColor( uint8_t* palette, int32_t r, int32_t g, int32_t b, uint16_t min = 0, uint16_t max = 255 );

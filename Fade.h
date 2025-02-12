@@ -13,8 +13,6 @@ namespace Assets
 	class CFade : public CAsset
 	{
 	public:
-		~CFade() { SafeDestroyTexture( m_pTexture ); }
-
 		// ====== Virtual Overrides  ======
 		Result	LoadBin( const std::string& sFilePath ) override;
 		Result	LoadImg( const std::string& sFilePath ) override { return Result::FAIL_LOAD; }

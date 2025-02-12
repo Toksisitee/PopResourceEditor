@@ -73,7 +73,7 @@ namespace Assets
 			return Result::OK_EXPORT;
 		}
 
-		return Result::FAIL_GENERATE;
+		return Result::FAIL_EXPORT;
 	}
 
 	void CFade::FadeColor( Color& color, float fFadeFactor )

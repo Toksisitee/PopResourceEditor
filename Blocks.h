@@ -20,8 +20,6 @@ namespace Assets
 		using CAsset::GetTexture;
 		using CAsset::DestroyTexture;
 
-		~CBlocks() { SafeDestroyTexture( m_pTexture ); }
-		
 		// ====== Virtual Overrides  ======
 		Result	LoadBin( const std::string& sFilePath ) override;
 		Result	LoadImg( const std::string& sFilePath ) override { return Result::FAIL_LOAD; }

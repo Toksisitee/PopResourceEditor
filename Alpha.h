@@ -14,8 +14,6 @@ namespace Assets
 	class CAlpha : public CAsset
 	{
 	public:
-		~CAlpha() { SafeDestroyTexture( m_pTexture ); }
-
 		// ====== Virtual Overrides  ======
 		Result	LoadBin( const std::string& sFilePath ) override;
 		Result	LoadImg( const std::string& sFilePath ) override { return Result::FAIL_LOAD; }
