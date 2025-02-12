@@ -170,18 +170,6 @@ namespace Assets
 
 		Result	GeneratePreview( uint16_t uCliff, float fLightX, float fLightY, bool bWater );
 
-		inline void DestroyTexture()
-		{
-			SafeDestroyTexture( m_pTexture );
-		}
-		[[nodiscard]] inline CTexture2D* GetTexture()
-		{
-			return m_pTexture;
-		}
-		[[nodiscard]] inline CPalette* GetPalette()
-		{
-			return &m_Palette;
-		}
 		[[nodiscard]] inline CBigFade* GetBigFade()
 		{
 			return &m_BigFade;
@@ -189,6 +177,10 @@ namespace Assets
 		[[nodiscard]] inline CDisp* GetDisp()
 		{
 			return &m_Disp;
+		}
+		[[nodiscard]] inline LevelHeaderV2* GetHeader()
+		{
+			return &m_LevelHeader;
 		}
 	public:
 		bool m_bCalcLight = true;
@@ -205,8 +197,6 @@ namespace Assets
 		LevelHeaderV2 m_LevelHeader;
 		LevelDataV2 m_LevelData;
 		CBigFade m_BigFade;
-		CPalette m_Palette;
-		CTexture2D* m_pTexture;
 		CDisp m_Disp;
 	};
 }

@@ -16,6 +16,7 @@
 #include "Cliff.h"
 #include "Disp.h"
 #include "Palette.h"
+#include "Level.h"
 #include "AssetPicker.h"
 #include "ImEditor.h"
 
@@ -69,6 +70,7 @@ std::unordered_map<std::string, FileTypeSize, CaseInsensitiveHash, CaseInsensiti
 	{"ghost0", { Assets::FileType::Ghost, Assets::Ghost::k_uSize }},
 	{"pal0", { Assets::FileType::Palette, Assets::Palette::k_uSize}},
 	{"sky0", { Assets::FileType::Sky, Assets::Sky::k_uSize}},
+	{"levl2", { Assets::FileType::Level, sizeof( Assets::LevelDataV2 )}},
 };
 
 std::unordered_map<std::string, std::string, CaseInsensitiveHash, CaseInsensitiveEqual> mapExtension = {
@@ -200,8 +202,8 @@ void RenderDirectoryGrid( const FilesContainer& container, std::string& sSelecte
 		if ( ImGui::TreeNodeEx( currentFolder.c_str(), ImGuiTreeNodeFlags_DefaultOpen ) ) {
 			ImGui::Columns( nColumns, nullptr, false );
 			for ( const auto& entry : container.vsFiles ) {
-				
-				ImVec2 v2IconPos = ImGui::GetCursorScreenPos(); 
+
+				ImVec2 v2IconPos = ImGui::GetCursorScreenPos();
 
 				auto pTex2D = Assets::LoadTexture( entry.sFile, entry.eFileType );
 				if ( pTex2D ) {
@@ -217,6 +219,7 @@ void RenderDirectoryGrid( const FilesContainer& container, std::string& sSelecte
 				}
 
 				if ( ImGui::IsItemClicked() ) {
+					Assets::OpenWnd( entry.sFile, entry.eFileType );
 					sSelectedAsset = entry.sFile;
 					spdlog::info( "Selected file: {}", sSelectedAsset );
 				}

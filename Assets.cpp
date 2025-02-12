@@ -234,16 +234,12 @@ namespace Assets
 
 	Result QuickLoadLevel( CLevel* pLevel, const std::string& sFilePath )
 	{
-		if ( auto osIdentifier = ExtractAssetIdentifier( sFilePath ) ) {
-			if ( auto osPalettePath = GenerateAssetPath( sFilePath, (*osIdentifier).c_str(), FileType::Palette ) ) {
-				if ( QuickLoadPalette( pLevel->GetPalette(), *osPalettePath ) == Result::FAIL_LOAD ) {
-					return Result::FAIL_LOAD;
-				}
-			}
-		}
-
 		pLevel->DestroyTexture();
-		return pLevel->LoadBin( sFilePath );
+		auto result =  pLevel->LoadBin( sFilePath );
+		if ( result == Result::OK_LOAD ) {
+			pLevel->GeneratePreview( 10, -0.6f, -0.6f, true );
+		}
+		return result;
 	}
 
 	Result QuickLoad( void* pAsset, const std::string& sFilePath, FileType eFileType )

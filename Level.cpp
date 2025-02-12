@@ -21,16 +21,18 @@ namespace Assets
 	{
 		g_ErrHandler.SetFileType( FileType::Level );
 
+		auto sProccessedPath = Util::FileSystem::RemoveFileExtension( sFilePath );
+
 		memset( &m_LevelData, 0, sizeof( LevelDataV2 ) );
 
-		std::ifstream ifsHeader( sFilePath + ".hdr", std::ios::binary );
+		std::ifstream ifsHeader( sProccessedPath + ".hdr", std::ios::binary );
 		if ( ifsHeader.is_open() ) {
 			ifsHeader.seekg( 0 );
 			ifsHeader.read( reinterpret_cast<char*>(&m_LevelHeader), sizeof( LevelHeaderV2 ) );
 		}
 		else return Result::FAIL_LOAD;
 
-		std::ifstream ifs( sFilePath + ".dat", std::ios::binary );
+		std::ifstream ifs( sProccessedPath + ".dat", std::ios::binary );
 		if ( ifs.is_open() ) {
 			ifs.seekg( 0 );
 
@@ -46,21 +48,36 @@ namespace Assets
 		else return Result::FAIL_LOAD;
 
 
-		char szType;
-		if ( m_LevelHeader.LevelType < 10 ) szType = '0' + m_LevelHeader.LevelType;
-		else szType = 'a' + m_LevelHeader.LevelType - 10;
+		sProccessedPath = Util::FileSystem::GetParentDirectory( sFilePath );
+		if ( sProccessedPath != "" ) {
+			sProccessedPath += "data";
+			if ( Util::FileSystem::PathExists( sProccessedPath ) ) {
+				char szType;
+				char szBuffer[256];
+				if ( m_LevelHeader.LevelType < 10 ) szType = '0' + m_LevelHeader.LevelType;
+				else szType = 'a' + m_LevelHeader.LevelType - 10;
 
-		char szBuffer[256];
-		sprintf_s( szBuffer, sizeof( szBuffer ), "pal0-%c.dat", szType );
-		auto sFileDataPath = Util::FileSystem::FormatPath( szBuffer );
-		g_ErrHandler.HandleResult( m_Palette.LoadBin( sFileDataPath ) );
-		sprintf_s( szBuffer, sizeof( szBuffer ), "bigf0-%c.dat", szType );
-		sFileDataPath = Util::FileSystem::FormatPath( szBuffer );
-		g_ErrHandler.HandleResult( m_BigFade.LoadBin( sFileDataPath ) );
+				sprintf_s( szBuffer, sizeof( szBuffer ), "pal0-%c.dat", szType );
+				auto sFileDataPath = Util::FileSystem::FormatPath( szBuffer, sProccessedPath.c_str() );
+				if ( g_ErrHandler.HandleResult( m_Palette.LoadBin( sFileDataPath ) ) != Result::OK_LOAD ) {
+					return Result::FAIL_LOAD;
+				}
 
-		// TODO: this only has to be loaded once
-		sFileDataPath = Util::FileSystem::FormatPath( "watdisp.dat" );
-		g_ErrHandler.HandleResult( m_Disp.LoadBin( sFileDataPath ) );
+				sprintf_s( szBuffer, sizeof( szBuffer ), "bigf0-%c.dat", szType );
+				sFileDataPath = Util::FileSystem::FormatPath( szBuffer, sProccessedPath.c_str() );
+
+				if ( g_ErrHandler.HandleResult( m_BigFade.LoadBin( sFileDataPath ) ) != Result::OK_LOAD ) {
+					return Result::FAIL_LOAD;
+				}
+
+				// TODO: this only has to be loaded once
+				sFileDataPath = Util::FileSystem::FormatPath( "watdisp.dat", sProccessedPath.c_str() );
+				if ( g_ErrHandler.HandleResult( m_Disp.LoadBin( sFileDataPath ) ) != Result::OK_LOAD ) {
+					return Result::FAIL_LOAD;
+				}
+			} 
+			else return Result::FAIL_LOAD;
+		}
 
 		return Result::OK_LOAD;
 	}
