@@ -85,6 +85,12 @@ namespace Assets
 		return true;
 	}
 
+	bool CBlocks::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice, int nWidth, int nHeight )
+	{
+		m_pTexture = new CTexture2D( pD3DDevice, nWidth, nHeight, &m_Data[0], &m_Palette );
+		return true;
+	}
+
 	bool CBlocks::CreateSubTexture( LPDIRECT3DDEVICE9 pD3DDevice, size_t uIndex )
 	{
 		if ( uIndex >= k_uNumBlocks ) {

@@ -61,7 +61,7 @@ namespace Assets
 		if ( uDot == std::string::npos ) {
 			uDot = sFilePath.find( ".DAT" );
 		}
-		
+
 		if ( uDash == std::string::npos || uDot == std::string::npos || uDash + 1 >= uDot ) {
 			return std::nullopt;
 		}
@@ -402,7 +402,13 @@ namespace Assets
 
 		Assets::QuickLoad( pAsset, sFilePath, eType );
 
-		if ( !pAsset->CreateTexture( pDevice ) ) {
+		if ( eType == Assets::FileType::Blocks ) {
+			static_cast<CBlocks*>(pAsset)->CreateTexture( pDevice, Blocks::k_uWidth/4, Blocks::k_uHeight/4 );
+		}
+		else
+			pAsset->CreateTexture( pDevice );
+
+		if ( !pAsset->GetTexture() ) {
 			g_ErrHandler.LogFmt( Log::Level::ERR, "Failed to create texture for asset: %s", sFilePath );
 			delete pAsset;
 			return nullptr;

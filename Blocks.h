@@ -29,6 +29,7 @@ namespace Assets
 		inline void* GetPtr() override { return static_cast<void*>(&m_Data); }
 		// ================================
 
+		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice, int nWidth, int nHeight );
 		bool	CreateSubTexture( LPDIRECT3DDEVICE9 pD3DDevice, size_t index );
 		inline void DestroyTexture( size_t uIndex )
 		{
