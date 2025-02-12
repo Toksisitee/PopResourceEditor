@@ -125,6 +125,7 @@ namespace Assets
 
 	Result QuickLoadPalette( CPalette* pPalette, const std::string& sFilePath )
 	{
+		pPalette->DestroyTexture();
 		return pPalette->LoadBin( sFilePath );
 	}
 
@@ -235,7 +236,7 @@ namespace Assets
 	Result QuickLoadLevel( CLevel* pLevel, const std::string& sFilePath )
 	{
 		pLevel->DestroyTexture();
-		auto result =  pLevel->LoadBin( sFilePath );
+		auto result = pLevel->LoadBin( sFilePath );
 		if ( result == Result::OK_LOAD ) {
 			pLevel->GeneratePreview( 10, -0.6f, -0.6f, true );
 		}
@@ -349,6 +350,29 @@ namespace Assets
 		if ( (pTex = g_TextureManager.GetTexture2D( sFilePath )) ) {
 			return pTex;
 		}
+
+		// // // 
+		if ( eType == Assets::FileType::Palette ) {
+			Assets::CPalette* pPalette = new CPalette();
+
+			if ( !pPalette ) {
+				g_ErrHandler.LogFmt( Log::Level::CRT, "Failed to create asset: %s", sFilePath );
+				return nullptr;
+			}
+
+			Assets::QuickLoad( static_cast<void*>(pPalette), sFilePath, eType );
+
+			if ( !pPalette->CreateTexture( pDevice ) ) {
+				g_ErrHandler.LogFmt( Log::Level::ERR, "Failed to create texture for asset: %s", sFilePath );
+				delete pPalette;
+				return nullptr;
+			}
+
+			pTex = g_TextureManager.CopyTexture( pDevice, pPalette->GetTexture(), sFilePath );
+			delete pPalette;
+			return pTex;
+		}
+		// // // 
 
 		Assets::CAsset* pAsset = nullptr;
 

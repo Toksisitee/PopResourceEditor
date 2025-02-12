@@ -4,6 +4,7 @@
 
 #include "EasyBMP/EasyBMP.h"
 
+#include "Texture.h"
 #include "AssetsErrHandler.h"
 #include "Editor.h"
 #include "Utils.h"
@@ -73,6 +74,12 @@ namespace Assets
 
 		g_ErrHandler.LogFmt( "Successfully exported as image: %s", pFilePath );
 		return Result::OK_EXPORT;
+	}
+
+	bool CPalette::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
+	{
+		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, this );
+		return true;
 	}
 
 #if 0
