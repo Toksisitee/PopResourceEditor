@@ -20,10 +20,11 @@ namespace Util
 				}
 
 				int nSize = WideCharToMultiByte( CP_UTF8, 0, wszPath, -1, NULL, 0, NULL, NULL );
-				std::string str( nSize, 0 );
-				WideCharToMultiByte( CP_UTF8, 0, wszPath, -1, &str[0], nSize, NULL, NULL );
-
-				sFinalPath = str;
+				if ( nSize > 0 ) {
+					std::string str( nSize - 1, 0 );
+					WideCharToMultiByte( CP_UTF8, 0, wszPath, -1, &str[0], nSize, NULL, NULL );
+					sFinalPath = str;
+				}
 			}
 			return sFinalPath;
 		}
