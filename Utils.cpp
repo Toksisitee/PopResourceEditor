@@ -130,5 +130,39 @@ namespace Util
 			}
 			return "";
 		}
+
+		[[nodiscard]] std::string RemoveFileExtension( const std::string& sFilePath )
+		{
+			size_t uDot = sFilePath.find_last_of( '.' );
+			size_t uSlash = sFilePath.find_last_of( "/\\" );
+
+			if ( uDot != std::string::npos && (uSlash == std::string::npos || uDot > uSlash) ) {
+				return sFilePath.substr( 0, uDot );
+			}
+
+			return sFilePath;
+		}
+
+		[[nodiscard]] std::string GetParentDirectory( const std::string& sFilePath )
+		{
+			size_t lastSlash = sFilePath.find_last_of( "/\\" );
+			if ( lastSlash == std::string::npos ) {
+				return "";
+			}
+
+			size_t secondLastSlash = sFilePath.find_last_of( "/\\", lastSlash - 1 );
+			if ( secondLastSlash == std::string::npos ) {
+				return "";
+			}
+
+			return sFilePath.substr( 0, secondLastSlash + 1 );
+		}
+		
+		[[nodiscard]] bool PathExists( const std::string& sPath )
+		{
+			DWORD dwAttr = GetFileAttributesA( sPath.c_str() );
+			return (dwAttr != INVALID_FILE_ATTRIBUTES && (dwAttr & FILE_ATTRIBUTE_DIRECTORY));
+		}
+
 	}
 }

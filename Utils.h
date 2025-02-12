@@ -18,5 +18,8 @@ namespace Util
 		[[nodiscard]] extern std::string GetFileName( const std::string& sFilePath );
 		[[nodiscard]] extern size_t GetFileSize( const std::string& sFilePath );
 		[[nodiscard]] extern std::string GetLastCharacterInFilePath( const std::string& sFilePath );
+		[[nodiscard]] extern std::string RemoveFileExtension( const std::string& sFilePath );
+		[[nodiscard]] extern std::string GetParentDirectory( const std::string& sFilePath );
+		[[nodiscard]] extern bool PathExists( const std::string& sPath );
 	}
 }
