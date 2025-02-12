@@ -205,7 +205,7 @@ void RenderDirectoryGrid( const FilesContainer& container, std::string& sSelecte
 
 				ImVec2 v2IconPos = ImGui::GetCursorScreenPos();
 
-				auto pTex2D = Assets::LoadTexture( entry.sFile, entry.eFileType );
+				auto pTex2D = Assets::LoadTexture( entry.sFile, entry.eFileType, static_cast<int>(fIconSize) );
 				if ( pTex2D ) {
 					ImEditor::RenderTexture( pTex2D, ImVec2( fIconSize, fIconSize ) );
 				}

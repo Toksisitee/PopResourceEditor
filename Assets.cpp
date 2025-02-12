@@ -342,7 +342,7 @@ namespace Assets
 		return Result::FAIL;
 	}
 
-	CTexture2D* LoadTexture( const std::string& sFilePath, const Assets::FileType eType )
+	CTexture2D* LoadTexture( const std::string& sFilePath, const Assets::FileType eType, int nSize )
 	{
 		CTexture2D* pTex = nullptr;
 		auto pDevice = g_Editor.GetDevice();
@@ -368,7 +368,9 @@ namespace Assets
 				return nullptr;
 			}
 
-			pTex = g_TextureManager.CopyTexture( pDevice, pPalette->GetTexture(), sFilePath );
+			pTex = CopyTexture( pDevice, pPalette->GetTexture(), sFilePath, nSize );
+			g_TextureManager.AddTexture( sFilePath, pTex );
+
 			delete pPalette;
 			return pTex;
 		}
@@ -402,7 +404,9 @@ namespace Assets
 			return nullptr;
 		}
 
-		pTex = g_TextureManager.CopyTexture( pDevice, pAsset->GetTexture(), sFilePath );
+		pTex = CopyTexture( pDevice, pAsset->GetTexture(), sFilePath, nSize );
+		g_TextureManager.AddTexture( sFilePath, pTex );
+
 		delete pAsset;
 		return pTex;
 	}

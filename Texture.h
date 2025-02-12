@@ -35,10 +35,11 @@ public:
 	CTextureManager() = default;
 	~CTextureManager();
 
+	void AddTexture( const std::string& sTexture, CTexture2D* pTexture );
 	CTexture2D* LoadTexture( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirectory, const std::string& sName, int nWidth, int nHeight );
 	CTexture2D* LoadTexture( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sDirectory, const std::string& sName );
-	CTexture2D*	CopyTexture( LPDIRECT3DDEVICE9 pd3dDevice, CTexture2D* pSrcTex2D, const std::string& sName );
 	CTexture2D* GetTexture2D( const std::string& sName );
+
 	void DeleteAll();
 	void ClearAll();
 
@@ -46,6 +47,8 @@ private:
 	typedef std::map<std::string, CTexture2D*> Texture2DMap;
 	Texture2DMap m_TextureMap;
 };
+
+CTexture2D* CopyTexture( LPDIRECT3DDEVICE9 pd3dDevice, CTexture2D* pSrcTex2D, const std::string& sName, int nDownscale = 0 );
 
 extern CTextureManager g_TextureManager;
 

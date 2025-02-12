@@ -116,6 +116,11 @@ CTextureManager::~CTextureManager()
 	DeleteAll();
 }
 
+void CTextureManager::AddTexture( const std::string& sName, CTexture2D* pTexture )
+{
+	m_TextureMap[sName] = pTexture;
+}
+
 void CTextureManager::ClearAll()
 {
 	for ( auto it = m_TextureMap.begin(); it != m_TextureMap.end(); ++it ) {
@@ -153,7 +158,22 @@ CTexture2D* CTextureManager::GetTexture2D( const std::string& sName )
 	return nullptr;
 }
 
-CTexture2D* CTextureManager::CopyTexture( LPDIRECT3DDEVICE9 pd3dDevice, CTexture2D* pSrcTex2D, const std::string& sName )
+void CTextureManager::DeleteAll()
+{
+	for ( auto it = m_TextureMap.begin(); it != m_TextureMap.end(); ++it ) {
+		delete it->second;
+	}
+
+	m_TextureMap.clear();
+}
+
+/*
+	-------------------
+	| Utils			  |
+	-------------------
+*/
+
+CTexture2D* CopyTexture( LPDIRECT3DDEVICE9 pd3dDevice, CTexture2D* pSrcTex2D, const std::string& sName, int nDownscale )
 {
 	if ( !pSrcTex2D || !pSrcTex2D->GetTexture() ) {
 		spdlog::error( "CopyTexture: Source texture is nullptr." );
@@ -161,10 +181,19 @@ CTexture2D* CTextureManager::CopyTexture( LPDIRECT3DDEVICE9 pd3dDevice, CTexture
 	}
 
 	IDirect3DTexture9* pSrcD3DTex = pSrcTex2D->GetTexture();
-	D3DSURFACE_DESC desc;
-	pSrcD3DTex->GetLevelDesc( 0, &desc );
+	int nWidth = nDownscale;
+	int nHeight = nDownscale;
+	DWORD dwFilter = D3DX_FILTER_BOX;
 
-	CTexture2D* pTexture2D = new CTexture2D( pd3dDevice, desc.Width, desc.Height );
+	if ( nDownscale <= 0 ) {
+		D3DSURFACE_DESC desc;
+		pSrcD3DTex->GetLevelDesc( 0, &desc );
+		nWidth = desc.Width;
+		nHeight = desc.Height;
+		dwFilter = D3DX_FILTER_NONE;
+	}
+
+	CTexture2D* pTexture2D = new CTexture2D( pd3dDevice, nWidth, nHeight );
 	IDirect3DTexture9* pDstD3DTex = pTexture2D->GetTexture();
 
 	if ( !pDstD3DTex ) {
@@ -178,23 +207,13 @@ CTexture2D* CTextureManager::CopyTexture( LPDIRECT3DDEVICE9 pd3dDevice, CTexture
 
 	if ( SUCCEEDED( pSrcD3DTex->GetSurfaceLevel( 0, &pSrcSurface ) ) &&
 		SUCCEEDED( pDstD3DTex->GetSurfaceLevel( 0, &pDstSurface ) ) ) {
-		if ( FAILED( D3DXLoadSurfaceFromSurface( pDstSurface, nullptr, nullptr, pSrcSurface, nullptr, nullptr, D3DX_FILTER_NONE, 0 ) ) ) {
+		if ( FAILED( D3DXLoadSurfaceFromSurface( pDstSurface, nullptr, nullptr, pSrcSurface, nullptr, nullptr, dwFilter, 0 ) ) ) {
 			spdlog::error( "CopyTexture: Failed to copy texture data." );
 		}
 	}
-	
+
 	if ( pSrcSurface ) pSrcSurface->Release();
 	if ( pDstSurface ) pDstSurface->Release();
 
-	m_TextureMap[sName] = pTexture2D;
-	return GetTexture2D( sName );
-}
-
-void CTextureManager::DeleteAll()
-{
-	for ( auto it = m_TextureMap.begin(); it != m_TextureMap.end(); ++it ) {
-		delete it->second;
-	}
-
-	m_TextureMap.clear();
+	return pTexture2D;
 }
