@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <fstream>
 #include <cassert>
+#include <d3d9.h>
 
 #include "EasyBMP/EasyBMP.h"
 
@@ -43,11 +44,6 @@ namespace Assets
 		BMP BMP;
 		size_t uIndex = 0;
 
-		constexpr size_t k_uColorsPerRow = 16;
-		constexpr size_t k_uCellScale = 8;
-		const size_t k_uWidth = k_uCellScale * k_uColorsPerRow;
-		const size_t k_uHeight = k_uCellScale * (k_uNumColors / k_uColorsPerRow);
-
 		BMP.SetSize( k_uWidth, k_uHeight );
 		BMP.SetBitDepth( 24 );
 
@@ -78,7 +74,33 @@ namespace Assets
 
 	bool CPalette::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
+#if 0
 		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, this );
+#else
+		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight );
+
+		D3DLOCKED_RECT rc;
+		m_pTexture->GetTexture()->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
+		
+		BYTE* pTexels = static_cast<BYTE*>(rc.pBits);
+		size_t uIndex = 0;
+		for ( uint32_t y = 0; y < k_uColorsPerRow; y++ ) {
+			for ( uint32_t x = 0; x < k_uColorsPerRow; x++ ) {
+				for ( size_t h = 0; h < k_uCellScale; h++ ) {
+					for ( size_t w = 0; w < k_uCellScale; w++ ) {
+						size_t uTexelIndex = ((y * k_uCellScale + h) * rc.Pitch) + ((x * k_uCellScale + w) * 4);
+						pTexels[uTexelIndex] = m_ColorTable[uIndex].b;
+						pTexels[uTexelIndex + 1] = m_ColorTable[uIndex].g;
+						pTexels[uTexelIndex + 2] = m_ColorTable[uIndex].r;
+						pTexels[uTexelIndex + 3] = 255;
+					}
+				}
+				uIndex++;
+			}
+		}
+
+		m_pTexture->GetTexture()->UnlockRect( 0 );
+#endif
 		return true;
 	}
 

@@ -11,8 +11,10 @@ namespace Assets
 	namespace Palette
 	{
 		constexpr size_t	k_uNumColors = 256;
-		constexpr uint32_t	k_uWidth = 256; // Texture Width
-		constexpr uint32_t	k_uHeight = 256; // Texture Height
+		constexpr size_t	k_uColorsPerRow = 16;
+		constexpr size_t	k_uCellScale = 8;
+		constexpr size_t	k_uWidth = k_uCellScale * k_uColorsPerRow;
+		constexpr size_t	k_uHeight = k_uCellScale * (k_uNumColors / k_uColorsPerRow);
 		constexpr uint8_t	k_uNumColorKeys = 2;
 		constexpr size_t	k_uSize = k_uNumColors * 4;
 	}
