@@ -1,4 +1,4 @@
-#include <unordered_map>
+﻿#include <unordered_map>
 #include <filesystem>
 #include <fstream>
 
@@ -200,12 +200,15 @@ void RenderDirectory( const FilesContainer& container, std::string& sSelectedAss
 void RenderDirectoryGrid( const FilesContainer& container, std::string& sSelectedAsset, const std::string& sParentFolder = "" )
 {
 	const float fIconSize = 64.0f;
-	const int nColumns = 7;
+	const float fPadding = 10.0f;
+	float fWindowWidth = ImGui::GetContentRegionAvail().x; 
+	int nColumns = std::max( 1, static_cast<int>(fWindowWidth / (fIconSize + fPadding)) );
 
 	std::string currentFolder = sParentFolder.empty() ? container.sDirectory : sParentFolder + "/" + container.sDirectory;
 	if ( !container.vsFiles.empty() || !container.vSubDirs.empty() ) {
 		if ( ImGui::TreeNodeEx( currentFolder.c_str(), ImGuiTreeNodeFlags_DefaultOpen ) ) {
 			ImGui::Columns( nColumns, nullptr, false );
+
 			for ( const auto& entry : container.vsFiles ) {
 				if ( !(g_AssetPicker.uShowFileType & FileTypeToBit( entry.eFileType )) ) {
 					continue;
@@ -234,10 +237,11 @@ void RenderDirectoryGrid( const FilesContainer& container, std::string& sSelecte
 				ImGui::TextWrapped( "%s", std::filesystem::path( entry.sFile ).filename().string().c_str() );
 				ImGui::NextColumn();
 			}
+
 			ImGui::Columns( 1 );
 
 			for ( const auto& subContainer : container.vSubDirs ) {
-				if ( subContainer.vsFiles.size() == 0 ) continue;
+				if ( subContainer.vsFiles.empty() ) continue;
 				RenderDirectoryGrid( subContainer, sSelectedAsset, currentFolder );
 			}
 
@@ -245,63 +249,65 @@ void RenderDirectoryGrid( const FilesContainer& container, std::string& sSelecte
 		}
 	}
 }
-
 void Render()
 {
-	ImGui::Begin( "Asset Picker" );
-	static std::string sSelectedAsset = "";
+	static bool bShowAssetPicker = true;
+	if ( bShowAssetPicker ) {
+		ImGui::Begin( "Asset Picker", &bShowAssetPicker );
+		static std::string sSelectedAsset = "";
 
-	if ( ImGui::Button( "Toggle View" ) ) {
-		g_AssetPicker.eViewMode = (g_AssetPicker.eViewMode == ViewMode::List) ? ViewMode::Grid : ViewMode::List;
-	}  ImGui::NewLine();
+		if ( ImGui::Button( "Toggle View" ) ) {
+			g_AssetPicker.eViewMode = (g_AssetPicker.eViewMode == ViewMode::List) ? ViewMode::Grid : ViewMode::List;
+		}  ImGui::NewLine();
 
-	static const Assets::FileType sarrFileTypeOpt[] = {
-		{ Assets::FileType::Palette},
-		{ Assets::FileType::Alpha},
-		{ Assets::FileType::Sky},
-		{ Assets::FileType::Sprite},
-		{ Assets::FileType::Ghost},
-		{ Assets::FileType::Fade},
-		{ Assets::FileType::BigFade},
-		{ Assets::FileType::Cliff},
-		{ Assets::FileType::Disp},
-		{ Assets::FileType::Blocks},
-		{ Assets::FileType::Level},
-	};
+		static const Assets::FileType sarrFileTypeOpt[] = {
+			{ Assets::FileType::Palette},
+			{ Assets::FileType::Alpha},
+			{ Assets::FileType::Sky},
+			{ Assets::FileType::Sprite},
+			{ Assets::FileType::Ghost},
+			{ Assets::FileType::Fade},
+			{ Assets::FileType::BigFade},
+			{ Assets::FileType::Cliff},
+			{ Assets::FileType::Disp},
+			{ Assets::FileType::Blocks},
+			{ Assets::FileType::Level},
+		};
 
-	uint8_t uCount = 0;
-	for ( const auto& eFileType : sarrFileTypeOpt ) {
-		uint16_t bit = FileTypeToBit( eFileType );
-		bool isChecked = (g_AssetPicker.uShowFileType & bit) != 0;
-		if ( ImGui::Checkbox( Assets::GetFileTypeSz( eFileType ), &isChecked ) ) {
-			if ( isChecked )
-				g_AssetPicker.uShowFileType |= bit;
-			else
-				g_AssetPicker.uShowFileType &= ~bit;
+		uint8_t uCount = 0;
+		for ( const auto& eFileType : sarrFileTypeOpt ) {
+			uint16_t bit = FileTypeToBit( eFileType );
+			bool isChecked = (g_AssetPicker.uShowFileType & bit) != 0;
+			if ( ImGui::Checkbox( Assets::GetFileTypeSz( eFileType ), &isChecked ) ) {
+				if ( isChecked )
+					g_AssetPicker.uShowFileType |= bit;
+				else
+					g_AssetPicker.uShowFileType &= ~bit;
+			}
+			uCount++;
+			if ( uCount % 6 != 0 ) {
+				ImGui::SameLine();
+			}
+		} ImGui::NewLine();
+
+		for ( const auto& container : g_vFilesContainer ) {
+			if ( g_AssetPicker.eViewMode == ViewMode::List ) {
+				RenderDirectory( container, sSelectedAsset );
+			}
+			else {
+				RenderDirectoryGrid( container, sSelectedAsset );
+			}
 		}
-		uCount++;
-		if ( uCount % 6 != 0 ) {
-			ImGui::SameLine();
-		}
-	} ImGui::NewLine();
 
-	for ( const auto& container : g_vFilesContainer ) {
-		if ( g_AssetPicker.eViewMode == ViewMode::List ) {
-			RenderDirectory( container, sSelectedAsset );
+		ImGui::Separator();
+		ImGui::Text( "Selected Asset:" );
+		if ( !sSelectedAsset.empty() ) {
+			ImGui::TextWrapped( "%s", sSelectedAsset.c_str() );
 		}
 		else {
-			RenderDirectoryGrid( container, sSelectedAsset );
+			ImGui::Text( "None" );
 		}
-	}
 
-	ImGui::Separator();
-	ImGui::Text( "Selected Asset:" );
-	if ( !sSelectedAsset.empty() ) {
-		ImGui::TextWrapped( "%s", sSelectedAsset.c_str() );
+		ImGui::End();
 	}
-	else {
-		ImGui::Text( "None" );
-	}
-
-	ImGui::End();
 }
