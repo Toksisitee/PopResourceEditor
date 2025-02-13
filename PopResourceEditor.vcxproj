@@ -180,6 +180,7 @@
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelWnd.cpp" />
     <ClCompile Include="Palette.cpp" />
+    <ClCompile Include="PaletteWnd.cpp" />
     <ClCompile Include="PopResourceEditor.cpp" />
     <ClCompile Include="Sky.cpp" />
     <ClCompile Include="SkyWnd.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelWnd.h" />
     <ClInclude Include="Palette.h" />
+    <ClInclude Include="PaletteWnd.h" />
     <ClInclude Include="Sky.h" />
     <ClInclude Include="SkyWnd.h" />
     <ClInclude Include="Sprite.h" />

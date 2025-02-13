@@ -153,6 +153,9 @@
     <ClCompile Include="AssetPicker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PaletteWnd.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3DApp.h">
@@ -295,6 +298,9 @@
     </ClInclude>
     <ClInclude Include="AssetTypes.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PaletteWnd.h">
+      <Filter>Source Files\Windows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

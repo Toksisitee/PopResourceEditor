@@ -15,6 +15,7 @@
 #include "DispWnd.h"
 #include "BlocksWnd.h"
 #include "LevelWnd.h"
+#include "PaletteWnd.h"
 
 #include "Assets.h"
 
@@ -329,8 +330,9 @@ namespace Assets
 			}
 			case Assets::FileType::Palette:
 			{
-				assert( false && "TODO: Implement PaletteWnd" );
-				break;
+				auto pWnd = g_WndMngr.AddWindow<CPaletteWnd>( pDevice );
+				pWnd->SetWindowName( sFilePath );
+				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Sky:
 			{
@@ -339,8 +341,10 @@ namespace Assets
 				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Sprite:
+			{
 				assert( false && "TODO: Implement SpriteWnd" );
 				break;
+			}
 		}
 
 		return Result::FAIL;

@@ -159,34 +159,7 @@ void CEditorApp::Run()
 			g_ErrHandler.HandleResult( g_Palette.ExportImg( sFilePath.c_str() ) );
 
 		}
-		static float col2[4] = { 0.4f, 0.7f, 0.0f, 0.5f };
-
 		ImGui::NewLine();
-
-		uint8_t uIndex = 0;
-		char szColorLabel[8];
-		const int k_iColorEditFlags = ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoBorder;
-		Color* pPalette = g_Palette.GetColorTable();
-
-		auto getColor = [&pPalette]( uint8_t uIndex ) -> float* {
-			float fColors[4];
-			ImColor col = ImColor( pPalette[uIndex].r, pPalette[uIndex].g, pPalette[uIndex].b );
-			memcpy( &fColors, &col, sizeof( float ) * 4 );
-			return fColors;
-		};
-
-		ImGui::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2( 5.0f, 5.0f ) );
-		ImGui::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2( 0.0f, 0.0f ) );
-		for ( uint32_t y = 0; y < 16; y++ ) {
-			for ( uint32_t x = 0; x < 16; x++ ) {
-				sprintf_s( szColorLabel, sizeof( szColorLabel ), "%i", uIndex );
-				ImGui::SameLine();
-				ImGui::ColorEdit3( szColorLabel, getColor( uIndex ), k_iColorEditFlags );
-				uIndex++;
-			}
-			ImGui::NewLine();
-		}
-		ImGui::PopStyleVar( 2 );
 
 		{
 			static bool bLoaded = false;
