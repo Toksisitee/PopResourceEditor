@@ -27,14 +27,14 @@ void CCliffWnd::Render()
 	if ( ImGui::Button( "Generate w/ lum 2" ) ) {
 		m_Cliff.Generate( 2 );
 	}
-	if ( m_Cliff.GetTexture() == nullptr ) {
-		m_Cliff.CreateTexture( m_pd3dDevice );
-	}
 
 	if ( ImEditor::InputScalar( "m_fLuminance", &m_Cliff.m_fLuminance ) ) {
 		m_Cliff.Generate( 1 );
 	}
 
+	if ( m_Cliff.GetTexture() == nullptr ) {
+		m_Cliff.CreateTexture( m_pd3dDevice );
+	}
 	else {
 		ImEditor::SetPointFiltering( m_pd3dDevice );
 		ImEditor::RenderTexture( m_Cliff.GetTexture() );
