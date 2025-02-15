@@ -21,6 +21,7 @@ namespace Util
 		[[nodiscard]] extern std::string RemoveFileExtension( const std::string& sFilePath );
 		[[nodiscard]] extern std::string GetParentDirectory( const std::string& sFilePath );
 		[[nodiscard]] extern bool PathExists( const std::string& sPath );
+		void RemoveFileSpec( char* pszPath );
 	}
 
 	extern std::string StringToLowerCopy( const std::string& str );

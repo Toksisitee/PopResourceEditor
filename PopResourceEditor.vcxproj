@@ -155,6 +155,7 @@
     <ClCompile Include="BigFadeWnd.cpp" />
     <ClCompile Include="Blocks.cpp" />
     <ClCompile Include="BlocksWnd.cpp" />
+    <ClCompile Include="IniFile.cpp" />
     <ClCompile Include="Cliff.cpp" />
     <ClCompile Include="CliffWnd.cpp" />
     <ClCompile Include="D3DApp.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="BigFadeWnd.h" />
     <ClInclude Include="Blocks.h" />
     <ClInclude Include="BlocksWnd.h" />
+    <ClInclude Include="IniFile.h" />
     <ClInclude Include="Cliff.h" />
     <ClInclude Include="CliffWnd.h" />
     <ClInclude Include="D3DApp.h" />

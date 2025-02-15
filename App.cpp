@@ -12,6 +12,7 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "imsink/imsink.h"
 
+#include "IniFile.h"
 #include "Debug.h"
 #include "ImEditor.h"
 #include "Utils.h"
@@ -49,6 +50,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT ms
 CEditorApp g_Editor;
 Assets::CPalette g_Palette;
 Assets::CSky g_Sky;
+extern CIniFile g_IniFile;
 
 Assets::Sprite::CSprite g_Sprite( nullptr );
 ImFont* g_ImFonts[eImFont::Max] = { 0 };
@@ -106,6 +108,10 @@ void CEditorApp::Run()
 	ImGui_ImplDX9_Init( GetDevice() );
 
 	//Debug::InitializeWindows( GetDevice() );
+
+	g_IniFile.Initialize();
+	g_IniFile.GetString( EIniSetting::PopulousDirectory );
+	g_IniFile.SetString( EIniSetting::PopulousDirectory, "test" );
 
 	std::string basePath = "C:\\Users\\melyg\\AppData\\Roaming\\pop";
 	GetAllFiles( basePath );

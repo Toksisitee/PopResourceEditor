@@ -175,6 +175,20 @@ namespace Util
 			return (dwAttr != INVALID_FILE_ATTRIBUTES && (dwAttr & FILE_ATTRIBUTE_DIRECTORY));
 		}
 
+		void RemoveFileSpec( char* pszPath )
+		{
+			if ( !pszPath || !*pszPath )
+				return;
+
+			size_t uLen = strlen( pszPath );
+
+			for ( size_t i = uLen; i > 0; --i ) {
+				if ( pszPath[i] == '\\' || pszPath[i] == '/' ) {
+					pszPath[i] = '\0';
+					break;
+				}
+			}
+		}
 	}
 
 	std::string StringToLowerCopy( const std::string& sStr )
