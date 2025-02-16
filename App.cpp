@@ -96,8 +96,10 @@ void RenderSetupScreen()
 	}
 
 	if ( !FileDialog::file_dialog_open && szPath[0] != '\0' ) {
-		g_Editor.SetPopDirectory( std::string( szPath ) );
-		//g_IniFile.SetString( EIniSetting::PopulousDirectory, GetPopDirectory() );
+		auto sDir = std::string( szPath );
+		g_Editor.SetPopDirectory( sDir );
+		g_IniFile.SetString( EIniSetting::PopulousDirectory, sDir );
+		GetAllFiles( sDir );
 	}
 
 	ImGui::End();
@@ -163,12 +165,8 @@ void CEditorApp::Run()
 	std::string sPopDir = g_IniFile.GetString( EIniSetting::PopulousDirectory, "" );
 	if ( !sPopDir.empty() ) {
 		SetPopDirectory( sPopDir );
+		GetAllFiles( sPopDir );
 	}
-
-	//g_IniFile.SetString( EIniSetting::PopulousDirectory, "test" );
-
-	std::string basePath = "C:\\Users\\melyg\\AppData\\Roaming\\pop";
-	GetAllFiles( basePath );
 
 	bool bDone = false;
 	while ( !bDone ) {
@@ -209,8 +207,7 @@ void CEditorApp::Run()
 		if ( !IsPopDirectorySet() ) {
 			RenderSetupScreen();
 		}
-		else
-		{
+		else {
 			if ( bShowDemo ) {
 				ImGui::ShowDemoWindow( &bShowDemo );
 			}
