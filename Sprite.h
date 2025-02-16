@@ -1,15 +1,19 @@
 #pragma once
-#define NOMINMAX
 #include <vector>
 
-#include "Assets.h"
+#include "AssetTypes.h"
+
+class CTexture2D;
+class CPalette;
+
+typedef struct IDirect3DDevice9* LPDIRECT3DDEVICE9, * PDIRECT3DDEVICE9;
+extern inline void SafeDestroyTexture( CTexture2D*& pTexture );
 
 namespace Assets
 {
 	namespace Sprite
 	{
-		// Has to be uint8_t
-		typedef std::vector<std::vector<uint8_t>> PixelMap;
+		using PixelMap = std::vector<std::vector<uint8_t>>; // Must be uint8_t
 
 		struct SpriteInfo
 		{
@@ -40,50 +44,36 @@ namespace Assets
 		class CSprite
 		{
 		public:
+			explicit CSprite( CPalette* pPalette ) :
+				m_pPalette( pPalette ), m_bIsHFX( false )
+			{
+			}
 			~CSprite() = default;
-			CSprite( CPalette* pPalette ) :
-				m_pPalette(pPalette), m_IsHFX(false), m_pBuffer(nullptr), m_nBufferLength(0)
-			{}
 
-			Bank Bank;
-			Result Load( const std::string& file );
-			void Map( uint16_t index );
+			Bank m_Bank;
+			Result LoadBin( const std::string& file );
 			void ExportImg( uint16_t index );
+			void Map( uint16_t index );
+			void Reset();
+
+			void SetPalette( CPalette* pPalette ) { m_pPalette = pPalette; }
+			void SetHFX( bool b ) { m_bIsHFX = b; }
+
 			void CreateTextures( LPDIRECT3DDEVICE9 pD3DDevice );
-			void Clear();
-
-			void SetPalette( CPalette* pPalette )
-			{
-				m_pPalette = pPalette;
-			}
-
-			void SetHFX( bool b )
-			{
-				m_IsHFX = b;
-			}
-
-			// TODO: use flags?
-			[[nodiscard]] bool IsValid( SpriteInfo& spr )
-			{
-				return (spr.Height == 0 || spr.Width == 0) ? false : true;
-			}
-
-			[[nodiscard]] CTexture2D* GetTexture( uint32_t uSlot )
-			{
-				return m_Textures.at(uSlot);
-			}
+			[[nodiscard]] CTexture2D* GetTexture( uint32_t uSlot );
 
 		private:
-			bool IsAlphaSprite( uint32_t index );
+			[[nodiscard]] bool IsAlphaSprite( uint32_t uIndex ) const;
+			[[nodiscard]] bool IsValid( SpriteInfo& sprInfo );
 
 		private:
-			char* m_pBuffer;
-			uint32_t m_nBufferLength;
-			
+			char* m_pBuffer = nullptr;
+			uint32_t m_nBufferLength = 0;
+			bool m_bIsHFX = false;;
+
 			CPalette* m_pPalette;
-			std::vector<CTexture2D*> m_Textures;
-			
-			bool m_IsHFX;
+			std::vector<CTexture2D*> m_pTextures;
+
 		};
 	}
 }

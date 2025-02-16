@@ -257,10 +257,10 @@ void CEditorApp::Run()
 
 					static bool inputs_step = true;
 
-					if ( g_Sprite.Bank.Header.Count == 0 ) {
+					if ( g_Sprite.m_Bank.Header.Count == 0 ) {
 						auto sFilePath = Util::FileSystem::FormatPath( "HSPR0-0.dat" );
 						g_Sprite.SetPalette( &g_Palette );
-						g_ErrHandler.HandleResult( g_Sprite.Load( sFilePath ) );
+						g_ErrHandler.HandleResult( g_Sprite.LoadBin( sFilePath ) );
 						g_Sprite.CreateTextures( g_Editor.m_pd3dDevice );
 					}
 					else {
