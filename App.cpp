@@ -232,6 +232,11 @@ void CEditorApp::Run()
 		AssetPicker::GetAllFiles( sPopDir );
 	}
 
+	auto sExportDir = g_IniFile.GetString( EIniSetting::ExportDirectory, Util::FileSystem::GetApplicationDirectory() + "\\Export" );
+	g_Editor.SetExportDirectory( sExportDir );
+	g_IniFile.SetString( EIniSetting::ExportDirectory, sExportDir );
+	Util::FileSystem::CreateFolder( sExportDir );
+
 	bool bDone = false;
 	while ( !bDone ) {
 		MSG msg;
