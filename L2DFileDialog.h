@@ -12,6 +12,16 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
+
+	Modified by Toksisitee on 16.02.2025
+	Changes made:
+		- Removed static variables.
+		- Error messages now automatically clear.
+		- Added breadcrumbs navigation for improved file path visibility and easier navigation.
+		- Removed "Delete Folder" button
+		- Added an input text box to allow copy-pasting file paths efficiently.
+		- Updated file navigation to support multiple volumes.
+		- Window ImGuiWindowFlags_AlwaysAutoResize.
 */
 
 #pragma once
