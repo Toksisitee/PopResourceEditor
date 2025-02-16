@@ -1,6 +1,7 @@
 #include <vector>
 #include <memory>
 #include <iostream>
+#include <tuple>
 
 #include "WindowBase.h"
 
@@ -16,18 +17,22 @@ public:
 	T* AddWindow( Args&&... args )
 	{
 		static_assert(std::is_base_of<CWindowBase, T>::value, "T must derive from CWindowBase");
-		auto& pWnd = m_Windows.emplace_back( std::make_unique<T>( std::forward<Args>( args )... ) );
-		return static_cast<T*>(pWnd.get());
+		auto&& tuple = std::forward_as_tuple( args... );
+		if ( GetWindow( std::get<1>( tuple ) ) == nullptr ) {
+			auto& pWnd = m_Windows.emplace_back( std::make_unique<T>( std::forward<Args>( args )... ) );
+			return static_cast<T*>(pWnd.get());
+		}
+		return nullptr;
 	}
 
 	void Render()
 	{
-		m_Windows.erase(std::remove_if( m_Windows.begin(), m_Windows.end(),
-			[]( const std::unique_ptr<CWindowBase>& pWnd ) {
+		m_Windows.erase( std::remove_if( m_Windows.begin(), m_Windows.end(),
+						 []( const std::unique_ptr<CWindowBase>& pWnd ) {
 			if ( !pWnd->IsOpen() ) pWnd->Cleanup();
 			return !pWnd->IsOpen();
-			} ), m_Windows.end()
-		);
+		} ), m_Windows.end()
+			);
 
 		for ( auto& pWnd : m_Windows ) {
 			pWnd->Render();

@@ -5,8 +5,11 @@ typedef struct IDirect3DDevice9* LPDIRECT3DDEVICE9, * PDIRECT3DDEVICE9;
 
 class CWindowBase {
 public:
-	CWindowBase() : CWindowBase( nullptr ) {}
-	CWindowBase( LPDIRECT3DDEVICE9 pd3dDevice ) : m_pd3dDevice( pd3dDevice ), m_bFirstPass( false ) {}
+	CWindowBase( const std::string& sName ) : CWindowBase( nullptr, sName ) {}
+	CWindowBase( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sName ) :
+		m_pd3dDevice( pd3dDevice ), m_sWindowName( sName ), m_bFirstPass( false )
+	{
+	}
 	virtual ~CWindowBase() = default;
 
 	virtual void Render() = 0;

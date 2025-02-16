@@ -4,12 +4,7 @@
 
 class CLevelWnd : public CWindowBase {
 public:
-	CLevelWnd( LPDIRECT3DDEVICE9 pd3dDevice ) : CWindowBase( pd3dDevice )
-	{
-		Initialize( pd3dDevice );
-	}
-	CLevelWnd( LPDIRECT3DDEVICE9 pd3dDevice, std::string sLevel )
-		: CWindowBase( pd3dDevice ), m_sLevel( sLevel )
+	CLevelWnd( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sName ) : CWindowBase( pd3dDevice, sName ) 
 	{
 		Initialize( pd3dDevice );
 	}

@@ -4,7 +4,7 @@
 
 class CFadeWnd : public CWindowBase {
 public:
-	CFadeWnd( LPDIRECT3DDEVICE9 pd3dDevice ) :CWindowBase( pd3dDevice ) {}
+	CFadeWnd( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sName ) : CWindowBase( pd3dDevice, sName ) {}
 
 	void Render() override;
 

@@ -4,7 +4,7 @@
 
 class CSkyWnd : public CWindowBase {
 public:
-	CSkyWnd( LPDIRECT3DDEVICE9 pd3dDevice ) :CWindowBase( pd3dDevice ) {}
+	CSkyWnd( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sName ) : CWindowBase( pd3dDevice, sName ) {}
 
 	void Render() override;
 
@@ -19,7 +19,8 @@ public:
 	}
 
 	void Cleanup() override
-	{}
+	{
+	}
 
 private:
 	Assets::CSky m_Sky;

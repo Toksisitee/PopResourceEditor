@@ -2,20 +2,20 @@
 
 namespace Debug
 {
-	CSkyWnd g_SkyWnd( nullptr );
-	CGhostWnd g_GhostWnd( nullptr );
-	CGhostWnd g_GhostWnd2( nullptr );
-	CFadeWnd g_FadeWnd( nullptr );
-	CFadeWnd g_FadeWnd2( nullptr );
-	CBigFadeWnd g_BigFadeWnd( nullptr );
-	CCliffWnd g_CliffWnd( nullptr );
-	CCliffWnd g_CliffWnd2( nullptr );
-	CAlphaWnd g_AlphaWnd( nullptr );
-	CDispWnd g_DispWnd( nullptr );
-	CDispWnd g_DispWnd2( nullptr );
-	CBlocksWnd g_BlocksWnd( nullptr );
-	CLevelWnd g_LevelWnd( nullptr, "levl2017" );
-	CLevelWnd g_LevelWnd2( nullptr, "levl2021" );
+	CSkyWnd g_SkyWnd( nullptr, "Sky Debug" );
+	CGhostWnd g_GhostWnd( nullptr, "Ghost Debug" );
+	CGhostWnd g_GhostWnd2( nullptr, "Ghost Debug2" );
+	CFadeWnd g_FadeWnd( nullptr, "Fade Debug" );
+	CFadeWnd g_FadeWnd2( nullptr, "Fade Debug2" );
+	CBigFadeWnd g_BigFadeWnd( nullptr, "BigFade Debug" );
+	CCliffWnd g_CliffWnd( nullptr, "Cliff Debug" );
+	CCliffWnd g_CliffWnd2( nullptr, "Cliff Debug2" );
+	CAlphaWnd g_AlphaWnd( nullptr, "Alpha Debug" );
+	CDispWnd g_DispWnd( nullptr, "Disp Debug" );
+	CDispWnd g_DispWnd2( nullptr, "Disp Debug2" );
+	CBlocksWnd g_BlocksWnd( nullptr, "Blocks Debug" );
+	CLevelWnd g_LevelWnd( nullptr, "Level Debug" );
+	CLevelWnd g_LevelWnd2( nullptr, "Level Debug2" );
 
 	void InitializeWindows( LPDIRECT3DDEVICE9 pDevice )
 	{
@@ -33,21 +33,6 @@ namespace Debug
 		g_BlocksWnd.Initialize( pDevice );
 		g_LevelWnd.Initialize( pDevice );
 		g_LevelWnd2.Initialize( pDevice );
-
-		g_SkyWnd.SetWindowName( "Sky Window" );
-		g_GhostWnd.SetWindowName( "Ghost Window" );
-		g_GhostWnd2.SetWindowName( "Ghost Window2" );
-		g_FadeWnd.SetWindowName( "Fade Window" );
-		g_FadeWnd2.SetWindowName( "Fade Window2" );
-		g_BigFadeWnd.SetWindowName( "BigFade Window" );
-		g_CliffWnd.SetWindowName( "Cliff Window" );
-		g_CliffWnd2.SetWindowName( "Cliff Window2" );
-		g_AlphaWnd.SetWindowName( "Alpha Window" );
-		g_DispWnd.SetWindowName( "Displacement Window" );
-		g_DispWnd2.SetWindowName( "Water Displacement Window" );
-		g_BlocksWnd.SetWindowName( "Blocks Window" );
-		g_LevelWnd.SetWindowName( "Level Window" );
-		g_LevelWnd2.SetWindowName( "Level Window2" );
 	}
 
 	void RenderWindows()
