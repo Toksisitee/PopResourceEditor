@@ -9,6 +9,7 @@
 #include "L2DFileDialog.h"
 
 #define EDITOR_VOLUMES			(1)
+#define EDITOR_INPUT_PATH		(1)
 
 namespace FileDialog {
 	bool file_dialog_open = false;
@@ -82,6 +83,37 @@ namespace FileDialog {
 					file_dialog_file_select_index = 0;
 					ImGui::SetScrollHereY( 0.0f );
 					file_dialog_current_folder = "";
+				}
+			}
+#endif
+
+#if EDITOR_INPUT_PATH
+			static char folder_path_buffer[512] = "< Paste Directory Path >";
+			ImGui::PushItemWidth( 600 );
+
+			if ( ImGui::InputText( "##FolderPathInput", folder_path_buffer, sizeof( folder_path_buffer ), ImGuiInputTextFlags_EnterReturnsTrue ) ) {
+				if ( std::filesystem::exists( folder_path_buffer ) && std::filesystem::is_directory( folder_path_buffer ) ) {
+					file_dialog_current_path = folder_path_buffer;
+					file_dialog_folder_select_index = 0;
+					file_dialog_file_select_index = 0;
+					ImGui::SetScrollHereY( 0.0f );
+				}
+				else {
+					strcpy_s( file_dialog_error, "Error: Invalid folder path!" );
+				}
+			}
+			ImGui::PopItemWidth();
+
+			ImGui::SameLine();
+			if ( ImGui::Button( "Navigate" ) ) {
+				if ( std::filesystem::exists( folder_path_buffer ) && std::filesystem::is_directory( folder_path_buffer ) ) {
+					file_dialog_current_path = folder_path_buffer;
+					file_dialog_folder_select_index = 0;
+					file_dialog_file_select_index = 0;
+					ImGui::SetScrollHereY( 0.0f );
+				}
+				else {
+					strcpy_s( file_dialog_error, "Error: Invalid folder path!" );
 				}
 			}
 #endif
