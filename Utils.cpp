@@ -2,12 +2,21 @@
 #include <fstream>
 #include <algorithm>
 
+#include "App.h"
 #include "Utils.h"
 
 namespace Util
 {
 	namespace FileSystem
 	{
+		void CreateFolder( const std::string& sFolderPath )
+		{
+			DWORD attrib = GetFileAttributesA( sFolderPath.c_str() );
+			if ( attrib == INVALID_FILE_ATTRIBUTES ) {
+				CreateDirectoryA( sFolderPath.c_str(), NULL );
+			}
+		}
+
 		std::string GetApplicationDirectory()
 		{
 			static std::string sFinalPath;
@@ -67,6 +76,12 @@ namespace Util
 
 			sprintf_s( szPathBuffer, MAX_PATH, "%s\\%s", szDirBuffer, pFileName );
 			return std::string( szPathBuffer );
+		}
+
+		std::string FormatPathExportDirectory( const std::string& sFilePath )
+		{
+			auto sFileName = GetFileName( sFilePath );
+			return FormatPath( sFileName.c_str(), g_Editor.GetExportDirectory().c_str() );
 		}
 
 		[[nodiscard]] bool FileExists( const std::string& sFilePath )
