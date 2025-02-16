@@ -262,6 +262,7 @@ namespace AssetPicker
 		static bool bShowAssetPicker = true;
 		if ( bShowAssetPicker ) {
 			ImGui::Begin( "Asset Picker", &bShowAssetPicker );
+
 			static std::string sSelectedAsset = "";
 
 			if ( ImGui::Button( "Toggle View" ) ) {

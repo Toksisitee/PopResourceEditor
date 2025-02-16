@@ -105,6 +105,70 @@ void RenderSetupScreen()
 	ImGui::End();
 }
 
+void DockspaceBuild( ImGuiID dockspaceID, bool& bDockspaceBuilt )
+{
+	bDockspaceBuilt = true;
+	ImGuiViewport* pViewport = ImGui::GetMainViewport();
+
+	ImGui::DockBuilderRemoveNode( dockspaceID );
+	ImGui::DockBuilderAddNode( dockspaceID, ImGuiDockNodeFlags_DockSpace );
+	ImGui::DockBuilderSetNodeSize( dockspaceID, pViewport->Size );
+
+	ImGuiID dock_main_id = dockspaceID;
+	ImGuiID dock_id_top = ImGui::DockBuilderSplitNode( dockspaceID, ImGuiDir_Up, 0.35f, NULL, &dock_main_id );
+	ImGuiID dock_id_left = ImGui::DockBuilderSplitNode( dock_main_id, ImGuiDir_Left, 0.18f, NULL, &dock_main_id );
+	ImGuiID dock_id_right = ImGui::DockBuilderSplitNode( dock_main_id, ImGuiDir_Right, 0.25f, NULL, &dock_main_id );
+	ImGuiID dock_id_rightBottom = ImGui::DockBuilderSplitNode( dock_id_right, ImGuiDir_Down, 0.20f, NULL, &dock_id_right );
+	float fChatSplit = 0.13f;
+#if _DEBUG
+	fChatSplit = 0.55f;
+#endif
+	ImGuiID dock_id_bottom = ImGui::DockBuilderSplitNode( dock_main_id, ImGuiDir_Down, fChatSplit, NULL, &dock_main_id );
+	ImGuiID dock_id_bottomConsole = ImGui::DockBuilderSplitNode( dock_id_bottom, ImGuiDir_Down, 0.45f, NULL, &dock_id_bottom );
+
+	ImGuiDockNode* node = ImGui::DockBuilderGetNode( dock_id_top );
+	node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
+	node->LocalFlags |= ImGuiDockNodeFlags_NoResizeY;
+	node = ImGui::DockBuilderGetNode( dock_id_bottom );
+	node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
+	node = ImGui::DockBuilderGetNode( dock_id_bottomConsole );
+	node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
+	node = ImGui::DockBuilderGetNode( dock_main_id );
+	node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
+#if !_DEBUG
+	node->LocalFlags |= ImGuiDockNodeFlags_NoResizeY;
+#endif
+
+	ImGui::DockBuilderDockWindow( "Asset Picker", dock_main_id );
+	ImGui::DockBuilderDockWindow( "Console", dock_id_bottom );
+
+	ImGui::DockBuilderFinish( dockspaceID );
+}
+
+void DockspaceDraw()
+{
+	static ImGuiID dockspaceID = 0;
+	static bool bDockSpaceBuilt = false;
+	ImGuiWindowFlags windowFlags = 0;
+	windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove;
+	windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoResize;
+
+	dockspaceID = ImGui::GetID( "PopResourceEditorDockspace" );
+	ImGuiViewport* pViewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos( pViewport->Pos );
+	ImGui::SetNextWindowSize( pViewport->Size );
+	ImGui::SetNextWindowViewport( pViewport->ID );
+
+	if ( !bDockSpaceBuilt ) {
+		DockspaceBuild( dockspaceID, bDockSpaceBuilt );
+	}
+
+	ImGui::Begin( "PopResourceEditor", nullptr, windowFlags );
+	ImGui::DockSpace( dockspaceID, ImVec2( 0, 0 ), ImGuiDockNodeFlags_None );
+	ImGui::End();
+}
+
+
 void CEditorApp::Run()
 {
 	IMGUI_CHECKVERSION();
@@ -212,15 +276,14 @@ void CEditorApp::Run()
 				ImGui::ShowDemoWindow( &bShowDemo );
 			}
 
+#if 0
 			if ( ImGui::Button( "Test" ) ) {
 				auto sFilePath = Util::FileSystem::FormatPath( "pal0-0.dat" );
 				g_ErrHandler.HandleResult( g_Palette.LoadBin( sFilePath ) );
 				sFilePath = Util::FileSystem::FormatPath( "pal.bmp" );
 				g_ErrHandler.HandleResult( g_Palette.ExportImg( sFilePath.c_str() ) );
-
 			}
 			ImGui::NewLine();
-
 			{
 				static bool bLoaded = false;
 
@@ -237,6 +300,8 @@ void CEditorApp::Run()
 					}
 					bLoaded = true;
 				}
+#endif
+
 
 #endif
 
@@ -245,10 +310,12 @@ void CEditorApp::Run()
 				}
 
 				{
+					DockspaceDraw();
 					g_WndMngr.Render();
 					AssetPicker::Render();
 				}
 
+#if 0
 				{
 					ImGui::Begin( "Sprite Textures" );
 
@@ -289,6 +356,7 @@ void CEditorApp::Run()
 					ImGui::End();
 				}
 			}
+#endif
 			g_ImGuiSink->Render();
 		}
 		// Rendering
