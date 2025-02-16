@@ -8,9 +8,25 @@
 
 #include "L2DFileDialog.h"
 
+#define EDITOR_VOLUMES			(1)
+
 namespace FileDialog {
 	bool file_dialog_open = false;
 	FileDialogType file_dialog_open_type = FileDialogType::OpenFile;
+
+#if EDITOR_VOLUMES
+	std::vector<std::filesystem::path> GetVolumes()
+	{
+		std::vector<std::filesystem::path> volumes;
+		for ( char drive = 'A'; drive <= 'Z'; ++drive ) {
+			std::filesystem::path drive_path = std::string( 1, drive ) + ":\\";
+			if ( std::filesystem::exists( drive_path ) ) {
+				volumes.push_back( drive_path );
+			}
+		}
+		return volumes;
+	}
+#endif
 
 	void ShowFileDialog( bool* open, char* buffer, [[maybe_unused]] unsigned int buffer_size, FileDialogType type )
 	{
@@ -53,6 +69,22 @@ namespace FileDialog {
 			ImGui::SetNextWindowSize( ImVec2( 740.0f, 410.0f ) );
 			const char* window_title = (type == FileDialogType::OpenFile ? "Select a file" : "Select a folder");
 			ImGui::Begin( window_title, nullptr, ImGuiWindowFlags_NoResize );
+
+#if EDITOR_VOLUMES
+			std::vector<std::filesystem::path> volumes = GetVolumes();
+			ImGui::Text( "Volumes:" );
+			ImGui::SameLine();
+			for ( size_t i = 0; i < volumes.size(); i++ ) {
+				ImGui::SameLine();
+				if ( ImGui::Button( volumes[i].string().c_str() ) ) {
+					file_dialog_current_path = volumes[i].string();
+					file_dialog_folder_select_index = 0;
+					file_dialog_file_select_index = 0;
+					ImGui::SetScrollHereY( 0.0f );
+					file_dialog_current_folder = "";
+				}
+			}
+#endif
 
 			std::vector<std::filesystem::directory_entry> files;
 			std::vector<std::filesystem::directory_entry> folders;
