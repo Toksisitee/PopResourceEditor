@@ -160,9 +160,13 @@ void GetFilesRecursively( const std::string& sPath, FilesContainer& container )
 	}
 }
 
-void GetAllFiles( const std::string& sBasePath )
+void GetAllFiles( std::string& sBasePath )
 {
 	g_vFilesContainer.clear();
+
+	while ( sBasePath.length() > 1 && (sBasePath.back() == '\\' || sBasePath.back() == '/') ) {
+		sBasePath.pop_back(); 
+	}
 
 	FilesContainer baseContainer;
 	baseContainer.sPath = sBasePath;
@@ -249,6 +253,7 @@ void RenderDirectoryGrid( const FilesContainer& container, std::string& sSelecte
 		}
 	}
 }
+
 void Render()
 {
 	static bool bShowAssetPicker = true;

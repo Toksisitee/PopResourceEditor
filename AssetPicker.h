@@ -21,5 +21,5 @@ struct FilesContainer
 
 extern std::vector<FilesContainer> g_vFilesContainer;
 
-extern void GetAllFiles( const std::string& sBasePath );
+extern void GetAllFiles( std::string& sBasePath );
 extern void Render();
