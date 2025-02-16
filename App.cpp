@@ -21,6 +21,7 @@
 
 #include "AssetsErrHandler.h"
 #include "AssetPicker.h"
+#include "L2DFileDialog.h"
 
 #include "Palette.h"
 #include "Sprite.h"
@@ -54,6 +55,53 @@ extern CIniFile g_IniFile;
 
 Assets::Sprite::CSprite g_Sprite( nullptr );
 ImFont* g_ImFonts[eImFont::Max] = { 0 };
+
+void RenderSetupScreen()
+{
+	static char* pszBuffer = nullptr;
+	static char szPath[500] = "";
+	ImGuiViewport* pViewport = ImGui::GetMainViewport();
+
+	ImVec2 vCenterPos = ImVec2(
+		pViewport->Pos.x + (pViewport->Size.x * 0.5f),
+		pViewport->Pos.y + (pViewport->Size.y * 0.5f)
+	);
+
+	ImVec2 vWindowSize = ImVec2( 300, 200 );
+	ImVec2 vWindowPos = ImVec2(
+		vCenterPos.x - (vWindowSize.x * 0.5f),
+		vCenterPos.y - (vWindowSize.y * 0.5f)
+	);
+
+	ImGui::SetNextWindowPos( vWindowPos, ImGuiCond_Always );
+	ImGui::SetNextWindowSize( vWindowSize );
+
+	ImGui::Begin( "Setup", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar );
+
+	if ( !g_Editor.GetPopDirectory().empty() ) {
+		sprintf_s( szPath, sizeof( szPath ), "%s", g_Editor.GetPopDirectory().c_str() );
+	}
+
+	ImGui::TextUnformatted( "Populous Directory: " );
+	ImGui::InputText( "##path", szPath, sizeof( szPath ), ImGuiInputTextFlags_ReadOnly );
+	ImGui::SameLine();
+	if ( ImGui::Button( "Browse##path" ) ) {
+		pszBuffer = szPath;
+		FileDialog::file_dialog_open = true;
+		FileDialog::file_dialog_open_type = FileDialog::FileDialogType::SelectFolder;
+	}
+
+	if ( FileDialog::file_dialog_open ) {
+		FileDialog::ShowFileDialog( &FileDialog::file_dialog_open, pszBuffer, sizeof( pszBuffer ), FileDialog::file_dialog_open_type );
+	}
+
+	if ( !FileDialog::file_dialog_open && szPath[0] != '\0' ) {
+		g_Editor.SetPopDirectory( std::string( szPath ) );
+		//g_IniFile.SetString( EIniSetting::PopulousDirectory, GetPopDirectory() );
+	}
+
+	ImGui::End();
+}
 
 void CEditorApp::Run()
 {
@@ -109,14 +157,18 @@ void CEditorApp::Run()
 
 	//Debug::InitializeWindows( GetDevice() );
 
+	bool bPopDirectorySet = false;
 	g_IniFile.Initialize();
-	g_IniFile.GetString( EIniSetting::PopulousDirectory );
-	g_IniFile.SetString( EIniSetting::PopulousDirectory, "test" );
+
+	std::string sPopDir = g_IniFile.GetString( EIniSetting::PopulousDirectory, "" );
+	if ( !sPopDir.empty() ) {
+		SetPopDirectory( sPopDir );
+	}
+
+	//g_IniFile.SetString( EIniSetting::PopulousDirectory, "test" );
 
 	std::string basePath = "C:\\Users\\melyg\\AppData\\Roaming\\pop";
 	GetAllFiles( basePath );
-
-
 
 	bool bDone = false;
 	while ( !bDone ) {
@@ -154,89 +206,94 @@ void CEditorApp::Run()
 
 		static bool bShowDemo = true;
 
-		if ( bShowDemo ) {
-			ImGui::ShowDemoWindow( &bShowDemo );
+		if ( !IsPopDirectorySet() ) {
+			RenderSetupScreen();
 		}
-
-		if ( ImGui::Button( "Test" ) ) {
-			auto sFilePath = Util::FileSystem::FormatPath( "pal0-0.dat" );
-			g_ErrHandler.HandleResult( g_Palette.LoadBin( sFilePath ) );
-			sFilePath = Util::FileSystem::FormatPath( "pal.bmp" );
-			g_ErrHandler.HandleResult( g_Palette.ExportImg( sFilePath.c_str() ) );
-
-		}
-		ImGui::NewLine();
-
+		else
 		{
-			static bool bLoaded = false;
+			if ( bShowDemo ) {
+				ImGui::ShowDemoWindow( &bShowDemo );
+			}
 
-#if 1
-			if ( !bLoaded ) {
-				auto sFilePath = Util::FileSystem::FormatPath( "pal0-b.dat" );
+			if ( ImGui::Button( "Test" ) ) {
+				auto sFilePath = Util::FileSystem::FormatPath( "pal0-0.dat" );
 				g_ErrHandler.HandleResult( g_Palette.LoadBin( sFilePath ) );
 				sFilePath = Util::FileSystem::FormatPath( "pal.bmp" );
 				g_ErrHandler.HandleResult( g_Palette.ExportImg( sFilePath.c_str() ) );
 
-				sFilePath = Util::FileSystem::FormatPath( "sky0-b.dat" );
-				if ( g_ErrHandler.HandleResult( g_Sky.LoadBin( sFilePath ) ) != Assets::Result::OK_LOAD ) {
-
-				}
-				bLoaded = true;
 			}
+			ImGui::NewLine();
+
+			{
+				static bool bLoaded = false;
+
+#if 1
+				if ( !bLoaded ) {
+					auto sFilePath = Util::FileSystem::FormatPath( "pal0-b.dat" );
+					g_ErrHandler.HandleResult( g_Palette.LoadBin( sFilePath ) );
+					sFilePath = Util::FileSystem::FormatPath( "pal.bmp" );
+					g_ErrHandler.HandleResult( g_Palette.ExportImg( sFilePath.c_str() ) );
+
+					sFilePath = Util::FileSystem::FormatPath( "sky0-b.dat" );
+					if ( g_ErrHandler.HandleResult( g_Sky.LoadBin( sFilePath ) ) != Assets::Result::OK_LOAD ) {
+
+					}
+					bLoaded = true;
+				}
 
 #endif
 
-			{
-				//Debug::RenderWindows();
-			}
-
-			{
-				g_WndMngr.Render();
-				Render();
-			}
-
-			{
-				ImGui::Begin( "Sprite Textures" );
-
-				static bool inputs_step = true;
-
-				if ( g_Sprite.Bank.Header.Count == 0 ) {
-					auto sFilePath = Util::FileSystem::FormatPath( "HSPR0-0.dat" );
-					g_Sprite.SetPalette( &g_Palette );
-					g_ErrHandler.HandleResult( g_Sprite.Load( sFilePath ) );
-					g_Sprite.CreateTextures( g_Editor.m_pd3dDevice );
+				{
+					//Debug::RenderWindows();
 				}
-				else {
-					ImEditor::SetPointFiltering( g_Editor.m_pd3dDevice );
 
-					static uint16_t uSprIndex = 5000;
-					ImEditor::InputScalar( "##SpriteEditor", &uSprIndex );
-					//ImGui::InputScalar( "##SpriteIndex", ImGuiDataType_U16, &uSprIndex, inputs_step ? &u16_one : NULL, NULL, "%u" );
-					auto pTex = g_Sprite.GetTexture( uSprIndex );
-					ImVec2 texSize = ImVec2( static_cast<float>(pTex->GetWidth()), static_cast<float>(pTex->GetHeight()) );
-					texSize.x = 256;
-					texSize.y = 256;
+				{
+					g_WndMngr.Render();
+					Render();
+				}
 
-					static bool uv = false;
-					ImGui::Checkbox( "UV", &uv );
-					if ( uv ) {
-						float fTexelU = 0.5f / texSize.x;
-						float fTexelV = 0.5f / texSize.y;
-						auto uv0 = ImVec2( fTexelU, fTexelV );
-						auto uv1 = ImVec2( 1.0f - fTexelU, 1.0f - fTexelV );
-						ImEditor::RenderTexture( pTex, texSize, uv0, uv1 );
+				{
+					ImGui::Begin( "Sprite Textures" );
+
+					static bool inputs_step = true;
+
+					if ( g_Sprite.Bank.Header.Count == 0 ) {
+						auto sFilePath = Util::FileSystem::FormatPath( "HSPR0-0.dat" );
+						g_Sprite.SetPalette( &g_Palette );
+						g_ErrHandler.HandleResult( g_Sprite.Load( sFilePath ) );
+						g_Sprite.CreateTextures( g_Editor.m_pd3dDevice );
 					}
 					else {
-						ImEditor::RenderTexture( pTex, texSize );
+						ImEditor::SetPointFiltering( g_Editor.m_pd3dDevice );
+
+						static uint16_t uSprIndex = 5000;
+						ImEditor::InputScalar( "##SpriteEditor", &uSprIndex );
+						//ImGui::InputScalar( "##SpriteIndex", ImGuiDataType_U16, &uSprIndex, inputs_step ? &u16_one : NULL, NULL, "%u" );
+						auto pTex = g_Sprite.GetTexture( uSprIndex );
+						ImVec2 texSize = ImVec2( static_cast<float>(pTex->GetWidth()), static_cast<float>(pTex->GetHeight()) );
+						texSize.x = 256;
+						texSize.y = 256;
+
+						static bool uv = false;
+						ImGui::Checkbox( "UV", &uv );
+						if ( uv ) {
+							float fTexelU = 0.5f / texSize.x;
+							float fTexelV = 0.5f / texSize.y;
+							auto uv0 = ImVec2( fTexelU, fTexelV );
+							auto uv1 = ImVec2( 1.0f - fTexelU, 1.0f - fTexelV );
+							ImEditor::RenderTexture( pTex, texSize, uv0, uv1 );
+						}
+						else {
+							ImEditor::RenderTexture( pTex, texSize );
+						}
+
+						ImEditor::ResetRenderState();
 					}
-
-					ImEditor::ResetRenderState();
+					ImGui::End();
 				}
-				ImGui::End();
 			}
+			g_ImGuiSink->Render();
 		}
-		g_ImGuiSink->Render();
-
 		// Rendering
 		//ImGui::DockSpaceOverViewport();
 		ImGui::EndFrame();
