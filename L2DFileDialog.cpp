@@ -10,6 +10,7 @@
 
 #define EDITOR_VOLUMES			(1)
 #define EDITOR_INPUT_PATH		(1)
+#define EDITOR_CRUMBS			(1)
 
 namespace FileDialog {
 	bool file_dialog_open = false;
@@ -132,7 +133,35 @@ namespace FileDialog {
 			}
 			catch ( ... ) {}
 
+#if EDITOR_CRUMBS
+			std::filesystem::path path( file_dialog_current_path );
+			std::vector<std::string> path_segments;
+
+			for ( auto& part : path ) {
+				if ( !part.empty() && part != "\\" ) {
+					path_segments.push_back( part.string() );
+				}
+			}
+
+			std::filesystem::path current_path = "";
+			for ( size_t i = 0; i < path_segments.size(); i++ ) {
+				if ( ImGui::Button( path_segments[i].c_str() ) ) {
+					current_path /= path_segments[i];
+					file_dialog_current_path = "";
+					for ( size_t j = 0; j <= i; j++ ) {
+						file_dialog_current_path += path_segments[j] + "\\";
+					}
+				}
+
+				if ( i < path_segments.size() - 1 ) {
+					ImGui::SameLine();
+					ImGui::Text( ">" ); // Separator
+					ImGui::SameLine();
+				}
+			}
+#else
 			ImGui::Text( "%s", file_dialog_current_path.c_str() );
+#endif
 
 			ImGui::BeginChild( "Directories##1", ImVec2( 200, 300 ), true, ImGuiWindowFlags_HorizontalScrollbar );
 
