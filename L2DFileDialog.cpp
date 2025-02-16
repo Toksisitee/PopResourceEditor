@@ -392,15 +392,10 @@ namespace FileDialog {
 			ImGui::SameLine();
 			if ( ImGui::Button( "Choose" ) ) {
 				if ( type == FileDialogType::SelectFolder ) {
-					if ( file_dialog_current_folder == "" ) {
-						strcpy_s( file_dialog_error, "Error: You must select a folder!" );
-					}
-					else {
-						auto path = file_dialog_current_path + (file_dialog_current_path.back() == '\\' ? "" : "\\") + file_dialog_current_file;
-						strcpy_s( buffer, path.length() + 1, path.c_str() );
-						strcpy_s( file_dialog_error, "" );
-						reset_everything();
-					}
+					auto path = file_dialog_current_path + (file_dialog_current_path.back() == '\\' ? "" : "\\") + file_dialog_current_file;
+					strcpy_s( buffer, path.length() + 1, path.c_str() );
+					strcpy_s( file_dialog_error, "" );
+					reset_everything();
 				}
 				else if ( type == FileDialogType::OpenFile ) {
 					if ( file_dialog_current_file == "" ) {

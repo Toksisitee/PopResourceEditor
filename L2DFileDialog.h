@@ -22,6 +22,7 @@
 		- Added an input text box to allow copy-pasting file paths efficiently.
 		- Updated file navigation to support multiple volumes.
 		- Window ImGuiWindowFlags_AlwaysAutoResize.
+		- Pasted path is treated as a selected folder when clicking "Choose".
 */
 
 #pragma once
