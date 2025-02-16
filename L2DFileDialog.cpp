@@ -42,7 +42,7 @@ namespace FileDialog {
 		static FileDialogSortOrder size_sort_order = FileDialogSortOrder::None;
 		static FileDialogSortOrder date_sort_order = FileDialogSortOrder::None;
 		static FileDialogSortOrder type_sort_order = FileDialogSortOrder::None;
-
+		static double error_timeout = 0.0;
 		static bool initial_path_set = false;
 
 		if ( open ) {
@@ -415,7 +415,16 @@ namespace FileDialog {
 			}
 
 			if ( strlen( file_dialog_error ) > 0 ) {
-				ImGui::TextColored( ImColor( 1.0f, 0.0f, 0.2f, 1.0f ), file_dialog_error );
+				if ( error_timeout == 0.0 ) {
+					error_timeout = ImGui::GetTime();
+				}
+				if ( ImGui::GetTime() - error_timeout < 4.0 ) {
+					ImGui::TextColored( ImColor( 1.0f, 0.0f, 0.2f, 1.0f ), file_dialog_error );
+				}
+				else {
+					strcpy_s( file_dialog_error, "" );
+					error_timeout = 0.0;
+				}
 			}
 
 			ImGui::End();
