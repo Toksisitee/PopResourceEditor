@@ -235,7 +235,7 @@ namespace AssetPicker
 						drawList->AddRect( v2IconPos, ImVec2( v2IconPos.x + fIconSize, v2IconPos.y + fIconSize ), IM_COL32( 255, 255, 255, 255 ), 0.0f, 0, 2.0f );
 					}
 
-					if ( ImGui::IsItemClicked() ) {
+					if ( ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered() ) {
 						Assets::OpenWnd( entry.sFile, entry.eFileType );
 						sSelectedAsset = entry.sFile;
 						spdlog::info( "Selected file: {}", sSelectedAsset );
@@ -265,9 +265,9 @@ namespace AssetPicker
 
 			static std::string sSelectedAsset = "";
 
-			if ( ImGui::Button( "Toggle View" ) ) {
-				g_AssetPicker.eViewMode = (g_AssetPicker.eViewMode == ViewMode::List) ? ViewMode::Grid : ViewMode::List;
-			}  ImGui::NewLine();
+			//if ( ImGui::Button( "Toggle View" ) ) {
+			//	g_AssetPicker.eViewMode = (g_AssetPicker.eViewMode == ViewMode::List) ? ViewMode::Grid : ViewMode::List;
+			//}  ImGui::NewLine();
 
 			static const Assets::FileType sarrFileTypeOpt[] = {
 				{ Assets::FileType::Palette},
