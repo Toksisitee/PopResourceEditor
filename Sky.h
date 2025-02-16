@@ -18,8 +18,8 @@ namespace Assets
 		// ====== Virtual Overrides  ======
 		Result	LoadBin( const std::string& sFilePath );
 		Result	LoadImg( const std::string& sFilePath ) override { return Result::FAIL_LOAD; }
-		Result	ExportImg( const std::string& fFilepath );
-		Result	ExportBin( const std::string& fFilepath );
+		Result	ExportImg( const std::string& sFilePath );
+		Result	ExportBin( const std::string& sFilePath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
 		inline void* GetPtr() override { return static_cast<void*>(&m_Data); }
 		// ================================

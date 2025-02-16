@@ -29,7 +29,7 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
-	Result CSky::ExportImg( const std::string& fFilepath )
+	Result CSky::ExportImg( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Sky );
 
@@ -53,7 +53,8 @@ namespace Assets
 			}
 		}
 
-		if ( !BMP.WriteToFile( (fFilepath).c_str() ) ) {
+		auto sNewFilePath = Util::FileSystem::RemoveFileExtension( sFilePath ) + ".bmp";
+		if ( !BMP.WriteToFile( sNewFilePath.c_str() ) ) {
 			return Result::FAIL_EXPORT;
 		}
 

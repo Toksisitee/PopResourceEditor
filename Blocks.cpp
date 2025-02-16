@@ -54,7 +54,8 @@ namespace Assets
 			}
 		}
 
-		if ( !BMP.WriteToFile( (sFilePath).c_str() ) ) {
+		auto sNewFilePath = Util::FileSystem::RemoveFileExtension( sFilePath ) + ".bmp";
+		if ( !BMP.WriteToFile( sNewFilePath.c_str() ) ) {
 			return Result::FAIL_EXPORT;
 		}
 

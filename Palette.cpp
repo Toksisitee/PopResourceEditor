@@ -37,7 +37,7 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
-	Result CPalette::ExportImg( const char* pFilePath )
+	Result CPalette::ExportImg( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Palette );
 
@@ -64,11 +64,12 @@ namespace Assets
 			}
 		}
 
-		if ( !BMP.WriteToFile( pFilePath ) ) {
+		auto sNewFilePath = Util::FileSystem::RemoveFileExtension( sFilePath ) + ".bmp";
+		if ( !BMP.WriteToFile( sNewFilePath.c_str() ) ) {
 			return Result::FAIL_EXPORT;
 		}
 
-		g_ErrHandler.LogFmt( "Successfully exported as image: %s", pFilePath );
+		g_ErrHandler.LogFmt( "Successfully exported as image: %s", sFilePath.c_str() );
 		return Result::OK_EXPORT;
 	}
 
