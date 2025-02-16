@@ -188,22 +188,6 @@ namespace Assets
 			}
 		}
 
-		[[nodiscard]] inline CTexture2D* CSprite::GetTexture( uint32_t uSlot ) 
-		{ 
-			return (uSlot < m_pTextures.size()) ? m_pTextures.at( uSlot ) : nullptr; 
-		}
-
-		[[nodiscard]] bool CSprite::IsAlphaSprite( uint32_t uIndex ) const
-		{
-			return m_bIsHFX && ((uIndex >= 1090 && uIndex <= 1499) || (uIndex >= 1538 && uIndex <= 1592));
-
-		}
-
-		[[nodiscard]] inline bool CSprite::IsValid( SpriteInfo& sprInfo ) 
-		{ 
-			return sprInfo.Width > 0 && sprInfo.Height > 0; 
-		}
-
 		void CSprite::Reset()
 		{
 			m_nBufferLength = 0;

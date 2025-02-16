@@ -60,11 +60,11 @@ namespace Assets
 			void SetHFX( bool b ) { m_bIsHFX = b; }
 
 			void CreateTextures( LPDIRECT3DDEVICE9 pD3DDevice );
-			[[nodiscard]] CTexture2D* GetTexture( uint32_t uSlot );
+			[[nodiscard]] inline CTexture2D* GetTexture( uint32_t uSlot ) { return (uSlot < m_pTextures.size()) ? m_pTextures.at( uSlot ) : nullptr; }
 
 		private:
-			[[nodiscard]] bool IsAlphaSprite( uint32_t uIndex ) const;
-			[[nodiscard]] bool IsValid( SpriteInfo& sprInfo );
+			[[nodiscard]] inline bool IsAlphaSprite( uint32_t uIndex ) const { return m_bIsHFX && ((uIndex >= 1090 && uIndex <= 1499) || (uIndex >= 1538 && uIndex <= 1592)); }
+			[[nodiscard]] inline bool IsValid( SpriteInfo& sprInfo ) { return sprInfo.Width > 0 && sprInfo.Height > 0; }
 
 		private:
 			char* m_pBuffer = nullptr;
