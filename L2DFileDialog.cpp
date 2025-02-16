@@ -316,6 +316,7 @@ namespace FileDialog {
 			}
 			ImGui::SameLine();
 
+#if 0
 			static bool disable_delete_button = false;
 			disable_delete_button = (file_dialog_current_folder == "");
 			if ( disable_delete_button ) {
@@ -329,6 +330,7 @@ namespace FileDialog {
 				ImGui::PopStyleVar();
 				ImGui::PopItemFlag();
 			}
+#endif
 
 			ImVec2 center( ImGui::GetWindowPos().x + ImGui::GetWindowSize().x * 0.5f, ImGui::GetWindowPos().y + ImGui::GetWindowSize().y * 0.5f );
 			ImGui::SetNextWindowPos( center, ImGuiCond_Appearing, ImVec2( 0.5f, 0.5f ) );
