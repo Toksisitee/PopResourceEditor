@@ -2,24 +2,27 @@
 #include <string>
 #include <vector>
 
-#include "Assets.h"
+#include "AssetTypes.h"
 
-struct FileAsset
+namespace AssetPicker
 {
-	std::string sFile;
-	std::string sFileType;
-	Assets::FileType eFileType;
-};
+	struct FileAsset
+	{
+		std::string sFile;
+		std::string sFileType;
+		Assets::FileType eFileType;
+	};
 
-struct FilesContainer
-{
-	std::string sPath;						 // Full path to this directory
-	std::string sDirectory;					 // Name of this directory
-	std::vector<FileAsset> vsFiles;			// Files in this directory
-	std::vector<FilesContainer> vSubDirs;	// Subdirectories
-};
+	struct FilesContainer
+	{
+		std::string sPath;						// Full path to this directory
+		std::string sDirectory;					// Name of this directory
+		std::vector<FileAsset> vsFiles;			// Files in this directory
+		std::vector<FilesContainer> vSubDirs;	// Subdirectories
+	};
 
-extern std::vector<FilesContainer> g_vFilesContainer;
+	extern std::vector<FilesContainer> g_vFilesContainer;
 
-extern void GetAllFiles( std::string& sBasePath );
-extern void Render();
+	extern void GetAllFiles( std::string& sBasePath );
+	extern void Render();
+}

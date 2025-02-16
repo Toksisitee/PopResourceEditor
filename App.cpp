@@ -99,7 +99,7 @@ void RenderSetupScreen()
 		auto sDir = std::string( szPath );
 		g_Editor.SetPopDirectory( sDir );
 		g_IniFile.SetString( EIniSetting::PopulousDirectory, sDir );
-		GetAllFiles( sDir );
+		AssetPicker::GetAllFiles( sDir );
 	}
 
 	ImGui::End();
@@ -165,7 +165,7 @@ void CEditorApp::Run()
 	std::string sPopDir = g_IniFile.GetString( EIniSetting::PopulousDirectory, "" );
 	if ( !sPopDir.empty() ) {
 		SetPopDirectory( sPopDir );
-		GetAllFiles( sPopDir );
+		AssetPicker::GetAllFiles( sPopDir );
 	}
 
 	bool bDone = false;
@@ -246,7 +246,7 @@ void CEditorApp::Run()
 
 				{
 					g_WndMngr.Render();
-					Render();
+					AssetPicker::Render();
 				}
 
 				{
