@@ -30,13 +30,13 @@ namespace Assets
 		CErrHandler();
 		~CErrHandler();
 
-		void Log( const char* psMsg );
+		void Log( const char* pszMsg );
 		void Log( Log::Level eLevel, const char* pszMsg );
-		void LogFmt( const char* pFmt, ... );
-		void LogFmt( Log::Level eLevel, const char* pFmt, ... );
-		void SetFileType( FileType type );
+		void LogFmt( const char* pszFmt, ... );
+		void LogFmt( Log::Level eLevel, const char* pszFmt, ... );
+		void SetFileType( FileType eType );
 
-		Result HandleResult( Result code, std::optional<std::string> sErrorMsg = std::nullopt );
+		Result HandleResult( Result eResult, std::optional<std::string> sErrorMsg = std::nullopt );
 
 	private:
 		void EmitLogBuffer();
@@ -44,7 +44,7 @@ namespace Assets
 
 
 		void SetFileTypeSz( const char* pszFileType );
-		void SetError( Result code );
+		void SetError( Result eResult );
 		[[nodiscard]] FileType GetFileType();
 		const char* GetLastFileTypeSz();
 		const char* GetLastErrorSz();

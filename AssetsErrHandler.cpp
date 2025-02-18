@@ -22,40 +22,40 @@ namespace Assets
 		SAFE_FREE( m_szTypeBuffer );
 	}
 
-	void CErrHandler::LogFmt( const char* pFmt, ... )
+	void CErrHandler::LogFmt( const char* pszFmt, ... )
 	{
 		char* pszBuffer = (char*)malloc( m_kErrBufferSize );
 		assert( pszBuffer && "CErrHandler: Failed to allocate memory" );
 
 		if ( pszBuffer ) {
 			va_list argptr;
-			va_start( argptr, pFmt );
-			vsprintf_s( pszBuffer, m_kErrBufferSize, pFmt, argptr );
+			va_start( argptr, pszFmt );
+			vsprintf_s( pszBuffer, m_kErrBufferSize, pszFmt, argptr );
 			va_end( argptr );
 			Log( pszBuffer );
 			free( pszBuffer );
 		}
 	}
 
-	void CErrHandler::LogFmt( Log::Level eLevel, const char* pFmt, ... )
+	void CErrHandler::LogFmt( Log::Level eLevel, const char* pszFmt, ... )
 	{
 		char* pszBuffer = (char*)malloc( m_kErrBufferSize );
 		assert( pszBuffer && "CErrHandler: Failed to allocate memory" );
 
 		if ( pszBuffer ) {
 			va_list argptr;
-			va_start( argptr, pFmt );
-			vsprintf_s( pszBuffer, m_kErrBufferSize, pFmt, argptr );
+			va_start( argptr, pszFmt );
+			vsprintf_s( pszBuffer, m_kErrBufferSize, pszFmt, argptr );
 			va_end( argptr );
 			EmitLog( pszBuffer, eLevel );
 			free( pszBuffer );
 		}
 	}
 
-	void CErrHandler::Log( const char* psMsg )
+	void CErrHandler::Log( const char* pszMsg )
 	{
 		assert( m_FileType != FileType::None && "CErrHandler: File type not set" );
-		sprintf_s( m_szErrBuffer, m_kErrBufferSize, "[%s]: %s", GetLastFileTypeSz(), psMsg );
+		sprintf_s( m_szErrBuffer, m_kErrBufferSize, "[%s]: %s", GetLastFileTypeSz(), pszMsg );
 		EmitLogBuffer();
 	}
 
@@ -107,10 +107,10 @@ namespace Assets
 		}
 	}
 
-	Result CErrHandler::HandleResult( Assets::Result code, std::optional<std::string> sErrorMsg )
+	Result CErrHandler::HandleResult( Assets::Result eResult, std::optional<std::string> sErrorMsg )
 	{
 		assert( m_FileType != FileType::None && "CErrHandler: File type not set" );
-		SetError( code );
+		SetError( eResult );
 
 		char szErrCode[128];
 		switch ( m_Err ) {
@@ -148,7 +148,7 @@ namespace Assets
 		}
 
 		EmitLogBuffer();
-		return code;
+		return eResult;
 	}
 
 	const char* CErrHandler::GetLastFileTypeSz()
@@ -171,13 +171,13 @@ namespace Assets
 		sprintf_s( m_szTypeBuffer, m_kTypeBufferSize, pszFileType );
 	}
 
-	void CErrHandler::SetFileType( Assets::FileType type )
+	void CErrHandler::SetFileType( Assets::FileType eType )
 	{
-		m_FileType = type;
+		m_FileType = eType;
 	}
 
-	void CErrHandler::SetError( Assets::Result code )
+	void CErrHandler::SetError( Assets::Result eResult )
 	{
-		m_Err = code;
+		m_Err = eResult;
 	}
 }
