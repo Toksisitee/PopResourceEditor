@@ -1,3 +1,4 @@
+#pragma once
 /*
 	Copyright 2020 Limeoats
 
@@ -13,8 +14,8 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
-	Modified by Toksisitee on 16.02.2025
-	Changes made:
+	Modified by Toksisitee
+	Changes made on 16.02.2025:
 		- Removed static variables.
 		- Error messages now automatically clear.
 		- Added breadcrumbs navigation for improved file path visibility and easier navigation.
@@ -23,9 +24,14 @@
 		- Updated file navigation to support multiple volumes.
 		- Window ImGuiWindowFlags_AlwaysAutoResize.
 		- Pasted path is treated as a selected folder when clicking "Choose".
+
+	Changes made on 18.02.2025:
+		- ShowFileDialog now takes in a callback.
 */
 
-#pragma once
+#include <functional>
+#include <string>
+
 namespace FileDialog {
 	enum class FileDialogType {
 		OpenFile,
@@ -41,6 +47,7 @@ namespace FileDialog {
 	extern bool file_dialog_open;
 	extern FileDialogType file_dialog_open_type;
 
-	extern void ShowFileDialog( bool* open, char* buffer, [[maybe_unused]] unsigned int buffer_size, FileDialogType type = FileDialogType::OpenFile );
+	using FileDialogCallback = std::function<void( const std::string& )>;
+	extern void ShowFileDialog( bool* open, char* buffer, [[maybe_unused]] unsigned int buffer_size, FileDialogType type = FileDialogType::OpenFile, FileDialogCallback callback = nullptr );
 	extern void ShowFileDialog_s( bool* open, char* buffer, FileDialogType type = FileDialogType::OpenFile );
 }

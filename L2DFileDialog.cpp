@@ -30,7 +30,7 @@ namespace FileDialog {
 	}
 #endif
 
-	void ShowFileDialog( bool* open, char* buffer, [[maybe_unused]] unsigned int buffer_size, FileDialogType type )
+	void ShowFileDialog( bool* open, char* buffer, [[maybe_unused]] unsigned int buffer_size, FileDialogType type, FileDialogCallback callback )
 	{
 		static int file_dialog_file_select_index = 0;
 		static int file_dialog_folder_select_index = 0;
@@ -396,6 +396,7 @@ namespace FileDialog {
 					strcpy_s( buffer, path.length() + 1, path.c_str() );
 					strcpy_s( file_dialog_error, "" );
 					reset_everything();
+					callback( path );
 				}
 				else if ( type == FileDialogType::OpenFile ) {
 					if ( file_dialog_current_file == "" ) {
@@ -406,6 +407,7 @@ namespace FileDialog {
 						strcpy_s( buffer, path.length() + 1, path.c_str() );
 						strcpy_s( file_dialog_error, "" );
 						reset_everything();
+						callback( path );
 					}
 				}
 			}
