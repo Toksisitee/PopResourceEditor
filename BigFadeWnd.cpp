@@ -3,33 +3,33 @@
 #include "Utils.h"
 #include "AssetsErrHandler.h"
 #include "ImEditor.h"
+#include "FileDialog.h"
 #include "BigFadeWnd.h"
+
+void CBigFadeWnd::OnLoadImage( const std::string& sFilePath )
+{
+	g_ErrHandler.HandleResult( m_BigFade.LoadImg( sFilePath ) );
+	m_BigFade.DestroyTexture();
+}
 
 void CBigFadeWnd::Render()
 {
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
-	auto pPalette = m_BigFade.GetPalette();
-
-	if ( !m_bFirstPass ) {
-		//auto sFilePath = Util::FileSystem::FormatPath( "pal0-u.dat" );
-		//g_ErrHandler.HandleResult( pPalette->Load( sFilePath ) );
-		//sFilePath = Util::FileSystem::FormatPath( "bigf0-u.dat" );
-		//g_ErrHandler.HandleResult( m_BigFade.Load( sFilePath ) );
-		m_bFirstPass = true;
-	}
 
 	if ( ImGui::Button( "Load Image" ) ) {
-		g_ErrHandler.HandleResult( m_BigFade.LoadImg( "C:\\Users\\melyg\\Pictures\\bigfade.bmp" ) );
-		m_BigFade.DestroyTexture();
+		CFileDialogManager::GetInstance().ShowFileDialog( FileDialog::FileDialogType::OpenFile,
+				  [this]( const std::string& sFilePath ) { 
+			m_PendingTask = [this, sFilePath]() { OnLoadImage( sFilePath ); };
+		});
+	} ImGui::SameLine();
+	if ( ImGui::Button( "Export Image" ) ) {
+		g_ErrHandler.HandleResult( m_BigFade.ExportImg( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
+	} ImGui::SameLine();
+	if ( ImGui::Button( "Export Bin" ) ) {
+		g_ErrHandler.HandleResult( m_BigFade.ExportBin( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
 	}
 
-	if ( ImGui::Button( "Export" ) ) {
-		g_ErrHandler.HandleResult( m_BigFade.ExportImg( "C:\\Users\\melyg\\Pictures\\bigfade.bmp" ) );
-	}
-
-	if ( ImGui::Button( "Generate" ) ) {
-		g_ErrHandler.HandleResult( m_BigFade.ExportBin( "C:\\Users\\melyg\\Pictures\\bigfade.dat" ) );
-	}
+	ProcessTask();
 
 	if ( m_BigFade.GetTexture() == nullptr ) {
 		m_BigFade.CreateTexture( m_pd3dDevice );

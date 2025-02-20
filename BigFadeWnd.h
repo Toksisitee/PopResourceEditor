@@ -20,6 +20,8 @@ public:
 
 	void Cleanup() override
 	{}
+private:
+	void OnLoadImage( const std::string& sFilePath );
 
 private:
 	Assets::CBigFade m_BigFade;
