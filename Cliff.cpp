@@ -30,6 +30,31 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
+	Result CCliff::LoadImg( const std::string& sFilePath )
+	{
+		g_ErrHandler.SetFileType( FileType::Cliff );
+		BMP BMP;
+
+		if ( BMP.ReadFromFile( sFilePath.c_str() ) ) {
+			auto nWidth = BMP.TellWidth();
+			auto nHeight = BMP.TellHeight();
+			if ( nWidth != k_uWidth || nHeight != k_uHeight ) {
+				g_ErrHandler.LogFmt( Log::Level::CRT, "LoadImg: Image dimensions mismatch. Got: %ix%i, Expected: %ux%u", nWidth, nHeight, k_uWidth, k_uHeight );
+				return Result::FAIL_LOAD;
+			}
+
+			for ( auto y = 0; y < nHeight; y++ ) {
+				for ( auto x = 0; x < nWidth; x++ ) {
+					auto clr = BMP.GetPixel( x, y );
+					m_Data[y * k_uWidth + x] = m_Palette.FindColor( { clr.Red, clr.Green, clr.Blue } );
+				}
+			}
+
+			return Result::OK_LOAD;
+		}
+
+		return Result::FAIL_LOAD;
+	}
 
 	Result CCliff::ExportImg( const std::string& sFilePath )
 	{
@@ -102,8 +127,13 @@ namespace Assets
 	}
 
 	// TODO: This does not match Bullfrog's implementation.
-	void CCliff::ComputeTable( uint8_t uMode )
+	Result CCliff::ComputeTable( Cliff::Generation eMode )
 	{
+		if ( eMode >= Cliff::Generation::MAX ) {
+			assert( false && "CCliff::ComputeTable eMode invalid!" );
+			return Result::FAIL_GENERATE;
+		}
+
 		Color blendedColor;
 		uint8_t* pData = &m_Data[0];
 		const Color ditherColor = *m_Palette.GetColor( 244 );
@@ -132,15 +162,15 @@ namespace Assets
 				Color originalColor = *pPalette;
 
 				// TODO: temp uMode switch
-				if ( uMode == 0 ) {
+				if ( eMode == Cliff::Generation::NO_LUMINANCE ) {
 					blendedColor = BlendColors( originalColor, ditherColor, fFade );
 				}
-				else if ( uMode == 1 ) {
+				else if ( eMode == Cliff::Generation::LUMINANCE_1 ) {
 					blendedColor = BlendColors( originalColor, ditherColor, fFade );
 					blendedColor = IncreaseLuminance( blendedColor, fFinalLuminance );
 					blendedColor = BlendColors( blendedColor, ditherColor, fFade );
 				}
-				else {
+				else if ( eMode == Cliff::Generation::LUMINANCE_2 ) {
 					blendedColor = IncreaseLuminance( originalColor, fFinalLuminance );
 					float fDitherStrength = 0.7f;
 					blendedColor = BlendColors( blendedColor, ditherColor, fFade * fDitherStrength );
@@ -150,15 +180,20 @@ namespace Assets
 				*pData = m_Palette.FindColor( blendedColor );
 			}
 		}
+
+		return Result::OK_GENERATE;
 	}
 
-	Result CCliff::Generate( uint8_t uMode )
+	Result CCliff::Generate( Cliff::Generation eMode )
 	{
+		Result result;
 		g_ErrHandler.SetFileType( FileType::Cliff );
 		g_ErrHandler.Log( Log::Level::WRN, "Cliff generation does not exactly replicate Bullfrog's original algorithm." );
-		ComputeTable( uMode );
-		DestroyTexture();
-		return Result::OK_GENERATE;
+		result = ComputeTable( eMode );
+		if ( result == Result::OK_GENERATE ) {
+			DestroyTexture();
+		}
+		return result;
 	}
 
 	bool CCliff::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
