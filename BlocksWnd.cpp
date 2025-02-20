@@ -1,26 +1,32 @@
 #include "imgui.h"
 
 #include "Utils.h"
+#include "AssetsErrHandler.h"
 #include "ImEditor.h"
+#include "FileDialog.h"
 #include "BlocksWnd.h"
 
 void CBlocksWnd::Render()
 {
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
-	auto pPalette = m_Blocks.GetPalette();
 
-	if ( !m_bFirstPass ) {
-		//auto sFilePath = Util::FileSystem::FormatPath( "pal0-u.dat" );
-		//g_ErrHandler.HandleResult( pPalette->Load( sFilePath ) );
-		//sFilePath = Util::FileSystem::FormatPath( "BL320-U.dat" );
-		//g_ErrHandler.HandleResult( m_Blocks.Load( sFilePath ) );
-		m_bFirstPass = true;
+	if ( ImGui::Button( "Load Image" ) ) {
+		CFileDialogManager::GetInstance().ShowFileDialog( FileDialog::FileDialogType::OpenFile,
+				  [this]( const std::string& sFilePath ) {
+			m_PendingTask = [this, sFilePath]() { 
+				g_ErrHandler.HandleResult( m_Blocks.LoadImg( sFilePath ) );
+				m_Blocks.DestroyTexture();
+			};
+		} );
+	} ImGui::SameLine();
+	if ( ImGui::Button( "Export Image" ) ) {
+		g_ErrHandler.HandleResult( m_Blocks.ExportImg( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
+	} ImGui::SameLine();
+	if ( ImGui::Button( "Export Bin" ) ) {
+		g_ErrHandler.HandleResult( m_Blocks.ExportBin( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
 	}
 
-	if ( ImGui::Button( "Generate" ) ) {
-		std::string f;
-		m_Blocks.ExportBin( f );
-	}
+	ProcessTask();
 
 	if ( m_Blocks.GetTexture() == nullptr ) {
 		for ( size_t i = 0; i < Assets::Blocks::k_uNumBlocks; i++ ) {
