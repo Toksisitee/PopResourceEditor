@@ -21,7 +21,7 @@
 
 #include "AssetsErrHandler.h"
 #include "AssetPicker.h"
-#include "L2DFileDialog.h"
+#include "FileDialog.h"
 
 #include "Palette.h"
 #include "Sprite.h"
@@ -86,20 +86,14 @@ void RenderSetupScreen()
 	ImGui::InputText( "##path", szPath, sizeof( szPath ), ImGuiInputTextFlags_ReadOnly );
 	ImGui::SameLine();
 	if ( ImGui::Button( "Browse##path" ) ) {
-		pszBuffer = szPath;
-		FileDialog::file_dialog_open = true;
-		FileDialog::file_dialog_open_type = FileDialog::FileDialogType::SelectFolder;
-	}
-
-	if ( FileDialog::file_dialog_open ) {
-		FileDialog::ShowFileDialog( &FileDialog::file_dialog_open, pszBuffer, sizeof( pszBuffer ), FileDialog::file_dialog_open_type );
-	}
-
-	if ( !FileDialog::file_dialog_open && szPath[0] != '\0' ) {
-		auto sDir = std::string( szPath );
-		g_Editor.SetPopDirectory( sDir );
-		g_IniFile.SetString( EIniSetting::PopulousDirectory, sDir );
-		AssetPicker::GetAllFiles( sDir );
+		CFileDialogManager::GetInstance().ShowFileDialog( FileDialog::FileDialogType::SelectFolder,
+	   []( const std::string& sFilePath ) {
+			std::string sFilePathCopy = sFilePath;
+			g_Editor.SetPopDirectory( sFilePathCopy );
+			g_IniFile.SetString( EIniSetting::PopulousDirectory, sFilePathCopy );
+			AssetPicker::GetAllFiles( sFilePathCopy );
+			sprintf_s( szPath, sizeof( szPath ), "%s", sFilePathCopy.c_str() );
+		} );
 	}
 
 	ImGui::End();
@@ -275,6 +269,7 @@ void CEditorApp::Run()
 
 		if ( !IsPopDirectorySet() ) {
 			RenderSetupScreen();
+			CFileDialogManager::GetInstance().Update();
 		}
 		else {
 			if ( bShowDemo ) {
@@ -318,6 +313,7 @@ void CEditorApp::Run()
 					DockspaceDraw();
 					g_WndMngr.Render();
 					AssetPicker::Render();
+					CFileDialogManager::GetInstance().Update();
 				}
 
 #if 0
