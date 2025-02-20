@@ -168,6 +168,9 @@
     <ClCompile Include="L2DFileDialog.cpp">
       <Filter>Source Files\imgui\L2DFileDialog</Filter>
     </ClCompile>
+    <ClCompile Include="FileDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3DApp.h">
@@ -315,6 +318,9 @@
       <Filter>Source Files\Windows</Filter>
     </ClInclude>
     <ClInclude Include="IniFile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileDialog.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
