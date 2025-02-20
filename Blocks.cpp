@@ -30,6 +30,32 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
+	Result CBlocks::LoadImg( const std::string& sFilePath )
+	{
+		g_ErrHandler.SetFileType( FileType::Blocks );
+		BMP BMP;
+
+		if ( BMP.ReadFromFile( sFilePath.c_str() ) ) {
+			auto nWidth = BMP.TellWidth();
+			auto nHeight = BMP.TellHeight();
+			if ( nWidth != k_uWidth || nHeight != k_uHeight ) {
+				g_ErrHandler.LogFmt( Log::Level::CRT, "LoadImg: Image dimensions mismatch. Got: %ix%i, Expected: %ux%u", nWidth, nHeight, k_uWidth, k_uHeight );
+				return Result::FAIL_LOAD;
+			}
+
+			for ( auto y = 0; y < nHeight; y++ ) {
+				for ( auto x = 0; x < nWidth; x++ ) {
+					auto clr = BMP.GetPixel( x, y );
+					m_Data[y * k_uWidth + x] = m_Palette.FindColor( { clr.Red, clr.Green, clr.Blue } );
+				}
+			}
+
+			return Result::OK_LOAD;
+		}
+
+		return Result::FAIL_LOAD;
+	}
+
 	Result CBlocks::ExportImg( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Blocks );
@@ -66,16 +92,12 @@ namespace Assets
 	{
 		g_ErrHandler.SetFileType( FileType::Blocks );
 
-		DestroyTextures();
-
-#if 0
-		std::ofstream ofs( fFilepath, std::ios::binary | std::ios::trunc );
+		std::ofstream ofs( sFilePath, std::ios::binary | std::ios::trunc );
 		if ( ofs.is_open() ) {
-			ofs.write( reinterpret_cast<const char*>(&m_Data), (k_uWidth * k_uHeight) );
+			ofs.write( reinterpret_cast<const char*>(m_Data), sizeof( m_Data ) );
 			ofs.close();
-			return Result::OK_GENERATE;
+			return Result::OK_EXPORT;
 		}
-#endif
 
 		return Result::FAIL_EXPORT;
 	}
