@@ -23,7 +23,7 @@ public:
 	{}
 
 public:
-	bool m_bDrawAtlas;
+	bool m_bDrawAtlas = false;
 private:
 	Assets::CBlocks m_Blocks;
 };
