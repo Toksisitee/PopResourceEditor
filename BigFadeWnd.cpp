@@ -24,8 +24,6 @@ void CBigFadeWnd::Render()
 		g_ErrHandler.HandleResult( m_BigFade.ExportBin( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
 	}
 
-	ProcessTask();
-
 	if ( m_BigFade.GetTexture() == nullptr ) {
 		m_BigFade.CreateTexture( m_pd3dDevice );
 	}

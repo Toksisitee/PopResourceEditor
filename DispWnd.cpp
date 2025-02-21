@@ -24,8 +24,6 @@ void CDispWnd::Render()
 		g_ErrHandler.HandleResult( m_Disp.ExportBin( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
 	}
 
-	ProcessTask();
-
 	if ( m_Disp.GetTexture() == nullptr ) {
 		m_Disp.CreateTexture( m_pd3dDevice );
 	}

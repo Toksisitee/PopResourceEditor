@@ -16,13 +16,6 @@ public:
 	virtual void Render() = 0;
 	virtual void Initialize( LPDIRECT3DDEVICE9 pd3dDevice ) = 0;
 	virtual void Cleanup() = 0;
-	void ProcessTask()
-	{
-		if ( m_PendingTask ) {
-			m_PendingTask();
-			m_PendingTask = nullptr;
-		}
-	}
 
 	void SetWindowName( std::string sWindowName ) { m_sWindowName = sWindowName; }
 	[[nodiscard]] virtual const std::string& GetWindowName() const { return m_sWindowName; }

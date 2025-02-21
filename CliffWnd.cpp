@@ -24,8 +24,6 @@ void CCliffWnd::Render()
 		g_ErrHandler.HandleResult( m_Cliff.ExportBin( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
 	}
 
-	ProcessTask();
-
 	if ( ImGui::Button( "Generate (NO_LUMINANCE)" ) ) {
 		m_Cliff.Generate( Assets::Cliff::Generation::NO_LUMINANCE );
 	} ImGui::SameLine();

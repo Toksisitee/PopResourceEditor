@@ -26,8 +26,6 @@ void CBlocksWnd::Render()
 		g_ErrHandler.HandleResult( m_Blocks.ExportBin( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
 	}
 
-	ProcessTask();
-
 	if ( m_Blocks.GetTexture() == nullptr ) {
 		for ( size_t i = 0; i < Assets::Blocks::k_uNumBlocks; i++ ) {
 			m_Blocks.CreateSubTexture( m_pd3dDevice, i );

@@ -40,8 +40,6 @@ void CFadeWnd::Render()
 		g_ErrHandler.HandleResult( m_Fade.ExportBin( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
 	}
 
-	ProcessTask();
-
 	if ( m_Fade.GetTexture() == nullptr ) {
 		m_Fade.CreateTexture( m_pd3dDevice );
 	}
