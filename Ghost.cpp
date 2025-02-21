@@ -28,6 +28,32 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
+	Result CGhost::LoadImg( const std::string& sFilePath )
+	{
+		g_ErrHandler.SetFileType( FileType::Ghost );
+		BMP BMP;
+
+		if ( BMP.ReadFromFile( sFilePath.c_str() ) ) {
+			auto nWidth = BMP.TellWidth();
+			auto nHeight = BMP.TellHeight();
+			if ( nWidth != k_uWidth || nHeight != k_uHeight ) {
+				g_ErrHandler.LogFmt( Log::Level::CRT, "LoadImg: Image dimensions mismatch. Got: %ix%i, Expected: %ux%u", nWidth, nHeight, k_uWidth, k_uHeight );
+				return Result::FAIL_LOAD;
+			}
+
+			for ( auto y = 0; y < nHeight; y++ ) {
+				for ( auto x = 0; x < nWidth; x++ ) {
+					auto clr = BMP.GetPixel( x, y );
+					m_Data[y * k_uWidth + x] = m_Palette.FindColor( { clr.Red, clr.Green, clr.Blue } );
+				}
+			}
+
+			return Result::OK_LOAD;
+		}
+
+		return Result::FAIL_LOAD;
+	}
+
 	Result CGhost::ExportImg( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Ghost );
@@ -96,7 +122,7 @@ namespace Assets
 		}
 	}
 
-	Result CGhost::Generate( const std::string& sFilePath )
+	Result CGhost::Generate()
 	{
 		g_ErrHandler.SetFileType( FileType::Ghost );
 		ComputeTable( m_uOpacity );
