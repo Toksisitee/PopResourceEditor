@@ -30,6 +30,31 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
+	Result CFade::LoadImg( const std::string& sFilePath )
+	{
+		g_ErrHandler.SetFileType( FileType::Fade );
+		BMP BMP;
+
+		if ( BMP.ReadFromFile( sFilePath.c_str() ) ) {
+			auto nWidth = BMP.TellWidth();
+			auto nHeight = BMP.TellHeight();
+			if ( nWidth != k_uWidth || nHeight != k_uHeight ) {
+				g_ErrHandler.LogFmt( Log::Level::CRT, "LoadImg: Image dimensions mismatch. Got: %ix%i, Expected: %ux%u", nWidth, nHeight, k_uWidth, k_uHeight );
+				return Result::FAIL_LOAD;
+			}
+
+			for ( auto y = 0; y < nHeight; y++ ) {
+				for ( auto x = 0; x < nWidth; x++ ) {
+					auto clr = BMP.GetPixel( x, y );
+					m_Data[y * k_uWidth + x] = m_Palette.FindColor( { clr.Red, clr.Green, clr.Blue } );
+				}
+			}
+
+			return Result::OK_LOAD;
+		}
+
+		return Result::FAIL_LOAD;
+	}
 
 	Result CFade::ExportImg( const std::string& sFilePath )
 	{
@@ -109,7 +134,7 @@ namespace Assets
 		}
 	}
 
-	Result CFade::Generate( const std::string& sFilePath )
+	Result CFade::Generate()
 	{
 		g_ErrHandler.SetFileType( FileType::Fade );
 		g_ErrHandler.Log( Log::Level::WRN, "Fade generation does not exactly replicate Bullfrog's original algorithm." );
