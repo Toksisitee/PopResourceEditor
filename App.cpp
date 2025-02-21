@@ -21,7 +21,7 @@
 
 #include "AssetsErrHandler.h"
 #include "AssetPicker.h"
-#include "FileDialog.h"
+#include "FileDialogNative.h"
 
 #include "Palette.h"
 #include "Sprite.h"
@@ -86,14 +86,13 @@ void RenderSetupScreen()
 	ImGui::InputText( "##path", szPath, sizeof( szPath ), ImGuiInputTextFlags_ReadOnly );
 	ImGui::SameLine();
 	if ( ImGui::Button( "Browse##path" ) ) {
-		CFileDialogManager::GetInstance().ShowFileDialog( FileDialog::FileDialogType::SelectFolder,
-	   []( const std::string& sFilePath ) {
-			std::string sFilePathCopy = sFilePath;
+		if ( auto osFolderPath = FileDialog::OpenFolder() ) {
+			std::string sFilePathCopy = *osFolderPath;
 			g_Editor.SetPopDirectory( sFilePathCopy );
 			g_IniFile.SetString( EIniSetting::PopulousDirectory, sFilePathCopy );
 			AssetPicker::GetAllFiles( sFilePathCopy );
 			sprintf_s( szPath, sizeof( szPath ), "%s", sFilePathCopy.c_str() );
-		} );
+		}
 	}
 
 	ImGui::End();
@@ -269,7 +268,6 @@ void CEditorApp::Run()
 
 		if ( !IsPopDirectorySet() ) {
 			RenderSetupScreen();
-			CFileDialogManager::GetInstance().Update();
 		}
 		else {
 			if ( bShowDemo ) {
@@ -313,7 +311,6 @@ void CEditorApp::Run()
 					DockspaceDraw();
 					g_WndMngr.Render();
 					AssetPicker::Render();
-					CFileDialogManager::GetInstance().Update();
 				}
 
 #if 0
