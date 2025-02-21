@@ -15,7 +15,7 @@ namespace Assets
 	public:
 		// ====== Virtual Overrides  ======
 		Result	LoadBin( const std::string& sFilePath ) override;
-		Result	LoadImg( const std::string& sFilePath ) override { return Result::FAIL_LOAD; }
+		Result	LoadImg( const std::string& sFilePath ) override;
 		Result	ExportImg( const std::string& sFilePath ) override;
 		Result  ExportBin( const std::string& sFilePath ) override;
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice ) override;

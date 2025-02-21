@@ -1,6 +1,7 @@
 #include <fstream>
 #include <assert.h>
 #include <D3dx9tex.h>
+#include <algorithm>
 
 #include "EasyBMP/EasyBMP.h"
 
@@ -30,6 +31,33 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
+	Result CDisp::LoadImg( const std::string& sFilePath )
+	{
+		g_ErrHandler.SetFileType( FileType::Disp );
+		BMP BMP;
+
+		if ( BMP.ReadFromFile( sFilePath.c_str() ) ) {
+			auto nWidth = BMP.TellWidth();
+			auto nHeight = BMP.TellHeight();
+			if ( nWidth != k_uWidth || nHeight != k_uHeight ) {
+				g_ErrHandler.LogFmt( Log::Level::CRT, "LoadImg: Image dimensions mismatch. Got: %ix%i, Expected: %ux%u", nWidth, nHeight, k_uWidth, k_uHeight );
+				return Result::FAIL_LOAD;
+			}
+
+			for ( auto y = 0; y < nHeight; y++ ) {
+				for ( auto x = 0; x < nWidth; x++ ) {
+					auto clr = BMP.GetPixel( x, y );
+					uint8_t uGray = static_cast<uint8_t>(0.299 * clr.Red + 0.587 * clr.Green + 0.114 * clr.Blue);
+					uGray -= k_uGrayscaleOffset;
+					m_Data[y * k_uWidth + x] = uGray;
+				}
+			}
+
+			return Result::OK_LOAD;
+		}
+
+		return Result::FAIL_LOAD;
+	}
 
 	Result CDisp::ExportImg( const std::string& sFilePath )
 	{
