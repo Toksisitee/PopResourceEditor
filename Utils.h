@@ -27,4 +27,5 @@ namespace Util
 	}
 
 	extern std::string StringToLowerCopy( const std::string& str );
+	extern std::string wcstombs( void* pwszStr, size_t uBufferSize );
 }

@@ -212,4 +212,17 @@ namespace Util
 		std::transform( sLower.begin(), sLower.end(), sLower.begin(), []( unsigned char c ) { return std::tolower( c ); } );
 		return sLower;
 	}
+
+	std::string wcstombs( void* pwszStr, size_t uBufferSize )
+	{
+		size_t i;
+		char* pszBuffer = (char*)malloc( uBufferSize );
+		wcstombs_s( &i, pszBuffer, uBufferSize, static_cast<PWSTR>(pwszStr), uBufferSize - 1 );
+		if ( pszBuffer ) {
+			auto sStr = std::string( pszBuffer );
+			free( pszBuffer );
+			return sStr;
+		}
+		return "";
+	}
 }
