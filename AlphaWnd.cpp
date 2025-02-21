@@ -1,14 +1,21 @@
 #include "imgui.h"
 
-#include "Utils.h"
+#include "FileDialogNative.h"
 #include "AssetsErrHandler.h"
 #include "ImEditor.h"
+#include "Utils.h"
+
 #include "AlphaWnd.h"
 
 void CAlphaWnd::Render()
 {
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
 
+	if ( ImGui::Button( "Load Palette" ) ) {
+		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::DAT ) ) {
+			g_ErrHandler.HandleResult( m_Alpha.GetPalette()->LoadBin( *osFilePath ) );
+		}
+	} ImGui::SameLine();
 	if ( ImGui::Button( "Generate" ) ) {
 		g_ErrHandler.HandleResult( m_Alpha.Generate() );
 	} ImGui::SameLine();
