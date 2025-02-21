@@ -1,7 +1,7 @@
 #include "imgui.h"
 
+#include "FileDialogNative.h"
 #include "AssetsErrHandler.h"
-#include "FileDialog.h"
 #include "ImEditor.h"
 #include "Utils.h"
 
@@ -12,13 +12,10 @@ void CCliffWnd::Render()
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
 
 	if ( ImGui::Button( "Load Image" ) ) {
-		CFileDialogManager::GetInstance().ShowFileDialog( FileDialog::FileDialogType::OpenFile,
-				  [this]( const std::string& sFilePath ) {
-			m_PendingTask = [this, sFilePath]() {
-				g_ErrHandler.HandleResult( m_Cliff.LoadImg( sFilePath ) );
-				m_Cliff.DestroyTexture();
-			};
-		} );
+		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::BMP ) ) {
+			g_ErrHandler.HandleResult( m_Cliff.LoadImg( *osFilePath ) );
+			m_Cliff.DestroyTexture();
+		}
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Export Image" ) ) {
 		g_ErrHandler.HandleResult( m_Cliff.ExportImg( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
@@ -37,7 +34,7 @@ void CCliffWnd::Render()
 	}
 	if ( ImGui::Button( "Generate (LUMINANCE_2)" ) ) {
 		m_Cliff.Generate( Assets::Cliff::Generation::LUMINANCE_2 );
-	} 
+	}
 	if ( ImEditor::InputScalar( "m_fLuminance", &m_Cliff.m_fLuminance ) ) {
 		m_Cliff.Generate( Assets::Cliff::Generation::NO_LUMINANCE );
 	}

@@ -1,7 +1,7 @@
 #include "imgui.h"
 
+#include "FileDialogNative.h"
 #include "AssetsErrHandler.h"
-#include "FileDialog.h"
 #include "ImEditor.h"
 #include "Utils.h"
 
@@ -12,31 +12,22 @@ void CFadeWnd::Render()
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
 
 	if ( ImGui::Button( "Load Palette" ) ) {
-		CFileDialogManager::GetInstance().ShowFileDialog( FileDialog::FileDialogType::OpenFile,
-				  [this]( const std::string& sFilePath ) {
-			m_PendingTask = [this, sFilePath]() {
-				g_ErrHandler.HandleResult( m_Fade.GetPalette()->LoadBin( sFilePath ) );
-				m_Fade.DestroyTexture();
-			};
-		} );
+		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::DAT ) ) {
+			g_ErrHandler.HandleResult( m_Fade.GetPalette()->LoadBin( *osFilePath ) );
+			m_Fade.DestroyTexture();
+		}
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Load Bin" ) ) {
-		CFileDialogManager::GetInstance().ShowFileDialog( FileDialog::FileDialogType::OpenFile,
-				  [this]( const std::string& sFilePath ) {
-			m_PendingTask = [this, sFilePath]() {
-				g_ErrHandler.HandleResult( m_Fade.LoadBin( sFilePath ) );
-				m_Fade.DestroyTexture();
-			};
-		} );
+		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::DAT ) ) {
+			g_ErrHandler.HandleResult( m_Fade.LoadBin( *osFilePath ) );
+			m_Fade.DestroyTexture();
+		}
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Load Image" ) ) {
-		CFileDialogManager::GetInstance().ShowFileDialog( FileDialog::FileDialogType::OpenFile,
-				  [this]( const std::string& sFilePath ) {
-			m_PendingTask = [this, sFilePath]() {
-				g_ErrHandler.HandleResult( m_Fade.LoadImg( sFilePath ) );
-				m_Fade.DestroyTexture();
-			};
-		} );
+		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::BMP ) ) {
+			g_ErrHandler.HandleResult( m_Fade.LoadImg( *osFilePath ) );
+			m_Fade.DestroyTexture();
+		}
 	}
 
 	if ( ImGui::Button( "Generate" ) ) {
