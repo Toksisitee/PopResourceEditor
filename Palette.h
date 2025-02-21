@@ -25,6 +25,7 @@ namespace Assets
 	{
 	public:
 		Result	LoadBin( const std::string& sFilePath );
+		Result	ExportBin( const std::string& sFilePath );
 		Result	ExportImg( const std::string& sFilePath );
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice );
 		[[nodiscard]] uint8_t* GetPtr();

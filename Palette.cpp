@@ -37,6 +37,20 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
+	Result CPalette::ExportBin( const std::string& sFilePath )
+	{
+		g_ErrHandler.SetFileType( FileType::Palette );
+
+		std::ofstream ofs( sFilePath, std::ios::binary | std::ios::trunc );
+		if ( ofs.is_open() ) {
+			ofs.write( reinterpret_cast<const char*>(m_Data), sizeof( m_Data ) );
+			ofs.close();
+			return Result::OK_EXPORT;
+		}
+
+		return Result::FAIL_EXPORT;
+	}
+
 	Result CPalette::ExportImg( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Palette );
