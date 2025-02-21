@@ -171,6 +171,9 @@
     <ClCompile Include="FileDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FileDialogNative.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3DApp.h">
@@ -321,6 +324,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="FileDialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileDialogNative.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

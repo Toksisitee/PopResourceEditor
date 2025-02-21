@@ -156,6 +156,7 @@
     <ClCompile Include="Blocks.cpp" />
     <ClCompile Include="BlocksWnd.cpp" />
     <ClCompile Include="FileDialog.cpp" />
+    <ClCompile Include="FileDialogNative.cpp" />
     <ClCompile Include="IniFile.cpp" />
     <ClCompile Include="Cliff.cpp" />
     <ClCompile Include="CliffWnd.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Blocks.h" />
     <ClInclude Include="BlocksWnd.h" />
     <ClInclude Include="FileDialog.h" />
+    <ClInclude Include="FileDialogNative.h" />
     <ClInclude Include="IniFile.h" />
     <ClInclude Include="Cliff.h" />
     <ClInclude Include="CliffWnd.h" />
