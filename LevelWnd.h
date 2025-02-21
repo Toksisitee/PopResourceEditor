@@ -34,7 +34,6 @@ public:
 	}
 
 private:
-	Assets::CPalette m_Palette;
 	Assets::CLevel m_Level;
 	bool           m_bHighRes;
 	bool           m_bPointFiltering;

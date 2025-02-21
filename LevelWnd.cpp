@@ -1,41 +1,30 @@
 #include "imgui.h"
 
-#include "Texture.h"
+#include "FileDialogNative.h"
 #include "AssetsErrHandler.h"
-#include "Utils.h"
 #include "ImEditor.h"
+#include "Texture.h"
+#include "Utils.h"
+
 #include "LevelWnd.h"
 
 void CLevelWnd::Render()
 {
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
-	auto pPalette = m_Level.GetPalette();
 	if ( !m_bFirstPass ) {
-#if 0
-		auto sFilePath = Util::FileSystem::FormatPath( "pal0-t.dat" );
-		g_ErrHandler.HandleResult( pPalette->Load( sFilePath ) );
-		sFilePath = Util::FileSystem::FormatPath( "bigf0-t.dat" );
-		g_ErrHandler.HandleResult( m_Level.GetBigFade()->Load( sFilePath ) );
-		sFilePath = Util::FileSystem::FormatPath( "levl2021" );
-		g_ErrHandler.HandleResult( m_Level.Load( sFilePath ) );
-#endif
-#if 0
-		auto sFilePath = Util::FileSystem::FormatPath( "pal0-c.dat" );
-		g_ErrHandler.HandleResult( pPalette->Load( sFilePath ) );
-		sFilePath = Util::FileSystem::FormatPath( "bigf0-c.dat" );
-		g_ErrHandler.HandleResult( m_Level.GetBigFade()->Load( sFilePath ) );
-		sFilePath = Util::FileSystem::FormatPath( "levl2017" );
-		g_ErrHandler.HandleResult( m_Level.Load( sFilePath ) );
-#endif
-#if 0
-		auto sFilePath = Util::FileSystem::FormatPath( m_sLevel.c_str() );
-		g_ErrHandler.HandleResult( m_Level.Load( sFilePath ) );
-		//sFilePath = Util::FileSystem::FormatPath( "watdisp.dat" );
-		//g_ErrHandler.HandleResult( m_Level.GetDisp()->Load( sFilePath ) );
-#endif
-
 		m_bRegenerate = true;
 		m_bFirstPass = true;
+	}
+
+	if ( ImGui::Button( "Load Bin" ) ) {
+		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::DAT ) ) {
+			g_ErrHandler.HandleResult( m_Level.LoadBin( *osFilePath ) );
+			m_Level.DestroyTexture();
+			m_bRegenerate = true;
+		}
+	} ImGui::SameLine();
+	if ( ImGui::Button( "Export Image" ) ) {
+		g_ErrHandler.HandleResult( m_Level.ExportImg( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
 	}
 
 	ImGui::InputText( "###Level", (char*)m_sLevel.c_str(), sizeof( m_sLevel ) );
