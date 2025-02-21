@@ -8,7 +8,7 @@
 
 namespace FileDialog
 {
-    std::optional<std::string> OpenFile()
+    std::optional<std::string> OpenFile( Filter eFilter )
     {
         HRESULT hr;
         IFileOpenDialog* pFileOpen;
@@ -19,6 +19,23 @@ namespace FileDialog
         if ( SUCCEEDED( hr ) ) {
             hr = CoCreateInstance( CLSID_FileOpenDialog, NULL, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen) );
             if ( SUCCEEDED( hr ) ) {
+
+                std::vector<COMDLG_FILTERSPEC> fileTypes;
+                switch ( eFilter ) {
+                    case Filter::DAT:
+                        fileTypes = { { L"DAT Files", L"*.dat" } };
+                        break;
+                    case Filter::BMP:
+                        fileTypes = { { L"BMP Files", L"*.bmp" } };
+                        break;
+                    case Filter::ALL:
+                    default:
+                        fileTypes = { { L"All Files", L"*.*" } };
+                        break;
+                }
+                pFileOpen->SetFileTypes( static_cast<UINT>(fileTypes.size()), fileTypes.data() );
+                pFileOpen->SetFileTypeIndex( 1 );
+
                 hr = pFileOpen->Show( NULL );
                 if ( SUCCEEDED( hr ) ) {
                     IShellItem* pItem;
