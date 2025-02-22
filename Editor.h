@@ -28,6 +28,11 @@ struct Color {
 	
 	uint8_t r, g, b;
 
+	float GetLuminance() const
+	{
+		return 0.299f * r + 0.587f * g + 0.114f * b;
+	}
+
 	bool operator==( const Color& o ) const
 	{
 		return r == o.r && g == o.g && b == o.b;
