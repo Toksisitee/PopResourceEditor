@@ -37,7 +37,6 @@ namespace Assets
 		void SetPalette( const std::shared_ptr<CPalette>& pPalette )
 		{
 			m_pPalette = pPalette;
-			//		m_pPalette = std::make_shared<CPalette>( *pPalette );
 		}
 
 		inline void DestroyTexture()
