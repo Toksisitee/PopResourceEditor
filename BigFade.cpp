@@ -61,6 +61,13 @@ namespace Assets
 				g_ErrHandler.LogFmt( Log::Level::WRN, "LoadImg: Image is not optimized. %i additional unique colors could still be used.", k_uNumColors - colors.size() );
 			}
 
+			size_t uIndex = 0;
+			for ( auto it = colors.begin(); it != colors.end(); it++ ) {
+				auto oldColor = GetPalette()->GetColor( static_cast<uint8_t>(uIndex) );
+				*oldColor = *it;
+				uIndex++;
+			}
+
 			for ( auto y = 0; y < nHeight; y++ ) {
 				for ( auto x = 0; x < nWidth; x++ ) {
 					auto clr = BMP.GetPixel( x, y );

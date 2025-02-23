@@ -9,6 +9,7 @@ namespace Assets
 		constexpr uint32_t	k_uWidth = 256;			// U
 		constexpr uint32_t	k_uHeight = 1152;		// V
 		constexpr uint32_t	k_uSize = k_uHeight * k_uWidth;
+		constexpr uint32_t	k_uColorStart = 0;
 		constexpr uint32_t	k_uNumColors = 112;		// Max numbers of colors in the palette reserved for the BigFade texture
 	}
 
