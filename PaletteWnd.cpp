@@ -21,26 +21,26 @@ void CPaletteWnd::Render()
 {
 	if ( ImGui::Button( "Load Palette" ) ) {
 		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::DAT ) ) {
-			g_ErrHandler.HandleResult( m_Palette.LoadBin( *osFilePath ) );
-			m_Palette.DestroyTexture();
+			g_ErrHandler.HandleResult( m_pPalette.get()->LoadBin( *osFilePath ) );
+			m_pPalette.get()->DestroyTexture();
 		}
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Export Image" ) ) {
-		g_ErrHandler.HandleResult( m_Palette.ExportImg( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
+		g_ErrHandler.HandleResult( m_pPalette.get()->ExportImg( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Export Bin" ) ) {
-		g_ErrHandler.HandleResult( m_Palette.ExportBin( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
+		g_ErrHandler.HandleResult( m_pPalette.get()->ExportBin( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
 	}
 
 	ImGui::Checkbox( "Render Texture##pal", &m_bRenderTexture );
 
-	if ( m_Palette.GetTexture() == nullptr ) {
-		m_Palette.CreateTexture( m_pd3dDevice );
+	if ( m_pPalette.get()->GetTexture() == nullptr ) {
+		m_pPalette.get()->CreateTexture( m_pd3dDevice );
 	}
 	else {
 		if ( m_bRenderTexture ) {
 			ImEditor::SetPointFiltering( m_pd3dDevice );
-			ImEditor::RenderTexture( m_Palette.GetTexture() );
+			ImEditor::RenderTexture( m_pPalette.get()->GetTexture() );
 			ImEditor::ResetRenderState();
 		}
 	}
@@ -51,7 +51,7 @@ void CPaletteWnd::Render()
 		uint8_t uIndex = 0;
 		char szColorLabel[8];
 		const int k_iColorEditFlags = ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoBorder;
-		Color* pPalette = m_Palette.GetColorTable();
+		Color* pPalette = m_pPalette.get()->GetColorTable();
 
 		auto getColor = [&pPalette]( uint8_t uIndex ) -> float* {
 			float fColors[4];

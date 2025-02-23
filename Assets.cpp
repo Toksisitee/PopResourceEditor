@@ -327,7 +327,7 @@ namespace Assets
 			case Assets::FileType::Palette:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CPaletteWnd>( pDevice, sFilePath );
-				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
+				return QuickLoad( (void*)pWnd->GetAsset().get(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Sky:
 			{

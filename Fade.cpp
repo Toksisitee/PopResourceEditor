@@ -46,7 +46,7 @@ namespace Assets
 			for ( auto y = 0; y < nHeight; y++ ) {
 				for ( auto x = 0; x < nWidth; x++ ) {
 					auto clr = BMP.GetPixel( x, y );
-					m_Data[y * k_uWidth + x] = m_Palette.FindColor( { clr.Red, clr.Green, clr.Blue } );
+					m_Data[y * k_uWidth + x] = GetPalette()->FindColor( { clr.Red, clr.Green, clr.Blue } );
 				}
 			}
 
@@ -62,7 +62,7 @@ namespace Assets
 
 		BMP BMP;
 		size_t uIndex = 0;
-		auto pColorTable = m_Palette.GetColorTable();
+		auto pColorTable = GetPalette()->GetColorTable();
 
 		BMP.SetSize( k_uWidth, k_uHeight );
 		BMP.SetBitDepth( 24 );
@@ -114,22 +114,22 @@ namespace Assets
 	{
 		uint8_t* pData = &m_Data[0];
 		for ( uint32_t y = 0; y < k_uHeight; y++ ) {
-			Color* pPalette = m_Palette.GetColorTable();
+			Color* pPalette = GetPalette()->GetColorTable();
 			for ( uint32_t x = 0; x < k_uWidth; x++, pData++, pPalette++ ) {
-				*pData = m_Palette.FindColor( *pPalette );
+				*pData = GetPalette()->FindColor( *pPalette );
 			}
 		}
 
 		pData = &m_Data[0];
 		for ( uint32_t y = 0; y < k_uHeight; y++ ) {
-			Color* pPalette = m_Palette.GetColorTable();
+			Color* pPalette = GetPalette()->GetColorTable();
 			float fRowFade = 0.1f + 0.6f * (static_cast<float>(y) / (k_uHeight - 1));
 			for ( uint32_t x = 0; x < k_uWidth; x++, pData++, pPalette++ ) {
 				float fColumnFade = 2.0f + (static_cast<float>(k_uWidth - x - 1) / k_uWidth) * 2.0f;
 				float fFinalFade = std::clamp( fRowFade * fColumnFade, 0.0f, 3.0f );
 				Color color = *pPalette;
 				FadeColor( color, fFinalFade );
-				*pData = m_Palette.FindColor( color );
+				*pData = GetPalette()->FindColor( color );
 			}
 		}
 	}
@@ -145,7 +145,7 @@ namespace Assets
 
 	bool CFade::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
-		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], &m_Palette );
+		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], m_pPalette.get() );
 		return true;
 	}
 }

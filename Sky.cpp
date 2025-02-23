@@ -65,9 +65,9 @@ namespace Assets
 
 			size_t uIndex = k_uColorStart;
 			if ( k_uNumColors - colors.size() == 2 ) {
-				auto oldColor = m_Palette.GetColor( static_cast<uint8_t>(k_uColorStart) );
+				auto oldColor = GetPalette()->GetColor( static_cast<uint8_t>(k_uColorStart) );
 				*oldColor = Color{ 255, 0, 255 };
-				oldColor = m_Palette.GetColor( static_cast<uint8_t>(k_uColorStart + k_uNumColors - 1) );
+				oldColor = GetPalette()->GetColor( static_cast<uint8_t>(k_uColorStart + k_uNumColors - 1) );
 				*oldColor = Color{ 255, 0, 255 };
 				uIndex = k_uColorStart + 1;
 			}
@@ -86,7 +86,7 @@ namespace Assets
 			std::set<Color>::iterator it;
 			for ( it = colors.begin(); it != colors.end(); it++ ) {
 #endif
-				auto oldColor = m_Palette.GetColor( static_cast<uint8_t>(uIndex) );
+				auto oldColor = GetPalette()->GetColor( static_cast<uint8_t>(uIndex) );
 				*oldColor = *it;
 				uIndex++;
 			}
@@ -111,7 +111,7 @@ namespace Assets
 
 		BMP BMP;
 		size_t uIndex = 0;
-		auto pColorTable = m_Palette.GetColorTable();
+		auto pColorTable = GetPalette()->GetColorTable();
 
 		BMP.SetSize( k_uWidth, k_uHeight );
 		BMP.SetBitDepth( 24 );
@@ -154,7 +154,7 @@ namespace Assets
 	bool CSky::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
 		D3DLOCKED_RECT rc;
-		auto pColorTable = m_Palette.GetColorTable();
+		auto pColorTable = GetPalette()->GetColorTable();
 
 		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight );
 		m_pTexture->GetTexture()->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
@@ -176,10 +176,10 @@ namespace Assets
 	uint8_t CSky::FindColor( const Color & color )
 	{
 		for ( auto i = k_uColorStart; i < k_uColorStart + k_uNumColors; i++ ) {
-			if ( std::memcmp( &color, m_Palette.GetColor( i ), sizeof( Color ) ) == 0 ) {
+			if ( std::memcmp( &color, GetPalette()->GetColor( i ), sizeof( Color ) ) == 0 ) {
 				return static_cast<uint8_t>(i);
 			}
 		}
-		return m_Palette.GetColorKey( 0 );
+		return GetPalette()->GetColorKey( 0 );
 	}
 }

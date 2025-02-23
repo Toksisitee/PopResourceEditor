@@ -1,5 +1,7 @@
 #pragma once
 //#include <vector>
+#include <memory>
+#include <utility>
 
 #include "Palette.h"
 
@@ -18,6 +20,11 @@ namespace Assets
 	class CAsset
 	{
 	public:
+		CAsset()
+		{
+			m_pPalette = std::make_shared<CPalette>();
+		}
+
 		~CAsset() { SafeDestroyTexture( m_pTexture ); }
 
 		virtual Result	LoadBin( const std::string& sFilePath ) = 0;
@@ -26,6 +33,12 @@ namespace Assets
 		virtual Result	ExportBin( const std::string& sFilePath ) = 0;
 		virtual bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice ) = 0;
 		inline virtual void* GetPtr() = 0;
+
+		void SetPalette( const std::shared_ptr<CPalette>& pPalette )
+		{
+			m_pPalette = pPalette;
+			//		m_pPalette = std::make_shared<CPalette>( *pPalette );
+		}
 
 		inline void DestroyTexture()
 		{
@@ -37,12 +50,12 @@ namespace Assets
 		}
 		[[nodiscard]] inline CPalette* GetPalette()
 		{
-			return &m_Palette;
+			return m_pPalette.get();
 		}
 
 	protected:
-		CPalette m_Palette;
-		CTexture2D* m_pTexture;
+		std::shared_ptr<CPalette> m_pPalette = nullptr;
+		CTexture2D* m_pTexture = nullptr;
 	};
 
 #if 0

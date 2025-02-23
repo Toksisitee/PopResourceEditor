@@ -135,6 +135,12 @@ namespace Assets
 			case Assets::Result::FAIL_PARSE:
 				sprintf_s( szErrCode, sizeof( szErrCode ), "Failed to parse file." );
 				break;
+			case Assets::Result::OK_GENERATE:
+				sprintf_s( szErrCode, sizeof( szErrCode ), "Generate OK." );
+				break;
+			case Assets::Result::FAIL_GENERATE:
+				sprintf_s( szErrCode, sizeof( szErrCode ), "Generate FAIL." );
+				break;
 			default:
 				sprintf_s( szErrCode, sizeof( szErrCode ), "Unknown error code." );
 				break;

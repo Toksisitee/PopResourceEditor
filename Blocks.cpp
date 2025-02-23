@@ -46,7 +46,7 @@ namespace Assets
 			for ( auto y = 0; y < nHeight; y++ ) {
 				for ( auto x = 0; x < nWidth; x++ ) {
 					auto clr = BMP.GetPixel( x, y );
-					m_Data[y * k_uWidth + x] = m_Palette.FindColor( { clr.Red, clr.Green, clr.Blue } );
+					m_Data[y * k_uWidth + x] = GetPalette()->FindColor( { clr.Red, clr.Green, clr.Blue } );
 				}
 			}
 
@@ -62,7 +62,7 @@ namespace Assets
 
 		BMP BMP;
 		size_t uIndex = 0;
-		auto pColorTable = m_Palette.GetColorTable();
+		auto pColorTable = GetPalette()->GetColorTable();
 
 		BMP.SetSize( k_uWidth, k_uHeight );
 		BMP.SetBitDepth( 24 );
@@ -104,13 +104,13 @@ namespace Assets
 
 	bool CBlocks::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
-		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], &m_Palette );
+		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], m_pPalette.get() );
 		return true;
 	}
 
 	bool CBlocks::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice, int nWidth, int nHeight )
 	{
-		m_pTexture = new CTexture2D( pD3DDevice, nWidth, nHeight, &m_Data[0], &m_Palette );
+		m_pTexture = new CTexture2D( pD3DDevice, nWidth, nHeight, &m_Data[0], m_pPalette.get() );
 		return true;
 	}
 
@@ -124,7 +124,7 @@ namespace Assets
 		D3DLOCKED_RECT rc;
 		size_t uRow = uIndex / (k_uWidth / k_uBlockWidth);
 		size_t uCol = uIndex % (k_uWidth / k_uBlockWidth);
-		auto pColorTable = m_Palette.GetColorTable();
+		auto pColorTable = GetPalette()->GetColorTable();
 
 		m_pSubTextures[uIndex] = new CTexture2D( pD3DDevice, k_uBlockWidth, k_uBlockHeight );
 		m_pSubTextures[uIndex]->GetTexture()->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );

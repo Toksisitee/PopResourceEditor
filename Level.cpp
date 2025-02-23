@@ -59,7 +59,7 @@ namespace Assets
 
 				sprintf_s( szBuffer, sizeof( szBuffer ), "pal0-%c.dat", szType );
 				auto sFileDataPath = Util::FileSystem::FormatPath( szBuffer, sProccessedPath.c_str() );
-				if ( g_ErrHandler.HandleResult( m_Palette.LoadBin( sFileDataPath ) ) != Result::OK_LOAD ) {
+				if ( g_ErrHandler.HandleResult( GetPalette()->LoadBin( sFileDataPath ) ) != Result::OK_LOAD ) {
 					return Result::FAIL_LOAD;
 				}
 
@@ -88,7 +88,7 @@ namespace Assets
 
 		BMP BMP;
 		size_t uIndex = 0;
-		auto pColorTable = m_Palette.GetColorTable();
+		auto pColorTable = GetPalette()->GetColorTable();
 
 		BMP.SetSize( k_uWidth, k_uHeight );
 		BMP.SetBitDepth( 24 );
@@ -306,7 +306,7 @@ namespace Assets
 
 	bool CLevel::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
-		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], &m_Palette );
+		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], m_pPalette.get() );
 		return true;
 	}
 }

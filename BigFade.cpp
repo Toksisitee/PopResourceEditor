@@ -64,7 +64,7 @@ namespace Assets
 			for ( auto y = 0; y < nHeight; y++ ) {
 				for ( auto x = 0; x < nWidth; x++ ) {
 					auto clr = BMP.GetPixel( x, y );
-					m_Data[y * k_uWidth + x] = m_Palette.FindColor( { clr.Red, clr.Green, clr.Blue }, 0, k_uNumColors );
+					m_Data[y * k_uWidth + x] = GetPalette()->FindColor( { clr.Red, clr.Green, clr.Blue }, 0, k_uNumColors );
 				}
 			}
 
@@ -80,7 +80,7 @@ namespace Assets
 
 		BMP BMP;
 		size_t uIndex = 0;
-		auto pColorTable = m_Palette.GetColorTable();
+		auto pColorTable = GetPalette()->GetColorTable();
 
 		BMP.SetSize( k_uWidth, k_uHeight );
 		BMP.SetBitDepth( 24 );
@@ -122,18 +122,18 @@ namespace Assets
 
 	bool CBigFade::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
-		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], &m_Palette );
+		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], m_pPalette.get() );
 		return true;
 	}
 
 	uint8_t CBigFade::FindColor( const Color& color )
 	{
 		for ( size_t i = 0; i < k_uNumColors; i++ ) {
-			if ( std::memcmp( &color, m_Palette.GetColor( static_cast<uint8_t>(i) ), sizeof( Color ) ) == 0 ) {
+			if ( std::memcmp( &color, GetPalette()->GetColor( static_cast<uint8_t>(i) ), sizeof( Color ) ) == 0 ) {
 				return static_cast<uint8_t>(i);
 			}
 		}
-		return m_Palette.GetColorKey( 0 );
+		return GetPalette()->GetColorKey( 0 );
 	}
 
 	// TODO: Rename to "GetPal"?

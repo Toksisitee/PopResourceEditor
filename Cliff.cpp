@@ -46,7 +46,7 @@ namespace Assets
 			for ( auto y = 0; y < nHeight; y++ ) {
 				for ( auto x = 0; x < nWidth; x++ ) {
 					auto clr = BMP.GetPixel( x, y );
-					m_Data[y * k_uWidth + x] = m_Palette.FindColor( { clr.Red, clr.Green, clr.Blue } );
+					m_Data[y * k_uWidth + x] = GetPalette()->FindColor( { clr.Red, clr.Green, clr.Blue } );
 				}
 			}
 
@@ -62,7 +62,7 @@ namespace Assets
 
 		BMP BMP;
 		size_t uIndex = 0;
-		auto pColorTable = m_Palette.GetColorTable();
+		auto pColorTable = GetPalette()->GetColorTable();
 
 		BMP.SetSize( k_uWidth, k_uHeight );
 		BMP.SetBitDepth( 24 );
@@ -136,12 +136,12 @@ namespace Assets
 
 		Color blendedColor;
 		uint8_t* pData = &m_Data[0];
-		const Color ditherColor = *m_Palette.GetColor( 244 );
+		const Color ditherColor = *GetPalette()->GetColor( 244 );
 
 		const float fCenter = static_cast<float>(k_uHeight) / 2.0f;
 
 		for ( uint32_t y = 0; y < k_uHeight; y++ ) {
-			auto pPalette = m_Palette.GetColorTable();
+			auto pPalette = GetPalette()->GetColorTable();
 
 			float fFade = static_cast<float>(y) / (k_uHeight - 1);
 			fFade = fFade * fFade;
@@ -177,7 +177,7 @@ namespace Assets
 					blendedColor = BlendColors( blendedColor, ditherColor, fFade * fDitherStrength );
 				}
 
-				*pData = m_Palette.FindColor( blendedColor );
+				*pData = GetPalette()->FindColor( blendedColor );
 			}
 		}
 
@@ -198,7 +198,7 @@ namespace Assets
 
 	bool CCliff::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
-		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], &m_Palette );
+		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], m_pPalette.get() );
 		return true;
 	}
 }

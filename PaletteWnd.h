@@ -1,10 +1,16 @@
 #pragma once
+#include <memory>
+
 #include "WindowBase.h"
 #include "Palette.h"
 
 class CPaletteWnd : public CWindowBase {
 public:
-	CPaletteWnd( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sName ) : CWindowBase( pd3dDevice, sName ) {}
+	CPaletteWnd( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sName ) : CWindowBase( pd3dDevice, sName )
+	{
+		Initialize( pd3dDevice );
+		m_pPalette = std::make_shared<Assets::CPalette>();
+	}
 
 	void RenderBegin() override;
 	void Render() override;
@@ -15,9 +21,9 @@ public:
 		m_pd3dDevice = pd3dDevice;
 	}
 
-	Assets::CPalette* GetAsset()
+	std::shared_ptr<Assets::CPalette> GetAsset()
 	{
-		return &m_Palette;
+		return m_pPalette;
 	}
 
 	void Cleanup() override
@@ -25,6 +31,6 @@ public:
 	}
 
 private:
-	Assets::CPalette m_Palette;
+	std::shared_ptr<Assets::CPalette> m_pPalette;
 	bool m_bRenderTexture = true;
 };

@@ -58,7 +58,7 @@ namespace Assets
 
 		BMP BMP;
 		size_t uIndex = 0;
-		auto pColorTable = m_Palette.GetColorTable();
+		auto pColorTable = GetPalette()->GetColorTable();
 
 		BMP.SetSize( k_uWidth, k_uHeight );
 		BMP.SetBitDepth( 24 );
@@ -103,12 +103,12 @@ namespace Assets
 		uint8_t r, g, b;
 
 		for ( uint32_t y = 0; y < 16; y++ ) {
-			Color* palette = m_Palette.GetColorTable();
+			Color* palette = GetPalette()->GetColorTable();
 			for ( uint32_t x = 0; x < k_uWidth; x++, palette++, pData++ ) {
 				r = palette->r + ((targetColor.r - palette->r) * y) / 16;
 				g = palette->g + ((targetColor.g - palette->g) * y) / 16;
 				b = palette->b + ((targetColor.b - palette->b) * y) / 16;
-				*pData = m_Palette.FindColor( Color( r, g, b ) );
+				*pData = GetPalette()->FindColor( Color( r, g, b ) );
 			}
 		}
 
@@ -149,7 +149,7 @@ namespace Assets
 
 	bool CAlpha::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
-		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], &m_Palette );
+		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], m_pPalette.get() );
 		return true;
 	}
 }

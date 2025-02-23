@@ -44,7 +44,7 @@ namespace Assets
 			for ( auto y = 0; y < nHeight; y++ ) {
 				for ( auto x = 0; x < nWidth; x++ ) {
 					auto clr = BMP.GetPixel( x, y );
-					m_Data[y * k_uWidth + x] = m_Palette.FindColor( { clr.Red, clr.Green, clr.Blue } );
+					m_Data[y * k_uWidth + x] = GetPalette()->FindColor( { clr.Red, clr.Green, clr.Blue } );
 				}
 			}
 
@@ -60,7 +60,7 @@ namespace Assets
 
 		BMP BMP;
 		size_t uIndex = 0;
-		auto pColorTable = m_Palette.GetColorTable();
+		auto pColorTable = GetPalette()->GetColorTable();
 
 		BMP.SetSize( k_uWidth, k_uHeight );
 		BMP.SetBitDepth( 24 );
@@ -104,7 +104,7 @@ namespace Assets
 	{
 		if ( uOpacity > 100 ) uOpacity = 100;
 
-		Color* pColorPalette = m_Palette.GetColorTable();
+		Color* pColorPalette = GetPalette()->GetColorTable();
 		uint8_t* pData = &m_Data[0];
 		Color blend;
 
@@ -117,7 +117,7 @@ namespace Assets
 				blend.g = base.g + ((target.g - base.g) * uOpacity) / 100;
 				blend.b = base.b + ((target.b - base.b) * uOpacity) / 100;
 
-				*pData++ = m_Palette.FindColor( blend );
+				*pData++ = GetPalette()->FindColor( blend );
 			}
 		}
 	}
@@ -132,7 +132,7 @@ namespace Assets
 
 	bool CGhost::CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice )
 	{
-		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], &m_Palette );
+		m_pTexture = new CTexture2D( pD3DDevice, k_uWidth, k_uHeight, &m_Data[0], m_pPalette.get() );
 		return true;
 	}
 }
