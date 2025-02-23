@@ -32,5 +32,5 @@ public:
 
 private:
 	std::shared_ptr<Assets::CPalette> m_pPalette;
-	bool m_bRenderTexture = true;
+	bool m_bRenderTexture = false;
 };
