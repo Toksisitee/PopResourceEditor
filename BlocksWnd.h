@@ -6,7 +6,9 @@ class CBlocksWnd : public CWindowBase {
 public:
 	CBlocksWnd( LPDIRECT3DDEVICE9 pd3dDevice, const std::string& sName ) : CWindowBase( pd3dDevice, sName ) {}
 
+	void RenderBegin() override;
 	void Render() override;
+	void RenderEnd() override;
 
 	void Initialize( LPDIRECT3DDEVICE9 pd3dDevice ) override
 	{

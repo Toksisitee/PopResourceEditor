@@ -7,10 +7,18 @@
 
 #include "GhostWnd.h"
 
-void CGhostWnd::Render()
+void CGhostWnd::RenderBegin()
 {
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
-	auto pPalette = m_Ghost.GetPalette();
+}
+
+void CGhostWnd::RenderEnd()
+{
+	ImGui::End();
+}
+
+void CGhostWnd::Render()
+{
 	if ( ImGui::Button( "Load Palette" ) ) {
 		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::DAT ) ) {
 			g_ErrHandler.HandleResult( m_Ghost.GetPalette()->LoadBin( *osFilePath ) );
@@ -53,7 +61,4 @@ void CGhostWnd::Render()
 		ImEditor::RenderTexture( m_Ghost.GetTexture() );
 		ImEditor::ResetRenderState();
 	}
-
-
-	ImGui::End();
 }

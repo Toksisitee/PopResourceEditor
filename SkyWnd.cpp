@@ -7,10 +7,18 @@
 
 #include "SkyWnd.h"
 
-void CSkyWnd::Render()
+void CSkyWnd::RenderBegin()
 {
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
+}
 
+void CSkyWnd::RenderEnd()
+{
+	ImGui::End();
+}
+
+void CSkyWnd::Render()
+{
 	if ( ImGui::Button( "Load Palette" ) ) {
 		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::DAT ) ) {
 			g_ErrHandler.HandleResult( m_Sky.GetPalette()->LoadBin( *osFilePath ) );
@@ -79,6 +87,4 @@ void CSkyWnd::Render()
 		}
 	}
 	ImGui::PopStyleVar( 2 );
-
-	ImGui::End();
 }

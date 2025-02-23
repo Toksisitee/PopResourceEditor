@@ -7,10 +7,18 @@
 
 #include "AlphaWnd.h"
 
-void CAlphaWnd::Render()
+void CAlphaWnd::RenderBegin()
 {
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
+}
 
+void CAlphaWnd::RenderEnd()
+{
+	ImGui::End();
+}
+
+void CAlphaWnd::Render()
+{
 	if ( ImGui::Button( "Load Palette" ) ) {
 		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::DAT ) ) {
 			g_ErrHandler.HandleResult( m_Alpha.GetPalette()->LoadBin( *osFilePath ) );
@@ -34,7 +42,4 @@ void CAlphaWnd::Render()
 		ImEditor::RenderTexture( m_Alpha.GetTexture() );
 		ImEditor::ResetRenderState();
 	}
-
-
-	ImGui::End();
 }

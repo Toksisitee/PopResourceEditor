@@ -8,9 +8,18 @@
 
 #include "LevelWnd.h"
 
-void CLevelWnd::Render()
+void CLevelWnd::RenderBegin()
 {
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
+}
+
+void CLevelWnd::RenderEnd()
+{
+	ImGui::End();
+}
+
+void CLevelWnd::Render()
+{
 	if ( !m_bFirstPass ) {
 		m_bRegenerate = true;
 		m_bFirstPass = true;
@@ -90,7 +99,4 @@ void CLevelWnd::Render()
 			ImEditor::ResetRenderState();
 		}
 	}
-
-
-	ImGui::End();
 }

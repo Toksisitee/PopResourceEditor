@@ -7,10 +7,18 @@
 
 #include "BigFadeWnd.h"
 
-void CBigFadeWnd::Render()
+void CBigFadeWnd::RenderBegin()
 {
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
+}
 
+void CBigFadeWnd::RenderEnd()
+{
+	ImGui::End();
+}
+
+void CBigFadeWnd::Render()
+{
 	if ( ImGui::Button( "Load Image" ) ) {
 		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::BMP ) ) {
 			g_ErrHandler.HandleResult( m_BigFade.LoadImg( *osFilePath ) );
@@ -32,7 +40,4 @@ void CBigFadeWnd::Render()
 		ImEditor::RenderTexture( m_BigFade.GetTexture() );
 		ImEditor::ResetRenderState();
 	}
-
-
-	ImGui::End();
 }

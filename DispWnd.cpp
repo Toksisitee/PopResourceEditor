@@ -7,10 +7,18 @@
 
 #include "DispWnd.h"
 
-void CDispWnd::Render()
+void CDispWnd::RenderBegin()
 {
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
+}
 
+void CDispWnd::RenderEnd()
+{
+	ImGui::End();
+}
+
+void CDispWnd::Render()
+{
 	if ( ImGui::Button( "Load Image" ) ) {
 		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::BMP ) ) {
 			g_ErrHandler.HandleResult( m_Disp.LoadImg( *osFilePath ) );
@@ -32,7 +40,4 @@ void CDispWnd::Render()
 		ImEditor::RenderTexture( m_Disp.GetTexture() );
 		ImEditor::ResetRenderState();
 	}
-
-
-	ImGui::End();
 }

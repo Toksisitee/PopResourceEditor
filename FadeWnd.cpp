@@ -7,10 +7,18 @@
 
 #include "FadeWnd.h"
 
-void CFadeWnd::Render()
+void CFadeWnd::RenderBegin()
 {
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
+}
 
+void CFadeWnd::RenderEnd()
+{
+	ImGui::End();
+}
+
+void CFadeWnd::Render()
+{
 	if ( ImGui::Button( "Load Palette" ) ) {
 		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::DAT ) ) {
 			g_ErrHandler.HandleResult( m_Fade.GetPalette()->LoadBin( *osFilePath ) );
@@ -48,7 +56,4 @@ void CFadeWnd::Render()
 		ImEditor::RenderTexture( m_Fade.GetTexture() );
 		ImEditor::ResetRenderState();
 	}
-
-
-	ImGui::End();
 }

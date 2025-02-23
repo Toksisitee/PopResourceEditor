@@ -7,10 +7,18 @@
 
 #include "CliffWnd.h"
 
-void CCliffWnd::Render()
+void CCliffWnd::RenderBegin()
 {
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
+}
 
+void CCliffWnd::RenderEnd()
+{
+	ImGui::End();
+}
+
+void CCliffWnd::Render()
+{
 	if ( ImGui::Button( "Load Image" ) ) {
 		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::BMP ) ) {
 			g_ErrHandler.HandleResult( m_Cliff.LoadImg( *osFilePath ) );
@@ -45,6 +53,4 @@ void CCliffWnd::Render()
 		ImEditor::RenderTexture( m_Cliff.GetTexture() );
 		ImEditor::ResetRenderState();
 	}
-
-	ImGui::End();
 }

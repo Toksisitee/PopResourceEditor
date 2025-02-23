@@ -35,7 +35,9 @@ public:
 			);
 
 		for ( auto& pWnd : m_Windows ) {
+			pWnd->RenderBegin();
 			pWnd->Render();
+			pWnd->RenderEnd();
 		}
 	}
 

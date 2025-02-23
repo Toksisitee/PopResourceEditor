@@ -7,10 +7,18 @@
 
 #include "PaletteWnd.h"
 
-void CPaletteWnd::Render()
+void CPaletteWnd::RenderBegin()
 {
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
+}
 
+void CPaletteWnd::RenderEnd()
+{
+	ImGui::End();
+}
+
+void CPaletteWnd::Render()
+{
 	if ( ImGui::Button( "Load Palette" ) ) {
 		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::DAT ) ) {
 			g_ErrHandler.HandleResult( m_Palette.LoadBin( *osFilePath ) );
@@ -70,6 +78,4 @@ void CPaletteWnd::Render()
 		}
 		ImGui::PopStyleVar( 2 );
 	}
-
-	ImGui::End();
 }

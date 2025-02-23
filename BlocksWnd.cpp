@@ -6,10 +6,18 @@
 #include "FileDialog.h"
 #include "BlocksWnd.h"
 
-void CBlocksWnd::Render()
+void CBlocksWnd::RenderBegin()
 {
 	ImGui::Begin( m_sWindowName.c_str(), &m_bOpen );
+}
 
+void CBlocksWnd::RenderEnd()
+{
+	ImGui::End();
+}
+
+void CBlocksWnd::Render()
+{
 	if ( ImGui::Button( "Load Image" ) ) {
 		CFileDialogManager::GetInstance().ShowFileDialog( FileDialog::FileDialogType::OpenFile,
 				  [this]( const std::string& sFilePath ) {
@@ -53,7 +61,4 @@ void CBlocksWnd::Render()
 
 		ImEditor::ResetRenderState();
 	}
-
-
-	ImGui::End();
 }
