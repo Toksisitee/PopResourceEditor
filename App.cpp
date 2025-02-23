@@ -37,6 +37,7 @@
 #include "DispWnd.h"
 #include "BlocksWnd.h"
 #include "LevelWnd.h"
+#include "TextureSetWnd.h"
 
 #include "App.h"
 
@@ -309,6 +310,10 @@ void CEditorApp::Run()
 
 				{
 					DockspaceDraw();
+					if ( ImGui::Button( "Texture Set" ) ) {
+						auto pWnd = g_WndMngr.AddWindow<CTextureSetWnd>( GetDevice(), "Texture Set" );
+					}
+
 					g_WndMngr.Render();
 					AssetPicker::Render();
 				}

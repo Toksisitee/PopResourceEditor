@@ -191,6 +191,7 @@
     <ClCompile Include="SkyWnd.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureSetWnd.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="WindowBase.cpp" />
     <ClCompile Include="WindowManager.cpp" />
@@ -244,6 +245,7 @@
     <ClInclude Include="SkyWnd.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureSetWnd.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="WindowBase.h" />
     <ClInclude Include="WindowManager.h" />
