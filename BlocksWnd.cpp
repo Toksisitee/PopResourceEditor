@@ -62,3 +62,8 @@ void CBlocksWnd::Render()
 		ImEditor::ResetRenderState();
 	}
 }
+
+void CBlocksWnd::OnPaletteChange()
+{
+	m_Blocks.DestroyTextures();
+}

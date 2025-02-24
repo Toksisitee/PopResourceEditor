@@ -9,6 +9,7 @@ public:
 	void RenderBegin() override;
 	void Render() override;
 	void RenderEnd() override;
+	void OnPaletteChange() override {};
 
 	void Initialize( LPDIRECT3DDEVICE9 pd3dDevice ) override
 	{

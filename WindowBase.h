@@ -16,6 +16,7 @@ public:
 	virtual void RenderBegin() = 0;
 	virtual void Render() = 0;
 	virtual void RenderEnd() = 0;
+	virtual void OnPaletteChange() = 0;
 	virtual void Initialize( LPDIRECT3DDEVICE9 pd3dDevice ) = 0;
 	virtual void Cleanup() = 0;
 

@@ -30,6 +30,7 @@ namespace Assets
 				ifs.read( reinterpret_cast<char*>(&m_ColorTable[i].b), sizeof( char ) );
 				ifs.read( &pad, sizeof( char ) );
 			}
+			SetChanged( true );
 			ifs.close();
 			return Result::OK_LOAD;
 		}
@@ -96,7 +97,7 @@ namespace Assets
 
 		D3DLOCKED_RECT rc;
 		m_pTexture->GetTexture()->LockRect( 0, &rc, NULL, D3DLOCK_DISCARD );
-		
+
 		BYTE* pTexels = static_cast<BYTE*>(rc.pBits);
 		size_t uIndex = 0;
 		for ( uint32_t y = 0; y < k_uColorsPerRow; y++ ) {

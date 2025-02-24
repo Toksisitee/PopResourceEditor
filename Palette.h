@@ -38,6 +38,14 @@ namespace Assets
 		{
 			return m_pTexture;
 		}
+		[[nodiscard]] inline bool HasChanged()
+		{
+			return m_bModified;
+		}
+		inline void SetChanged( bool bState )
+		{
+			m_bModified = bState;
+		}
 
 		[[nodiscard]] Color* GetColor( uint8_t uIndex ) { return &m_ColorTable[uIndex]; }
 		[[nodiscard]] Color* GetColorTable();
@@ -50,5 +58,6 @@ namespace Assets
 		Color m_ColorTable[Palette::k_uNumColors];
 		uint8_t m_Data[Palette::k_uSize];
 		CTexture2D* m_pTexture;
+		bool m_bModified = false;
 	};
 };

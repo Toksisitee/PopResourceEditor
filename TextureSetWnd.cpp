@@ -27,6 +27,14 @@ void CTextureSetWnd::Render()
 				ImGui::EndTabItem();
 			}
 		}
+
+		auto* pPalette = GetWindow<Wnd::Palette>()->GetAsset().get();
+		if ( pPalette->HasChanged() ) {
+			for ( auto& pWnd : m_Windows ) {
+				pWnd->OnPaletteChange();
+			}
+			pPalette->SetChanged( false );
+		}
 		ImGui::EndTabBar();
 	}
 }

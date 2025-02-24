@@ -57,3 +57,9 @@ void CFadeWnd::Render()
 		ImEditor::ResetRenderState();
 	}
 }
+
+void CFadeWnd::OnPaletteChange()
+{
+	m_Fade.DestroyTexture();
+	m_Fade.Generate();
+}

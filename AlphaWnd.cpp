@@ -43,3 +43,9 @@ void CAlphaWnd::Render()
 		ImEditor::ResetRenderState();
 	}
 }
+
+void CAlphaWnd::OnPaletteChange()
+{	
+	m_Alpha.DestroyTexture();
+	m_Alpha.Generate();
+}

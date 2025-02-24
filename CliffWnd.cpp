@@ -34,15 +34,23 @@ void CCliffWnd::Render()
 
 	if ( ImGui::Button( "Generate (NO_LUMINANCE)" ) ) {
 		m_Cliff.Generate( Assets::Cliff::Generation::NO_LUMINANCE );
+		m_eLastMode = Assets::Cliff::Generation::NO_LUMINANCE;
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Generate (LUMINANCE_1) " ) ) {
 		m_Cliff.Generate( Assets::Cliff::Generation::LUMINANCE_1 );
+		m_eLastMode = Assets::Cliff::Generation::LUMINANCE_1;
+
 	}
 	if ( ImGui::Button( "Generate (LUMINANCE_2)" ) ) {
 		m_Cliff.Generate( Assets::Cliff::Generation::LUMINANCE_2 );
+		m_eLastMode = Assets::Cliff::Generation::LUMINANCE_2;
+
 	}
 	if ( ImEditor::InputScalar( "m_fLuminance", &m_Cliff.m_fLuminance ) ) {
-		m_Cliff.Generate( Assets::Cliff::Generation::NO_LUMINANCE );
+		if ( m_eLastMode == Assets::Cliff::Generation::NO_LUMINANCE ) {
+			m_eLastMode = Assets::Cliff::Generation::LUMINANCE_1;
+		}
+		m_Cliff.Generate( m_eLastMode );
 	}
 
 	if ( m_Cliff.GetTexture() == nullptr ) {
@@ -53,4 +61,10 @@ void CCliffWnd::Render()
 		ImEditor::RenderTexture( m_Cliff.GetTexture() );
 		ImEditor::ResetRenderState();
 	}
+}
+
+void CCliffWnd::OnPaletteChange()
+{
+	m_Cliff.DestroyTexture();
+	m_Cliff.Generate( m_eLastMode );
 }

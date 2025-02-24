@@ -62,3 +62,9 @@ void CGhostWnd::Render()
 		ImEditor::ResetRenderState();
 	}
 }
+
+void CGhostWnd::OnPaletteChange()
+{
+	m_Ghost.DestroyTexture();
+	m_Ghost.Generate();
+}

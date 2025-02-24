@@ -99,6 +99,8 @@ namespace Assets
 				}
 			}
 
+			m_pPalette.get()->SetChanged( true );
+
 			return Result::OK_LOAD;
 		}
 
