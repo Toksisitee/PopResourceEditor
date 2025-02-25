@@ -48,34 +48,6 @@ void CPaletteWnd::Render()
 	ImGui::NewLine();
 
 	if ( !m_bRenderTexture ) {
-		uint8_t uIndex = 0;
-		char szColorLabel[8];
-		const int k_iColorEditFlags = ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoBorder;
-		Color* pPalette = m_pPalette.get()->GetColorTable();
-
-		auto getColor = [&pPalette]( uint8_t uIndex ) -> float* {
-			float fColors[4];
-			ImColor col = ImColor( pPalette[uIndex].r, pPalette[uIndex].g, pPalette[uIndex].b );
-			memcpy( &fColors, &col, sizeof( float ) * 4 );
-			return fColors;
-		};
-
-		ImGui::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2( 5.0f, 5.0f ) );
-		ImGui::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2( 0.0f, 0.0f ) );
-		for ( uint32_t y = 0; y < 16; y++ ) {
-			for ( uint32_t x = 0; x < 16; x++ ) {
-				sprintf_s( szColorLabel, sizeof( szColorLabel ), "##%i", uIndex );
-				ImGui::SameLine();
-				ImGui::ColorEdit3( szColorLabel, getColor( uIndex ), k_iColorEditFlags );
-				if ( ImGui::IsItemHovered() ) {
-					ImGui::BeginTooltip();
-					ImGui::Text( "Index: %d", uIndex );
-					ImGui::EndTooltip();
-				}
-				uIndex++;
-			}
-			ImGui::NewLine();
-		}
-		ImGui::PopStyleVar( 2 );
+		ImEditor::RenderModifiablePalette( static_cast<void*>(m_pPalette.get()), 0, Assets::Palette::k_uNumColors );
 	}
 }

@@ -80,4 +80,36 @@ namespace ImEditor
 
 		return ImGui::ImageButton( pTexture->GetTexture(), imageSize, uv0, uv1, frame_padding, bg_col, tint_col );
 	}
+
+	void RenderModifiablePalette( void* pPalette, size_t uMin, size_t uMax )
+	{
+		Assets::CPalette* pPal = static_cast<Assets::CPalette*>(pPalette);
+		Color* pColorTable = pPal->GetColorTable();
+		char szColorLabel[8];
+		const int k_iColorEditFlags = ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoBorder;
+		ImGui::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2( 5.0f, 5.0f ) );
+		ImGui::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2( 0.0f, 0.0f ) );
+		for ( auto uIndex = uMin; uIndex < uMax; uIndex++ ) {
+			if ( uIndex % 16 != 0 ) {
+				ImGui::SameLine();
+			}
+			Color& col = pColorTable[uIndex];
+			float color[3] = { col.r / 255.0f, col.g / 255.0f, col.b / 255.0f };
+			sprintf_s( szColorLabel, sizeof( szColorLabel ), "##%i", uIndex );
+			if ( ImGui::ColorEdit3( szColorLabel, color, k_iColorEditFlags ) ) {
+				col.r = static_cast<uint8_t>(color[0] * 255);
+				col.g = static_cast<uint8_t>(color[1] * 255);
+				col.b = static_cast<uint8_t>(color[2] * 255);
+			}
+			if ( ImGui::IsItemDeactivatedAfterEdit() ) {
+				pPal->SetChanged( true );
+			}
+			if ( ImGui::IsItemHovered() ) {
+				ImGui::BeginTooltip();
+				ImGui::Text( "Index: %d", uIndex );
+				ImGui::EndTooltip();
+			}
+		}
+		ImGui::PopStyleVar( 2 );
+	}
 };
