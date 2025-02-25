@@ -77,3 +77,8 @@ void CBigFadeWnd::Render()
 		ImEditor::ResetRenderState();
 	}
 }
+
+void CBigFadeWnd::OnPaletteChange()
+{
+	m_BigFade.DestroyTexture();
+}
