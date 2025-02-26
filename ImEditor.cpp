@@ -160,6 +160,7 @@ namespace ImEditor
 		std::vector<std::pair<ImVec2, ImVec2>> vecCellPos;
 
 		if ( psIndicies ) {
+			ImGui::Text( "Right click & drag to select palette indicies." );
 			if ( ImGui::Button( "Clear Selected" ) ) {
 				psIndicies->clear();
 			}
