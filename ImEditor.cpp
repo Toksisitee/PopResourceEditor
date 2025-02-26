@@ -81,6 +81,76 @@ namespace ImEditor
 		return ImGui::ImageButton( pTexture->GetTexture(), imageSize, uv0, uv1, frame_padding, bg_col, tint_col );
 	}
 
+
+	// TODO: move
+	void RGBtoHSV( float r, float g, float b, float& h, float& s, float& v )
+	{
+		float fMin, fMax, fDelta;
+		fMin = std::min( r, std::min( g, b ) );
+		fMax = std::max( r, std::max( g, b ) );
+		fDelta = fMax - fMin;
+
+		v = fMax;
+		if ( fMax != 0.0f ) {
+			s = fDelta / fMax;
+		}
+		else {
+			s = 0.0f;
+			h = -1.0f;
+			return;
+		}
+
+		if ( r == fMax ) {
+			h = (g - b) / fDelta;
+		}
+		else if ( g == fMax ) {
+			h = 2.0f + (b - r) / fDelta;
+		}
+		else {
+			h = 4.0f + (r - g) / fDelta;
+		}
+		h /= 6.0f;
+
+		if ( h < 0.0f ) {
+			h += 1.0f;
+		}
+	}
+
+	// TODO: move
+	void HSVtoRGB( float h, float s, float v, float& r, float& g, float& b )
+	{
+		int i;
+		float f, p, q, t;
+
+		if ( s == 0.0f ) {
+			r = g = b = v;
+			return;
+		}
+
+		h *= 6.0f;
+		i = static_cast<int>(h);
+		f = h - i;
+		p = v * (1.0f - s);
+		q = v * (1.0f - f * s);
+		t = v * (1.0f - (1.0f - f) * s);
+
+		switch ( i ) {
+			case 0:
+				r = v; g = t; b = p; break;
+			case 1:
+				r = q; g = v; b = p; break;
+			case 2:
+				r = p; g = v; b = t; break;
+			case 3:
+				r = p; g = q; b = v; break;
+			case 4:
+				r = t; g = p; b = v; break;
+			default:
+				r = v; g = p; b = q; break;
+		}
+	}
+
+
 	void RenderModifiablePalette( void* pPalette, size_t uMin, size_t uMax, std::unordered_set<uint8_t>* psIndicies )
 	{
 		Assets::CPalette* pPal = static_cast<Assets::CPalette*>(pPalette);
@@ -89,8 +159,64 @@ namespace ImEditor
 		const int k_iColorEditFlags = ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoBorder;
 		std::vector<std::pair<ImVec2, ImVec2>> vecCellPos;
 
-		if ( psIndicies && ImGui::Button( "Clear Selected" ) ) {
-			psIndicies->clear();
+		if ( psIndicies ) {
+			if ( ImGui::Button( "Clear Selected" ) ) {
+				psIndicies->clear();
+			}
+
+			ImGui::SameLine();
+
+			static float fHueShift = 1.0f;
+			static float fBrightness = 1.0f;
+
+			if ( ImGui::Button( "Apply Hue Shift" ) && !psIndicies->empty() ) {
+				for ( uint32_t index : *psIndicies ) {
+					Color& col = pColorTable[index];
+
+					float r = col.r / 255.0f, g = col.g / 255.0f, b = col.b / 255.0f;
+					float h, s, v;
+					RGBtoHSV( r, g, b, h, s, v );
+
+					h += fHueShift;
+					if ( h > 1.0f ) h -= 1.0f;
+					if ( h < 0.0f ) h += 1.0f;
+
+					HSVtoRGB( h, s, v, r, g, b );
+
+					col.r = static_cast<uint8_t>(r * 255);
+					col.g = static_cast<uint8_t>(g * 255);
+					col.b = static_cast<uint8_t>(b * 255);
+				}
+				pPal->SetChanged( true );
+			}
+
+			ImGui::SameLine();
+
+			if ( ImGui::Button( "Apply Brightness" ) && !psIndicies->empty() ) {
+				for ( uint32_t index : *psIndicies ) {
+					Color& col = pColorTable[index];
+
+					float r = col.r / 255.0f;
+					float g = col.g / 255.0f;
+					float b = col.b / 255.0f;
+
+					r *= fBrightness;
+					g *= fBrightness;
+					b *= fBrightness;
+
+					r = (r > 1.0f) ? 1.0f : (r < 0.0f) ? 0.0f : r;
+					g = (g > 1.0f) ? 1.0f : (g < 0.0f) ? 0.0f : g;
+					b = (b > 1.0f) ? 1.0f : (b < 0.0f) ? 0.0f : b;
+
+					col.r = static_cast<uint8_t>(r * 255);
+					col.g = static_cast<uint8_t>(g * 255);
+					col.b = static_cast<uint8_t>(b * 255);
+				}
+				pPal->SetChanged( true );
+			}
+
+			ImGui::SliderFloat( "Hue Shift", &fHueShift, -1.0f, 1.0f, "Shift: %.2f" );
+			ImGui::SliderFloat( "Brightness", &fBrightness, 0.0f, 2.0f, "Brightness: %.2f" );
 		}
 
 		ImGui::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2( 5.0f, 5.0f ) );

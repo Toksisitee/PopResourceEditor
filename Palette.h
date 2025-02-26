@@ -45,6 +45,7 @@ namespace Assets
 		inline void SetChanged( bool bState )
 		{
 			m_bModified = bState;
+			DestroyTexture();
 		}
 
 		[[nodiscard]] Color* GetColor( uint8_t uIndex ) { return &m_ColorTable[uIndex]; }
