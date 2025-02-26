@@ -91,3 +91,8 @@ void CSkyWnd::Render()
 		ImEditor::ResetRenderState();
 	}
 }
+
+void CSkyWnd::OnPaletteChange()
+{
+	m_Sky.DestroyTexture();
+}
