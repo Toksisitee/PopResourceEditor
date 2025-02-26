@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <unordered_set>
 
 #include "WindowBase.h"
 #include "Palette.h"
@@ -33,5 +34,6 @@ public:
 
 private:
 	std::shared_ptr<Assets::CPalette> m_pPalette;
+	std::unordered_set<uint8_t> m_osuSelectedIndicies;
 	bool m_bRenderTexture = false;
 };

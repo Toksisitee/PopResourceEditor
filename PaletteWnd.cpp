@@ -48,6 +48,6 @@ void CPaletteWnd::Render()
 	ImGui::NewLine();
 
 	if ( !m_bRenderTexture ) {
-		ImEditor::RenderModifiablePalette( static_cast<void*>(m_pPalette.get()), 0, Assets::Palette::k_uNumColors );
+		ImEditor::RenderModifiablePalette( static_cast<void*>(m_pPalette.get()), 0, Assets::Palette::k_uNumColors, &m_osuSelectedIndicies );
 	}
 }
