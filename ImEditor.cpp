@@ -81,18 +81,25 @@ namespace ImEditor
 		return ImGui::ImageButton( pTexture->GetTexture(), imageSize, uv0, uv1, frame_padding, bg_col, tint_col );
 	}
 
-	void RenderModifiablePalette( void* pPalette, size_t uMin, size_t uMax )
+	void RenderModifiablePalette( void* pPalette, size_t uMin, size_t uMax, std::unordered_set<uint8_t>* psIndicies )
 	{
 		Assets::CPalette* pPal = static_cast<Assets::CPalette*>(pPalette);
 		Color* pColorTable = pPal->GetColorTable();
 		char szColorLabel[8];
 		const int k_iColorEditFlags = ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoBorder;
+		std::vector<std::pair<ImVec2, ImVec2>> vecCellPos;
+
+		if ( psIndicies && ImGui::Button( "Clear Selected" ) ) {
+			psIndicies->clear();
+		}
+
 		ImGui::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2( 5.0f, 5.0f ) );
-		ImGui::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2( 0.0f, 0.0f ) );
+		ImGui::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2( 6.0f, 6.0f ) );
 		for ( auto uIndex = uMin; uIndex < uMax; uIndex++ ) {
 			if ( uIndex % 16 != 0 ) {
 				ImGui::SameLine();
 			}
+
 			Color& col = pColorTable[uIndex];
 			float color[3] = { col.r / 255.0f, col.g / 255.0f, col.b / 255.0f };
 			sprintf_s( szColorLabel, sizeof( szColorLabel ), "##%i", uIndex );
@@ -101,9 +108,17 @@ namespace ImEditor
 				col.g = static_cast<uint8_t>(color[1] * 255);
 				col.b = static_cast<uint8_t>(color[2] * 255);
 			}
+
+			vecCellPos.push_back( { ImGui::GetItemRectMin(), ImGui::GetItemRectMax() } );
+			if ( psIndicies && psIndicies->count( uIndex ) ) {
+				ImDrawList* drawList = ImGui::GetWindowDrawList();
+				drawList->AddRect( vecCellPos.back().first, vecCellPos.back().second, IM_COL32( 255, 0, 0, 180 ), 0.0f, 0, 2.0f );
+			}
+
 			if ( ImGui::IsItemDeactivatedAfterEdit() ) {
 				pPal->SetChanged( true );
 			}
+
 			if ( ImGui::IsItemHovered() ) {
 				ImGui::BeginTooltip();
 				ImGui::Text( "Index: %d", uIndex );
@@ -111,5 +126,61 @@ namespace ImEditor
 			}
 		}
 		ImGui::PopStyleVar( 2 );
+
+		// Drag feature
+		{
+			if ( !psIndicies ) {
+				return;
+			}
+
+			static bool bDragging = false;
+			static ImVec2 vecDragStart, vecDragEnd;
+			const float fTolerance = 0.3f;
+
+			ImVec2 vecMousePos = ImGui::GetMousePos();
+			ImDrawList* pDrawList = ImGui::GetWindowDrawList();
+
+			if ( ImGui::IsMouseClicked( ImGuiMouseButton_Right ) ) {
+				bDragging = true;
+				vecDragStart = vecMousePos;
+				vecDragEnd = vecMousePos;
+			}
+
+			if ( bDragging && ImGui::IsMouseDragging( ImGuiMouseButton_Right ) ) {
+				vecDragEnd = vecMousePos;
+				pDrawList->AddRectFilled( vecDragStart, vecDragEnd, IM_COL32( 0, 120, 255, 50 ) );
+				pDrawList->AddRect( vecDragStart, vecDragEnd, IM_COL32( 0, 120, 255, 255 ), 0.0f, 0, 2.0f );
+			}
+
+			if ( bDragging && ImGui::IsMouseReleased( ImGuiMouseButton_Right ) ) {
+				bDragging = false;
+
+				float fDist = std::hypot( vecDragEnd.x - vecDragStart.x, vecDragEnd.y - vecDragStart.y );
+				if ( fDist < 15.0f ) {
+					return;
+				}
+
+				ImVec2 vecSelMin( std::min( vecDragStart.x, vecDragEnd.x ), std::min( vecDragStart.y, vecDragEnd.y ) );
+				ImVec2 vecSelMax( std::max( vecDragStart.x, vecDragEnd.x ), std::max( vecDragStart.y, vecDragEnd.y ) );
+
+				for ( size_t i = 0; i < vecCellPos.size(); i++ ) {
+					ImVec2 vecRectMin = vecCellPos[i].first;
+					ImVec2 vecRectMax = vecCellPos[i].second;
+					float fOverlapX = std::max( 0.0f, std::min( vecSelMax.x, vecRectMax.x ) - std::max( vecSelMin.x, vecRectMin.x ) );
+					float fOverlapY = std::max( 0.0f, std::min( vecSelMax.y, vecRectMax.y ) - std::max( vecSelMin.y, vecRectMin.y ) );
+					float fCellArea = (vecRectMax.x - vecRectMin.x) * (vecRectMax.y - vecRectMin.y);
+					float fOverlapArea = fOverlapX * fOverlapY;
+					if ( fOverlapArea / fCellArea >= fTolerance ) {
+						if ( psIndicies->count( uMin + i ) ) {
+							psIndicies->erase( uMin + i );
+						}
+						else {
+							psIndicies->insert( uMin + i );
+						}
+					}
+				}
+			}
+		}
+
 	}
 };

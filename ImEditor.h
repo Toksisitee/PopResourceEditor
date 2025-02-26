@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <utility>
+#include <unordered_set>
 
 #include "imgui.h"
 #include "Editor.h"
@@ -224,5 +225,5 @@ namespace ImEditor
 	extern void ResetRenderState();
 	extern void RenderTexture( CTexture2D* pTexture, const ImVec2& size = ImVec2( 0, 0 ), const ImVec2& uv0 = ImVec2( 0, 0 ), const ImVec2& uv1 = ImVec2( 1, 1 ), const ImVec4& tint_col = ImVec4( 1, 1, 1, 1 ), const ImVec4& border_col = ImVec4( 0, 0, 0, 0 ) );
 	extern bool ImageButton( CTexture2D* pTexture, const ImVec2& size = ImVec2( 0, 0 ), const ImVec2& uv0 = ImVec2( 0, 0 ), const ImVec2& uv1 = ImVec2( 1, 1 ), int frame_padding = -1, const ImVec4& bg_col = ImVec4( 0, 0, 0, 0 ), const ImVec4& tint_col = ImVec4( 1, 1, 1, 1 ) );
-	extern void RenderModifiablePalette( void* pPalette, size_t uMin, size_t uMax );
+	extern void RenderModifiablePalette( void* pPalette, size_t uMin, size_t uMax, std::unordered_set<uint8_t>* psIndicies );
 };
