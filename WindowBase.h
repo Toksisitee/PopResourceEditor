@@ -29,5 +29,4 @@ protected:
 	bool                m_bOpen = true;
 	std::string         m_sWindowName;
 	LPDIRECT3DDEVICE9   m_pd3dDevice;
-	std::function<void()> m_PendingTask;
 };
