@@ -23,6 +23,7 @@ namespace Util
 		extern std::string GetAssetsDirectory();
 		extern std::string GetCurrentDir();
 		extern std::string FormatPath( const char* pFileName, const char* pFilePath = nullptr );
+		extern const std::string& GetExportDirectory();
 		extern std::string FormatExportPathFromFilePath( const std::string& sFilePath );
 		extern std::string FormatExportPathFromFileName( const std::string& sFileName );
 		[[nodiscard]] extern bool FileExists( const std::string& file );
@@ -40,4 +41,5 @@ namespace Util
 
 	extern std::string StringToLowerCopy( const std::string& str );
 	extern std::string wcstombs( void* pwszStr, size_t uBufferSize );
+	extern void OpenDirectory( const std::string& sPath );
 }

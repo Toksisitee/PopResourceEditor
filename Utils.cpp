@@ -89,15 +89,20 @@ namespace Util
 			return std::string( szPathBuffer );
 		}
 
+		const std::string& GetExportDirectory()
+		{
+			return g_Editor.GetExportDirectory();
+		}
+
 		std::string FormatExportPathFromFilePath( const std::string& sFilePath )
 		{
 			auto sFileName = GetFileName( sFilePath );
-			return FormatPath( sFileName.c_str(), g_Editor.GetExportDirectory().c_str() );
+			return FormatPath( sFileName.c_str(), GetExportDirectory().c_str() );
 		}
 
 		std::string FormatExportPathFromFileName( const std::string& sFileName )
 		{
-			return FormatPath( sFileName.c_str(), g_Editor.GetExportDirectory().c_str() );
+			return FormatPath( sFileName.c_str(), GetExportDirectory().c_str() );
 		}
 
 		[[nodiscard]] bool FileExists( const std::string& sFilePath )
@@ -240,5 +245,10 @@ namespace Util
 			return sStr;
 		}
 		return "";
+	}
+
+	void OpenDirectory( const std::string& sPath )
+	{
+		ShellExecuteA( 0, "open", sPath.c_str(), NULL, NULL, SW_SHOWNORMAL );
 	}
 }

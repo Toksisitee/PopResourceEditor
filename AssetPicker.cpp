@@ -272,7 +272,17 @@ namespace AssetPicker
 	{
 		static bool bShowAssetPicker = true;
 		if ( bShowAssetPicker ) {
-			ImGui::Begin( "Asset Picker", &bShowAssetPicker );
+			ImGui::Begin( "Asset Picker", &bShowAssetPicker, ImGuiWindowFlags_MenuBar);
+
+			if ( ImGui::BeginMenuBar() ) {
+				if ( ImGui::BeginMenu( "File" ) ) {
+					if ( ImGui::MenuItem( "Open Export Directory" ) ) {
+						Util::OpenDirectory( Util::FileSystem::GetExportDirectory() );
+					}
+					ImGui::EndMenu();
+				}
+				ImGui::EndMenuBar();
+			}
 
 			static std::string sSelectedAsset = "";
 

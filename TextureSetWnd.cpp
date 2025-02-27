@@ -56,6 +56,9 @@ void CTextureSetWnd::Render()
 				}
 #undef EXPORT_BIN
 			}
+			if ( ImGui::MenuItem( "Open Export Directory" ) ) {
+				Util::OpenDirectory( Util::FileSystem::GetExportDirectory() );
+			}
 			ImGui::EndMenu();
 		}
 
