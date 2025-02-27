@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2025 Toksisitee. All rights reserved.
+Copyright (c) 2024-2025 Toksisitee. All rights reserved.
 
 This work is licensed under the terms of the MIT license.
 For a copy, refer to license.md or https://opensource.org/licenses/MIT
