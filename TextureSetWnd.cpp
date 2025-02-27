@@ -22,6 +22,29 @@ void CTextureSetWnd::Render()
 {
 	if ( ImGui::BeginMenuBar() ) {
 		if ( ImGui::BeginMenu( "File" ) ) {
+			if ( ImGui::MenuItem( "Export All (Bin)" ) ) {
+#define EXPORT_BIN(eWnd) { \
+							auto* pWnd = GetWindow<eWnd>(); \
+							pWnd->GetAsset()->ExportBin( Util::FileSystem::FormatExportPathFromFileName( pWnd->GetAssetName() ) ); \
+						 } \
+
+				auto* pPalWnd = GetWindow<Wnd::Palette>();
+				pPalWnd->GetAsset().get()->ExportBin( Util::FileSystem::FormatExportPathFromFileName( pPalWnd->GetAssetName() ) );
+				for ( size_t i = 1; i < IndexOf( Wnd::Max ); i++ ) {
+					switch ( static_cast<Wnd>(i) ) {
+						case Wnd::Alpha:   EXPORT_BIN( Wnd::Alpha )   break;
+						case Wnd::BigFade: EXPORT_BIN( Wnd::BigFade ) break;
+						case Wnd::Blocks:  EXPORT_BIN( Wnd::Blocks )  break;
+						case Wnd::Cliff:   EXPORT_BIN( Wnd::Cliff )   break;
+						case Wnd::Disp:    EXPORT_BIN( Wnd::Disp )    break;
+						case Wnd::Fade:    EXPORT_BIN( Wnd::Fade )    break;
+						case Wnd::Ghost:   EXPORT_BIN( Wnd::Ghost )   break;
+						case Wnd::Sky:     EXPORT_BIN( Wnd::Sky )     break;
+						default: break;
+					}
+				}
+#undef EXPORT_BIN
+			}
 			ImGui::EndMenu();
 		}
 

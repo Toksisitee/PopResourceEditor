@@ -17,7 +17,7 @@ class CTextureSetWnd : public CWindowBase {
 private:
 	enum class Wnd : uint8_t
 	{
-		Palette,
+		Palette, // Always first
 		Alpha,
 		BigFade,
 		Blocks,
