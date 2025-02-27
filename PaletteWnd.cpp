@@ -26,10 +26,10 @@ void CPaletteWnd::Render()
 		}
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Export Image" ) ) {
-		g_ErrHandler.HandleResult( m_pPalette.get()->ExportImg( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
+		g_ErrHandler.HandleResult( m_pPalette.get()->ExportImg( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ) ) );
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Export Bin" ) ) {
-		g_ErrHandler.HandleResult( m_pPalette.get()->ExportBin( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
+		g_ErrHandler.HandleResult( m_pPalette.get()->ExportBin( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ) ) );
 	}
 
 	ImGui::Checkbox( "Render Texture##pal", &m_bRenderTexture );

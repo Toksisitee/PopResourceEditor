@@ -25,10 +25,10 @@ void CBlocksWnd::Render()
 		}
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Export Image" ) ) {
-		g_ErrHandler.HandleResult( m_Blocks.ExportImg( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
+		g_ErrHandler.HandleResult( m_Blocks.ExportImg( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ) ) );
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Export Bin" ) ) {
-		g_ErrHandler.HandleResult( m_Blocks.ExportBin( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
+		g_ErrHandler.HandleResult( m_Blocks.ExportBin( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ) ) );
 	}
 
 	if ( m_Blocks.GetTexture() == nullptr ) {

@@ -42,10 +42,10 @@ void CFadeWnd::Render()
 		g_ErrHandler.HandleResult( m_Fade.Generate() );
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Export Image" ) ) {
-		g_ErrHandler.HandleResult( m_Fade.ExportImg( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
+		g_ErrHandler.HandleResult( m_Fade.ExportImg( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ) ) );
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Export Bin" ) ) {
-		g_ErrHandler.HandleResult( m_Fade.ExportBin( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
+		g_ErrHandler.HandleResult( m_Fade.ExportBin( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ) ) );
 	}
 
 	if ( m_Fade.GetTexture() == nullptr ) {

@@ -39,10 +39,10 @@ void CSkyWnd::Render()
 	}
 
 	if ( ImGui::Button( "Export Image" ) ) {
-		g_ErrHandler.HandleResult( m_Sky.ExportImg( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
+		g_ErrHandler.HandleResult( m_Sky.ExportImg( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ) ) );
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Export Bin" ) ) {
-		g_ErrHandler.HandleResult( m_Sky.ExportBin( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
+		g_ErrHandler.HandleResult( m_Sky.ExportBin( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ) ) );
 	}
 
 	ImEditor::RenderModifiablePalette( static_cast<void*>(m_Sky.GetPalette()), Assets::Sky::k_uColorStart, Assets::Sky::k_uColorStart + Assets::Sky::k_uNumColors, nullptr );

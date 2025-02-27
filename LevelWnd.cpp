@@ -33,7 +33,7 @@ void CLevelWnd::Render()
 		}
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Export Image" ) ) {
-		g_ErrHandler.HandleResult( m_Level.ExportImg( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
+		g_ErrHandler.HandleResult( m_Level.ExportImg( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ) ) );
 	}
 
 	ImGui::InputText( "###Level", (char*)m_sLevel.c_str(), sizeof( m_sLevel ) );

@@ -26,10 +26,10 @@ void CBigFadeWnd::Render()
 		}
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Export Image" ) ) {
-		g_ErrHandler.HandleResult( m_BigFade.ExportImg( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
+		g_ErrHandler.HandleResult( m_BigFade.ExportImg( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ) ) );
 	} ImGui::SameLine();
 	if ( ImGui::Button( "Export Bin" ) ) {
-		g_ErrHandler.HandleResult( m_BigFade.ExportBin( Util::FileSystem::FormatPathExportDirectory( GetWindowName() ) ) );
+		g_ErrHandler.HandleResult( m_BigFade.ExportBin( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ) ) );
 	}
 
 	ImEditor::RenderModifiablePalette( static_cast<void*>(m_BigFade.GetPalette()), Assets::BigFade::k_uColorStart, Assets::BigFade::k_uColorStart + Assets::BigFade::k_uNumColors, nullptr );

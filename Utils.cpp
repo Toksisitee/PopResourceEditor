@@ -78,9 +78,14 @@ namespace Util
 			return std::string( szPathBuffer );
 		}
 
-		std::string FormatPathExportDirectory( const std::string& sFilePath )
+		std::string FormatExportPathFromFilePath( const std::string& sFilePath )
 		{
 			auto sFileName = GetFileName( sFilePath );
+			return FormatPath( sFileName.c_str(), g_Editor.GetExportDirectory().c_str() );
+		}
+
+		std::string FormatExportPathFromFileName( const std::string& sFileName )
+		{
 			return FormatPath( sFileName.c_str(), g_Editor.GetExportDirectory().c_str() );
 		}
 

@@ -71,6 +71,19 @@ public:
 	void RenderEnd() override;
 	void OnPaletteChange() override {};
 
+	void SetAssetNames()
+	{
+		m_Windows[IndexOf( Wnd::Palette )].get()->SetAssetName( Assets::GenerateAssetName( m_szIdentifier, Assets::FileType::Palette ) );
+		m_Windows[IndexOf( Wnd::Alpha )].get()->SetAssetName( Assets::GenerateAssetName( m_szIdentifier, Assets::FileType::Alpha ) );
+		m_Windows[IndexOf( Wnd::BigFade )].get()->SetAssetName( Assets::GenerateAssetName( m_szIdentifier, Assets::FileType::BigFade ) );
+		m_Windows[IndexOf( Wnd::Blocks )].get()->SetAssetName( Assets::GenerateAssetName( m_szIdentifier, Assets::FileType::Blocks ) );
+		m_Windows[IndexOf( Wnd::Cliff )].get()->SetAssetName( Assets::GenerateAssetName( m_szIdentifier, Assets::FileType::Cliff ) );
+		m_Windows[IndexOf( Wnd::Disp )].get()->SetAssetName( Assets::GenerateAssetName( m_szIdentifier, Assets::FileType::Disp ) );
+		m_Windows[IndexOf( Wnd::Fade )].get()->SetAssetName( Assets::GenerateAssetName( m_szIdentifier, Assets::FileType::Fade ) );
+		m_Windows[IndexOf( Wnd::Ghost )].get()->SetAssetName( Assets::GenerateAssetName( m_szIdentifier, Assets::FileType::Ghost ) );
+		m_Windows[IndexOf( Wnd::Sky )].get()->SetAssetName( Assets::GenerateAssetName( m_szIdentifier, Assets::FileType::Sky ) );
+	}
+
 	void Initialize( LPDIRECT3DDEVICE9 pd3dDevice ) override
 	{
 		m_pd3dDevice = pd3dDevice;
@@ -85,6 +98,8 @@ public:
 		m_Windows[IndexOf( Wnd::Fade )] = std::make_unique<CFadeWnd>( m_pd3dDevice, "Fade" );
 		m_Windows[IndexOf( Wnd::Ghost )] = std::make_unique<CGhostWnd>( m_pd3dDevice, "Ghost" );
 		m_Windows[IndexOf( Wnd::Sky )] = std::make_unique<CSkyWnd>( m_pd3dDevice, "Sky" );
+
+		SetAssetNames();
 
 		for ( auto& pWnd : m_Windows ) {
 			pWnd->Initialize( pd3dDevice );
@@ -114,5 +129,7 @@ public:
 	}
 
 private:
+	char m_szIdentifier[2] = "0";
+	bool m_bEditTextureSlot;
 	std::vector<std::unique_ptr<CWindowBase>> m_Windows;
 };

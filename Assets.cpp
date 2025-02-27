@@ -19,6 +19,14 @@
 
 #include "Assets.h"
 
+namespace Util
+{
+	namespace FileSystem
+	{
+		extern [[nodiscard]] std::string GetFileName( const std::string& sFilePath );
+	}
+}
+
 namespace Assets
 {
 	const char* GetFileTypeSz( FileType eFileType )
@@ -87,46 +95,59 @@ namespace Assets
 		size_t uLastSlash = sFilePath.find_last_of( "/\\" );
 		if ( uLastSlash != std::string::npos ) {
 			std::string sDir = sFilePath.substr( 0, uLastSlash + 1 );
-			switch ( eType ) {
-				case FileType::Alpha:
-					sprintf_s( szPath, ALPHA_FORMAT, sDir.c_str(), pszIdentifier );
-					break;
-				case FileType::BigFade:
-					sprintf_s( szPath, BIGFADE_FORMAT, sDir.c_str(), pszIdentifier );
-					break;
-				case FileType::Blocks:
-					sprintf_s( szPath, BLOCKS_FORMAT, sDir.c_str(), pszIdentifier );
-					break;
-				case FileType::Cliff:
-					sprintf_s( szPath, CLIFF_FORMAT, sDir.c_str(), pszIdentifier );
-					break;
-				case FileType::Fade:
-					sprintf_s( szPath, FADE_FORMAT, sDir.c_str(), pszIdentifier );
-					break;
-				case FileType::Ghost:
-					sprintf_s( szPath, GHOST_FORMAT, sDir.c_str(), pszIdentifier );
-					break;
-				case FileType::Disp:
-					sprintf_s( szPath, DISP_FORMAT, sDir.c_str(), pszIdentifier );
-					break;
-				case FileType::Palette:
-					sprintf_s( szPath, PALETTE_FORMAT, sDir.c_str(), pszIdentifier );
-					break;
-				case FileType::Sky:
-					sprintf_s( szPath, SKY_FORMAT, sDir.c_str(), pszIdentifier );
-					break;
-				default:
-				{
-					assert( false && "GenerateAssetPath: Unknown Asset FileType" );
-					return "GenerateAssetPath: Unknown Asset FileType";
-				}
+			std::string sAssetName = GenerateAssetName( pszIdentifier, eType );
+
+			if ( sAssetName.empty() ) {
+				return std::nullopt;
 			}
 
+			sprintf_s( szPath, "%s%s", sDir.c_str(), sAssetName.c_str() );
 			return std::string( szPath );
 		}
 
 		return std::nullopt;
 	}
+
+	std::string GenerateAssetName( const char* pszIdentifier, FileType eType )
+	{
+		char szAssetName[256];
+
+		switch ( eType ) {
+			case FileType::Alpha:
+				sprintf_s( szAssetName, ALPHA_FORMAT, "", pszIdentifier );
+				break;
+			case FileType::BigFade:
+				sprintf_s( szAssetName, BIGFADE_FORMAT, "", pszIdentifier );
+				break;
+			case FileType::Blocks:
+				sprintf_s( szAssetName, BLOCKS_FORMAT, "", pszIdentifier );
+				break;
+			case FileType::Cliff:
+				sprintf_s( szAssetName, CLIFF_FORMAT, "", pszIdentifier );
+				break;
+			case FileType::Fade:
+				sprintf_s( szAssetName, FADE_FORMAT, "", pszIdentifier );
+				break;
+			case FileType::Ghost:
+				sprintf_s( szAssetName, GHOST_FORMAT, "", pszIdentifier );
+				break;
+			case FileType::Disp:
+				sprintf_s( szAssetName, DISP_FORMAT, "", pszIdentifier );
+				break;
+			case FileType::Palette:
+				sprintf_s( szAssetName, PALETTE_FORMAT, "", pszIdentifier );
+				break;
+			case FileType::Sky:
+				sprintf_s( szAssetName, SKY_FORMAT, "", pszIdentifier );
+				break;
+			default:
+				assert( false && "GenerateAssetName: Unknown Asset FileType" );
+				return "";
+		}
+
+		return std::string( szAssetName + 1 );
+	}
+
 
 	Result QuickLoadPalette( CPalette* pPalette, const std::string& sFilePath )
 	{
@@ -287,51 +308,61 @@ namespace Assets
 			case Assets::FileType::Alpha:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CAlphaWnd>( pDevice, sFilePath );
+				pWnd->SetAssetName( Util::FileSystem::GetFileName( sFilePath ) );
 				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::BigFade:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CBigFadeWnd>( pDevice, sFilePath );
+				pWnd->SetAssetName( Util::FileSystem::GetFileName( sFilePath ) );
 				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Blocks:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CBlocksWnd>( pDevice, sFilePath );
+				pWnd->SetAssetName( Util::FileSystem::GetFileName( sFilePath ) );
 				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Cliff:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CCliffWnd>( pDevice, sFilePath );
+				pWnd->SetAssetName( Util::FileSystem::GetFileName( sFilePath ) );
 				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Disp:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CDispWnd>( pDevice, sFilePath );
+				pWnd->SetAssetName( Util::FileSystem::GetFileName( sFilePath ) );
 				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Fade:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CFadeWnd>( pDevice, sFilePath );
+				pWnd->SetAssetName( Util::FileSystem::GetFileName( sFilePath ) );
 				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Ghost:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CGhostWnd>( pDevice, sFilePath );
+				pWnd->SetAssetName( Util::FileSystem::GetFileName( sFilePath ) );
 				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Level:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CLevelWnd>( pDevice, sFilePath );
+				pWnd->SetAssetName( Util::FileSystem::GetFileName( sFilePath ) );
 				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Palette:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CPaletteWnd>( pDevice, sFilePath );
+				pWnd->SetAssetName( Util::FileSystem::GetFileName( sFilePath ) );
 				return QuickLoad( (void*)pWnd->GetAsset().get(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Sky:
 			{
 				auto pWnd = g_WndMngr.AddWindow<CSkyWnd>( pDevice, sFilePath );
+				pWnd->SetAssetName( Util::FileSystem::GetFileName( sFilePath ) );
 				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 			case Assets::FileType::Sprite:

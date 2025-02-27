@@ -133,5 +133,6 @@ namespace Assets
 	const char* GetFileTypeSz( FileType eFileType );
 	extern Result OpenWnd( const std::string& sFilePath, FileType eFileType );
 	extern Result QuickLoad( void* pAsset, const std::string& sFilePath, FileType eFileType );
+	extern std::string GenerateAssetName( const char* pszIdentifier, FileType eType );
 	extern CTexture2D* LoadTexture( const std::string& sFilePath, const Assets::FileType eType, int nSize );
 }
