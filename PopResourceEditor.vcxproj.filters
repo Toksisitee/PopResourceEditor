@@ -25,9 +25,6 @@
     <Filter Include="Source Files\Windows">
       <UniqueIdentifier>{32010482-d215-483a-b105-459b0025838b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\imgui\L2DFileDialog">
-      <UniqueIdentifier>{0bf99e33-e58a-48fd-bcbd-a9cf8bfc97f8}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PopResourceEditor.cpp">
@@ -160,15 +157,6 @@
       <Filter>Source Files\Windows</Filter>
     </ClCompile>
     <ClCompile Include="IniFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="L2DFileDialog.h">
-      <Filter>Source Files\imgui\L2DFileDialog</Filter>
-    </ClCompile>
-    <ClCompile Include="L2DFileDialog.cpp">
-      <Filter>Source Files\imgui\L2DFileDialog</Filter>
-    </ClCompile>
-    <ClCompile Include="FileDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FileDialogNative.cpp">
@@ -324,9 +312,6 @@
       <Filter>Source Files\Windows</Filter>
     </ClInclude>
     <ClInclude Include="IniFile.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FileDialog.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="FileDialogNative.h">
