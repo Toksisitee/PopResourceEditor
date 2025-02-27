@@ -238,6 +238,7 @@
     <ClInclude Include="LevelWnd.h" />
     <ClInclude Include="Palette.h" />
     <ClInclude Include="PaletteWnd.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Sky.h" />
     <ClInclude Include="SkyWnd.h" />
     <ClInclude Include="Sprite.h" />
@@ -246,6 +247,12 @@
     <ClInclude Include="Utils.h" />
     <ClInclude Include="WindowBase.h" />
     <ClInclude Include="WindowManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PopResourceEditor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
