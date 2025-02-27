@@ -304,19 +304,19 @@ namespace AssetPicker
 				{ Assets::FileType::Level},
 			};
 
-			uint8_t uCount = 0;
+			float fStartX = ImGui::GetCursorPosX(), fMaxWidth = ImGui::GetContentRegionAvail().x;
 			for ( const auto& eFileType : sarrFileTypeOpt ) {
 				uint16_t bit = FileTypeToBit( eFileType );
 				bool isChecked = (g_AssetPicker.uShowFileType & bit) != 0;
-				if ( ImGui::Checkbox( Assets::GetFileTypeSz( eFileType ), &isChecked ) ) {
-					if ( isChecked )
-						g_AssetPicker.uShowFileType |= bit;
-					else
-						g_AssetPicker.uShowFileType &= ~bit;
-				}
-				uCount++;
-				if ( uCount % 6 != 0 ) {
-					ImGui::SameLine();
+				const char* pszLabel = Assets::GetFileTypeSz( eFileType );
+
+				if ( ImGui::Checkbox( pszLabel, &isChecked ) )
+					g_AssetPicker.uShowFileType = isChecked ? (g_AssetPicker.uShowFileType | bit)
+					: (g_AssetPicker.uShowFileType & ~bit);
+
+				ImGui::SameLine();
+				if ( ImGui::GetCursorPosX() + ImGui::CalcTextSize( pszLabel ).x + ImGui::GetFrameHeight() > fStartX + fMaxWidth ) {
+					ImGui::NewLine();
 				}
 			} ImGui::NewLine();
 
