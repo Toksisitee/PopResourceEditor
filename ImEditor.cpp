@@ -227,6 +227,17 @@ namespace ImEditor
 				ImGui::SameLine();
 			}
 
+			// TODO: fix in the future, these values are hardcoded because I can't external link constexpr
+			if ( uIndex == 0 ) {
+				ImGui::SeparatorText( "BigFade Start Region" );
+			}
+			else if ( uIndex == 112 ) {
+				ImGui::SeparatorText( "Sky Begin Region" );
+			}
+			else if ( uIndex == 112 + 16 ) {
+				ImGui::SeparatorText( "Sky End Region" );
+			}
+
 			Color& col = pColorTable[uIndex];
 			float color[3] = { col.r / 255.0f, col.g / 255.0f, col.b / 255.0f };
 			sprintf_s( szColorLabel, sizeof( szColorLabel ), "##%i", uIndex );
