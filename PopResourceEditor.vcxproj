@@ -180,8 +180,6 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="imgui\imsink\imsink.cpp" />
     <ClCompile Include="include\EasyBMP\EasyBMP.cpp" />
-    <ClCompile Include="L2DFileDialog.cpp" />
-    <ClCompile Include="L2DFileDialog.h" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelWnd.cpp" />
     <ClCompile Include="Palette.cpp" />
