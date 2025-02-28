@@ -30,6 +30,12 @@ void CBigFadeWnd::RenderEnd()
 
 void CBigFadeWnd::Render()
 {
+	if ( ImGui::Button( "Load Bin" ) ) {
+		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::DAT ) ) {
+			g_ErrHandler.HandleResult( m_BigFade.LoadBin( *osFilePath ) );
+			m_BigFade.DestroyTexture();
+		}
+	} ImGui::SameLine();
 	if ( ImGui::Button( "Load Image" ) ) {
 		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::BMP ) ) {
 			g_ErrHandler.HandleResult( m_BigFade.LoadImg( *osFilePath ) );

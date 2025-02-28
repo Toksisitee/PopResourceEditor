@@ -29,6 +29,12 @@ void CBlocksWnd::RenderEnd()
 
 void CBlocksWnd::Render()
 {
+	if ( ImGui::Button( "Load Bin" ) ) {
+		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::DAT ) ) {
+			g_ErrHandler.HandleResult( m_Blocks.LoadBin( *osFilePath ) );
+			m_Blocks.DestroyTexture();
+		}
+	} ImGui::SameLine();
 	if ( ImGui::Button( "Load Image" ) ) {
 		if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::BMP ) ) {
 			g_ErrHandler.HandleResult( m_Blocks.LoadImg( *osFilePath ) );
