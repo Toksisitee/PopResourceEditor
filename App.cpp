@@ -121,28 +121,14 @@ void DockspaceBuild( ImGuiID dockspaceID, bool& bDockspaceBuilt )
 
 	ImGuiID dock_main_id = dockspaceID;
 	ImGuiID dock_id_top = ImGui::DockBuilderSplitNode( dockspaceID, ImGuiDir_Up, 0.35f, NULL, &dock_main_id );
-	ImGuiID dock_id_left = ImGui::DockBuilderSplitNode( dock_main_id, ImGuiDir_Left, 0.18f, NULL, &dock_main_id );
-	ImGuiID dock_id_right = ImGui::DockBuilderSplitNode( dock_main_id, ImGuiDir_Right, 0.25f, NULL, &dock_main_id );
-	ImGuiID dock_id_rightBottom = ImGui::DockBuilderSplitNode( dock_id_right, ImGuiDir_Down, 0.20f, NULL, &dock_id_right );
-	float fChatSplit = 0.13f;
-#if _DEBUG
-	fChatSplit = 0.55f;
-#endif
-	ImGuiID dock_id_bottom = ImGui::DockBuilderSplitNode( dock_main_id, ImGuiDir_Down, fChatSplit, NULL, &dock_main_id );
-	ImGuiID dock_id_bottomConsole = ImGui::DockBuilderSplitNode( dock_id_bottom, ImGuiDir_Down, 0.45f, NULL, &dock_id_bottom );
+	ImGuiID dock_id_bottom = ImGui::DockBuilderSplitNode( dock_main_id, ImGuiDir_Down, 0.45f, NULL, &dock_main_id );
 
 	ImGuiDockNode* node = ImGui::DockBuilderGetNode( dock_id_top );
 	node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 	node->LocalFlags |= ImGuiDockNodeFlags_NoResizeY;
-	node = ImGui::DockBuilderGetNode( dock_id_bottom );
-	node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
-	node = ImGui::DockBuilderGetNode( dock_id_bottomConsole );
-	node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 	node = ImGui::DockBuilderGetNode( dock_main_id );
 	node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
-#if !_DEBUG
-	node->LocalFlags |= ImGuiDockNodeFlags_NoResizeY;
-#endif
+	node = ImGui::DockBuilderGetNode( dock_id_bottom );
 
 	ImGui::DockBuilderDockWindow( "Asset Picker", dock_main_id );
 	ImGui::DockBuilderDockWindow( "Console", dock_id_bottom );
