@@ -66,7 +66,10 @@ void CBlocksWnd::Render()
 			size_t uTexturesCountCol = Assets::Blocks::k_uHeight / Assets::Blocks::k_uBlockHeight;
 			for ( size_t i = 0; i < uTexturesCountCol; i++ ) {
 				for ( size_t j = 0; j < uTexturesCountRow; j++ ) {
-					ImEditor::ImageButton( m_Blocks.GetTexture( j * uTexturesCountRow + i ) );
+					const auto uIndex = j * uTexturesCountRow + i;
+					if ( ImEditor::ImageButton( m_Blocks.GetTexture( uIndex ) ) ) {
+						g_ErrHandler.HandleResult( m_Blocks.ExportSubImg( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ), uIndex ) );
+					}
 					ImGui::SameLine();
 				}
 				ImGui::NewLine();

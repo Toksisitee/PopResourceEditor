@@ -106,6 +106,40 @@ namespace Assets
 		return Result::OK_EXPORT;
 	}
 
+	Result CBlocks::ExportSubImg( const std::string& sFilePath, size_t uIndex )
+	{
+		g_ErrHandler.SetFileType( FileType::Blocks );
+
+		if ( uIndex >= k_uNumBlocks ) {
+			assert( false && "CBlocks::ExportSubImg out of bounds" );
+			return Result::FAIL_EXPORT;
+		}
+
+		BMP BMP;
+		BMP.SetSize( k_uBlockWidth, k_uBlockHeight );
+		BMP.SetBitDepth( 24 );
+
+		size_t uRow = uIndex / (k_uWidth / k_uBlockWidth);
+		size_t uCol = uIndex % (k_uWidth / k_uBlockWidth);
+		auto pColorTable = GetPalette()->GetColorTable();
+
+		for ( size_t y = 0; y < k_uBlockHeight; y++ ) {
+			for ( size_t x = 0; x < k_uBlockWidth; x++ ) {
+				const auto uAtlasX = uRow * k_uBlockWidth + x;
+				const auto uAatlasY = uCol * k_uBlockHeight + y;
+				Color* clr = &pColorTable[m_Data[uAatlasY * k_uWidth + uAtlasX]];
+				BMP.SetPixel( x, y, { clr->b, clr->g, clr->r, 0 } );
+			}
+		}
+
+		auto sNewFilePath = Util::FileSystem::RemoveFileExtension( sFilePath ) + "_" + std::to_string( uIndex ) + ".bmp";
+		if ( !BMP.WriteToFile( sNewFilePath.c_str() ) ) {
+			return Result::FAIL_EXPORT;
+		}
+
+		return Result::OK_EXPORT;
+	}
+
 	Result CBlocks::ExportBin( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Blocks );
@@ -150,9 +184,9 @@ namespace Assets
 
 		for ( size_t y = 0; y < k_uBlockHeight; y++ ) {
 			for ( size_t x = 0; x < k_uBlockWidth; x++ ) {
-				const auto atlasX = uRow * k_uBlockWidth + x;
-				const auto atlasY = uCol * k_uBlockHeight + y;
-				Color* clr = &pColorTable[m_Data[atlasY * k_uWidth + atlasX]];
+				const auto uAtlasX = uRow * k_uBlockWidth + x;
+				const auto uAatlasY = uCol * k_uBlockHeight + y;
+				Color* clr = &pColorTable[m_Data[uAatlasY * k_uWidth + uAtlasX]];
 				WriteRGBTexel( pTexels, x, y, rc.Pitch, clr );
 			}
 		}
