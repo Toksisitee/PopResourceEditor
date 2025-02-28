@@ -104,7 +104,8 @@ HRESULT CD3DApp::Create( HINSTANCE hInstance )
 	m_hInstance = hInstance;
 
 	// Create application window
-	//ImGui_ImplWin32_EnableDpiAwareness();
+	extern void ImGui_ImplWin32_EnableDpiAwareness();
+	ImGui_ImplWin32_EnableDpiAwareness();
 
 	WNDCLASSEX wc = { 0 };
 	wc.hInstance = hInstance;
