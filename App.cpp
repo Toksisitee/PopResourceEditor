@@ -120,8 +120,8 @@ void DockspaceBuild( ImGuiID dockspaceID, bool& bDockspaceBuilt )
 	ImGui::DockBuilderSetNodeSize( dockspaceID, pViewport->Size );
 
 	ImGuiID dock_main_id = dockspaceID;
-	ImGuiID dock_id_top = ImGui::DockBuilderSplitNode( dockspaceID, ImGuiDir_Up, 0.35f, NULL, &dock_main_id );
-	ImGuiID dock_id_bottom = ImGui::DockBuilderSplitNode( dock_main_id, ImGuiDir_Down, 0.45f, NULL, &dock_main_id );
+	ImGuiID dock_id_top = ImGui::DockBuilderSplitNode( dockspaceID, ImGuiDir_Up, 0.13f, NULL, &dock_main_id );
+	ImGuiID dock_id_bottom = ImGui::DockBuilderSplitNode( dock_main_id, ImGuiDir_Down, 0.30f, NULL, &dock_main_id );
 
 	ImGuiDockNode* node = ImGui::DockBuilderGetNode( dock_id_top );
 	node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
@@ -129,7 +129,9 @@ void DockspaceBuild( ImGuiID dockspaceID, bool& bDockspaceBuilt )
 	node = ImGui::DockBuilderGetNode( dock_main_id );
 	node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 	node = ImGui::DockBuilderGetNode( dock_id_bottom );
+	node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
 
+	ImGui::DockBuilderDockWindow( "PopResourceEditor", dock_id_top );
 	ImGui::DockBuilderDockWindow( "Asset Picker", dock_main_id );
 	ImGui::DockBuilderDockWindow( "Console", dock_id_bottom );
 
@@ -154,7 +156,7 @@ void DockspaceDraw()
 		DockspaceBuild( dockspaceID, bDockSpaceBuilt );
 	}
 
-	ImGui::Begin( "PopResourceEditor", nullptr, windowFlags );
+	ImGui::Begin( "Main", nullptr, windowFlags );
 	ImGui::DockSpace( dockspaceID, ImVec2( 0, 0 ), ImGuiDockNodeFlags_None );
 	ImGui::End();
 }
@@ -386,14 +388,82 @@ void CEditorApp::Run()
 					//Debug::RenderWindows();
 				}
 
+				DockspaceDraw();
+				g_WndMngr.Render();
+				ImGui::Begin( "PopResourceEditor", nullptr, ImGuiWindowFlags_MenuBar );
 				{
-					DockspaceDraw();
-					if ( ImGui::Button( "Texture Set" ) ) {
-						auto pWnd = g_WndMngr.AddWindow<CTextureSetWnd>( GetDevice(), "Texture Set" );
-					}
+					{
+						static bool bAboutWnd = false;
 
-					g_WndMngr.Render();
+						ImVec2 vecPickerPos = ImGui::GetWindowPos();
+						ImVec2 vecPickerSize = ImGui::GetWindowSize();
+
+						if ( ImGui::BeginMenuBar() ) {
+							if ( ImGui::BeginMenu( "File" ) ) {
+								if ( ImGui::MenuItem( "Open Export Directory" ) ) {
+									Util::OpenDirectory( Util::FileSystem::GetExportDirectory() );
+								}
+								ImGui::EndMenu();
+							}
+
+							if ( ImGui::BeginMenu( "About" ) ) {
+								bAboutWnd = true;
+								ImGui::EndMenu();
+							}
+							ImGui::EndMenuBar();
+						}
+
+						if ( bAboutWnd ) {
+							ImGui::OpenPopup( "About" );
+
+							ImVec2 vecPickerCenter = ImVec2( vecPickerPos.x + vecPickerSize.x * 0.5f, vecPickerPos.y + vecPickerSize.y * 0.5f );
+							ImVec2 vecAboutWndSize = ImVec2( vecPickerSize.x * 0.65f, vecPickerSize.y * 0.85f );
+							ImGui::SetNextWindowSize( vecAboutWndSize );
+							ImGui::SetNextWindowPos( ImVec2( vecPickerCenter.x - vecAboutWndSize.x * 0.5f,
+													 vecPickerCenter.y - vecAboutWndSize.y * 0.5f ),
+													 ImGuiCond_Always );
+
+							if ( ImGui::BeginPopupModal( "About", NULL, ImGuiWindowFlags_AlwaysAutoResize ) ) {
+								ImGui::TextWrapped( "Open-source asset editor and manager written in C++ for Bullfrog's Populous: The Beginning, designed to preview, modify, and generate the game's assets." );
+								ImGui::NewLine();
+								ImGui::TextWrapped( "Project: %S", EDITOR_NAME );
+								ImGui::TextWrapped( "Version: %s", EDITOR_VERSION );
+								ImGui::TextWrapped( "Compiled: %s (%s)", EDITOR_DATE, EDITOR_CONFIG );
+								ImGui::NewLine();
+
+								const char* pszLicense =
+									"Copyright (c) 2024-2025 Toksisitee\n"
+									"Permission is hereby granted, free of charge, to any person obtaining a copy"
+									"of this software and associated documentation files (the \"Software\"), to deal"
+									"in the Software without restriction, including without limitation the rights"
+									"to use, copy, modify, merge, publish, distribute, sublicense, and/or sell"
+									"copies of the Software, and to permit persons to whom the Software is"
+									"furnished to do so, subject to the following conditions:"
+									"The above copyright notice and this permission notice shall be included in all"
+									"copies or substantial portions of the Software."
+									"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR"
+									"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,"
+									"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE"
+									"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+									"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,"
+									"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE";
+								ImGui::TextWrapped( pszLicense );
+
+								if ( ImGui::Button( "Close" ) ) {
+									bAboutWnd = false;
+									ImGui::CloseCurrentPopup();
+								}
+								ImGui::EndPopup();
+							}
+						}
+
+						if ( ImGui::Button( "Create Texture Set" ) ) {
+							auto pWnd = g_WndMngr.AddWindow<CTextureSetWnd>( GetDevice(), "Texture Set" );
+						}
+					}
+					ImGui::End();
 					AssetPicker::Render();
+
 				}
 
 #if 0
