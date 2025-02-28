@@ -28,6 +28,9 @@ public:
 	[[nodiscard]] HWND		GetHwnd() { return m_hWnd; }
 	[[nodiscard]] LPDIRECT3DDEVICE9	GetDevice() { return m_pd3dDevice; }
 
+	UINT					GetWidth() { return m_d3dpp.BackBufferWidth; }
+	UINT					GetHeight() { return m_d3dpp.BackBufferHeight; }
+
 protected:
 	virtual LRESULT			WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	virtual LRESULT			DefWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
