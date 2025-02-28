@@ -136,6 +136,9 @@ public:
 
 	void Cleanup() override
 	{
+		for ( auto& pWnd : m_Windows ) {
+			pWnd->Cleanup();
+		}
 		m_Windows.clear();
 	}
 
