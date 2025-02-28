@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 */
 
 #include <dwmapi.h>
-
+#include "resource.h"
 
 #include "imgui/imgui.h"
 #include "imgui_impl_dx9.h"
@@ -112,8 +112,8 @@ HRESULT CD3DApp::Create( HINSTANCE hInstance )
 	wc.lpfnWndProc = WndProcCallback;
 	wc.style = CS_BYTEALIGNWINDOW;
 	wc.cbSize = sizeof( WNDCLASSEX );
-	wc.hIcon = 0;
-	wc.hIconSm = 0;
+	wc.hIcon = ::LoadIcon( hInstance, MAKEINTRESOURCE( IDI_ICON1 ) );
+	wc.hIconSm = ::LoadIcon( hInstance, MAKEINTRESOURCE( IDI_ICON1 ) );
 	wc.hCursor = ::LoadCursor( NULL, IDC_ARROW );
 	wc.lpszMenuName = NULL;
 	wc.cbClsExtra = 0;
