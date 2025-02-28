@@ -68,7 +68,6 @@ namespace Assets
 	private:
 		uint8_t m_uColorKeys[Palette::k_uNumColorKeys] = { 255, 255 };;
 		Color m_ColorTable[Palette::k_uNumColors];
-		uint8_t m_Data[Palette::k_uSize];
 		CTexture2D* m_pTexture;
 		bool m_bModified = false;
 	};
