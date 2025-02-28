@@ -246,7 +246,7 @@ namespace AssetPicker
 						drawList->AddRect( v2IconPos, ImVec2( v2IconPos.x + fIconSize, v2IconPos.y + fIconSize ), IM_COL32( 255, 255, 255, 255 ), 0.0f, 0, 2.0f );
 					}
 
-					if ( ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered() ) {
+					if ( ImGui::IsMouseDoubleClicked( ImGuiMouseButton_Left ) && ImGui::IsItemHovered() ) {
 						Assets::OpenWnd( entry.sFile, entry.eFileType );
 						sSelectedAsset = entry.sFile;
 						spdlog::info( "Selected file: {}", sSelectedAsset );
@@ -272,7 +272,10 @@ namespace AssetPicker
 	{
 		static bool bShowAssetPicker = true;
 		if ( bShowAssetPicker ) {
-			ImGui::Begin( "Asset Picker", &bShowAssetPicker, ImGuiWindowFlags_MenuBar);
+			ImGui::Begin( "Asset Picker", &bShowAssetPicker, ImGuiWindowFlags_MenuBar );
+			static bool bAboutWnd = false;
+			ImVec2 vecPickerPos = ImGui::GetWindowPos();
+			ImVec2 vecPickerSize = ImGui::GetWindowSize();
 
 			if ( ImGui::BeginMenuBar() ) {
 				if ( ImGui::BeginMenu( "File" ) ) {
@@ -281,7 +284,56 @@ namespace AssetPicker
 					}
 					ImGui::EndMenu();
 				}
+
+				if ( ImGui::BeginMenu( "About" ) ) {
+					bAboutWnd = true;
+					ImGui::EndMenu();
+				}
 				ImGui::EndMenuBar();
+			}
+
+			if ( bAboutWnd ) {
+				ImGui::OpenPopup( "About" );
+
+				ImVec2 vecPickerCenter = ImVec2( vecPickerPos.x + vecPickerSize.x * 0.5f, vecPickerPos.y + vecPickerSize.y * 0.5f );
+				ImVec2 vecAboutWndSize = ImVec2( vecPickerSize.x * 0.65f, vecPickerSize.y * 0.85f );
+				ImGui::SetNextWindowSize( vecAboutWndSize );
+				ImGui::SetNextWindowPos( ImVec2( vecPickerCenter.x - vecAboutWndSize.x * 0.5f,
+										 vecPickerCenter.y - vecAboutWndSize.y * 0.5f ),
+										 ImGuiCond_Always );
+
+				if ( ImGui::BeginPopupModal( "About", NULL, ImGuiWindowFlags_AlwaysAutoResize ) ) {
+					ImGui::TextWrapped( "Open-source asset editor and manager written in C++ for Bullfrog's Populous: The Beginning, designed to preview, modify, and generate the game's assets." );
+					ImGui::NewLine();
+					ImGui::TextWrapped( "Project: %S", EDITOR_NAME );
+					ImGui::TextWrapped( "Version: %s", EDITOR_VERSION );
+					ImGui::TextWrapped( "Compiled: %s (%s)", EDITOR_DATE, EDITOR_CONFIG );
+					ImGui::NewLine();
+
+					const char* pszLicense =
+						"Copyright (c) 2024-2025 Toksisitee\n"
+						"Permission is hereby granted, free of charge, to any person obtaining a copy"
+						"of this software and associated documentation files (the \"Software\"), to deal"
+						"in the Software without restriction, including without limitation the rights"
+						"to use, copy, modify, merge, publish, distribute, sublicense, and/or sell"
+						"copies of the Software, and to permit persons to whom the Software is"
+						"furnished to do so, subject to the following conditions:"
+						"The above copyright notice and this permission notice shall be included in all"
+						"copies or substantial portions of the Software."
+						"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR"
+						"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,"
+						"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE"
+						"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+						"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,"
+						"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE";
+					ImGui::TextWrapped( pszLicense );
+
+					if ( ImGui::Button( "Close" ) ) {
+						bAboutWnd = false;
+						ImGui::CloseCurrentPopup();
+					}
+					ImGui::EndPopup();
+				}
 			}
 
 			static std::string sSelectedAsset = "";

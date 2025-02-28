@@ -15,6 +15,12 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 #define TO_STRING(s)	#s
 #define STRINGIFY(s)	TO_STRING(s)
 
+#if _DEBUG
+#define EDITOR_CONFIG "Debug"
+#else
+#define EDITOR_CONFIG "Release"
+#endif
+
 #define VERSION_MAJOR	0
 #define VERSION_MINOR	1
 #define VERSION_PATCH	0
