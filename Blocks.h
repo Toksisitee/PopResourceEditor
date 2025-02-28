@@ -42,6 +42,7 @@ namespace Assets
 
 		bool	CreateTexture( LPDIRECT3DDEVICE9 pD3DDevice, int nWidth, int nHeight );
 		bool	CreateSubTexture( LPDIRECT3DDEVICE9 pD3DDevice, size_t index );
+		Result	LoadSubImg( LPDIRECT3DDEVICE9 pD3DDevice, const std::string& sFilePath, size_t uIndex );
 		Result	ExportSubImg( const std::string& sFilePath, size_t uIndex );
 
 		inline void DestroyTexture( size_t uIndex )

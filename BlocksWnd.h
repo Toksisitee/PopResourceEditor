@@ -40,4 +40,5 @@ public:
 	bool m_bDrawAtlas = false;
 private:
 	Assets::CBlocks m_Blocks;
+	size_t m_uSubTexClicked = 0;
 };

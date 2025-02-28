@@ -74,6 +74,49 @@ namespace Assets
 		return Result::FAIL_LOAD;
 	}
 
+	Result CBlocks::LoadSubImg( LPDIRECT3DDEVICE9 pD3DDevice, const std::string& sFilePath, size_t uIndex )
+	{
+		g_ErrHandler.SetFileType( FileType::Blocks );
+
+		if ( uIndex >= k_uNumBlocks ) {
+			assert( false && "CBlocks::LoadSubImg out of bounds" );
+			return Result::FAIL_LOAD;
+		}
+
+		BMP BMP;
+		if ( !BMP.ReadFromFile( sFilePath.c_str() ) ) {
+			return Result::FAIL_LOAD;
+		}
+
+		auto nWidth = BMP.TellWidth();
+		auto nHeight = BMP.TellHeight();
+
+		if ( nWidth != k_uBlockWidth || nHeight != k_uBlockHeight ) {
+			g_ErrHandler.LogFmt( Log::Level::CRT, "LoadSubImg: Image dimensions mismatch. Got: %ix%i, Expected: %ux%u", nWidth, nHeight, k_uBlockWidth, k_uBlockHeight );
+			return Result::FAIL_LOAD;
+		}
+
+		size_t uCol = uIndex / (k_uWidth / k_uBlockWidth);
+		size_t uRow = uIndex % (k_uWidth / k_uBlockWidth);
+		for ( size_t y = 0; y < k_uBlockHeight; y++ ) {
+			for ( size_t x = 0; x < k_uBlockWidth; x++ ) {
+				auto clr = BMP.GetPixel( x, y );
+				const auto uAtlasX = uRow * k_uBlockWidth + x;
+				const auto uAtlasY = uCol * k_uBlockHeight + y;
+				m_Data[uAtlasY * k_uWidth + uAtlasX] = GetPalette()->FindColor( { clr.Red, clr.Green, clr.Blue } );
+			}
+		}
+
+		if ( m_pSubTextures[uIndex] ) {
+			delete m_pSubTextures[uIndex];
+		}
+
+		CreateSubTexture( pD3DDevice, uIndex );
+		
+		return Result::OK_LOAD;
+	}
+
+
 	Result CBlocks::ExportImg( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Blocks );
@@ -194,6 +237,4 @@ namespace Assets
 		m_pSubTextures[uIndex]->GetTexture()->UnlockRect( 0 );
 		return true;
 	}
-
-
 }

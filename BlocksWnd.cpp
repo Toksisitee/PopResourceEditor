@@ -58,13 +58,27 @@ void CBlocksWnd::Render()
 		ImEditor::SetPointFiltering( m_pd3dDevice );
 
 		ImGui::Checkbox( "Draw Atlas", &m_bDrawAtlas );
+
 		if ( m_bDrawAtlas ) {
 			ImEditor::RenderTexture( m_Blocks.GetTexture() );
 		}
 		else {
+			if ( ImGui::BeginPopup( "Texture Options" ) ) {
+				if ( ImGui::MenuItem( "Export SubTexture" ) ) {
+					g_ErrHandler.HandleResult( m_Blocks.ExportSubImg( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ), m_uSubTexClicked ) );
+				}
+				if ( ImGui::MenuItem( "Load SubTexture" ) ) {
+					if ( auto osFilePath = FileDialog::OpenFile( FileDialog::Filter::BMP ) ) {
+						g_ErrHandler.HandleResult( m_Blocks.LoadSubImg( m_pd3dDevice, *osFilePath, m_uSubTexClicked ) );
+					}
+				}
+				ImGui::EndPopup();
+			}
+
 			for ( size_t uIndex = 0; uIndex < Assets::Blocks::k_uNumBlocks; uIndex++ ) {
 				if ( ImEditor::ImageButton( m_Blocks.GetTexture( uIndex ) ) ) {
-					g_ErrHandler.HandleResult( m_Blocks.ExportSubImg( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ), uIndex ) );
+					ImGui::OpenPopup( "Texture Options" );
+					m_uSubTexClicked = uIndex;
 				}
 				if ( (uIndex + 1) % 8 == 0 ) ImGui::NewLine();
 				else ImGui::SameLine();
