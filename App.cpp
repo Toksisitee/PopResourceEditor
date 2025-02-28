@@ -343,7 +343,7 @@ void CEditorApp::Run()
 		freetype_test.ShowFontsOptionsWindow();
 #endif
 
-		static bool bShowDemo = true;
+		static bool bShowDemo = false;
 
 		if ( !IsPopDirectorySet() ) {
 			RenderSetupScreen();
