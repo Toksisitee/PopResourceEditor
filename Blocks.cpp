@@ -119,15 +119,15 @@ namespace Assets
 		BMP.SetSize( k_uBlockWidth, k_uBlockHeight );
 		BMP.SetBitDepth( 24 );
 
-		size_t uRow = uIndex / (k_uWidth / k_uBlockWidth);
-		size_t uCol = uIndex % (k_uWidth / k_uBlockWidth);
+		size_t uCol = uIndex / (k_uWidth / k_uBlockWidth);
+		size_t uRow = uIndex % (k_uWidth / k_uBlockWidth);
 		auto pColorTable = GetPalette()->GetColorTable();
 
 		for ( size_t y = 0; y < k_uBlockHeight; y++ ) {
 			for ( size_t x = 0; x < k_uBlockWidth; x++ ) {
 				const auto uAtlasX = uRow * k_uBlockWidth + x;
-				const auto uAatlasY = uCol * k_uBlockHeight + y;
-				Color* clr = &pColorTable[m_Data[uAatlasY * k_uWidth + uAtlasX]];
+				const auto uAtlasY = uCol * k_uBlockHeight + y;
+				Color* clr = &pColorTable[m_Data[uAtlasY * k_uWidth + uAtlasX]];
 				BMP.SetPixel( x, y, { clr->b, clr->g, clr->r, 0 } );
 			}
 		}
@@ -174,8 +174,8 @@ namespace Assets
 		}
 
 		D3DLOCKED_RECT rc;
-		size_t uRow = uIndex / (k_uWidth / k_uBlockWidth);
-		size_t uCol = uIndex % (k_uWidth / k_uBlockWidth);
+		size_t uCol = uIndex / (k_uWidth / k_uBlockWidth);
+		size_t uRow = uIndex % (k_uWidth / k_uBlockWidth);
 		auto pColorTable = GetPalette()->GetColorTable();
 
 		m_pSubTextures[uIndex] = new CTexture2D( pD3DDevice, k_uBlockWidth, k_uBlockHeight );
@@ -185,8 +185,8 @@ namespace Assets
 		for ( size_t y = 0; y < k_uBlockHeight; y++ ) {
 			for ( size_t x = 0; x < k_uBlockWidth; x++ ) {
 				const auto uAtlasX = uRow * k_uBlockWidth + x;
-				const auto uAatlasY = uCol * k_uBlockHeight + y;
-				Color* clr = &pColorTable[m_Data[uAatlasY * k_uWidth + uAtlasX]];
+				const auto uAtlasY = uCol * k_uBlockHeight + y;
+				Color* clr = &pColorTable[m_Data[uAtlasY * k_uWidth + uAtlasX]];
 				WriteRGBTexel( pTexels, x, y, rc.Pitch, clr );
 			}
 		}
@@ -194,5 +194,6 @@ namespace Assets
 		m_pSubTextures[uIndex]->GetTexture()->UnlockRect( 0 );
 		return true;
 	}
+
 
 }

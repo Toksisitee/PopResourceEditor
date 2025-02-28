@@ -62,17 +62,12 @@ void CBlocksWnd::Render()
 			ImEditor::RenderTexture( m_Blocks.GetTexture() );
 		}
 		else {
-			size_t uTexturesCountRow = Assets::Blocks::k_uWidth / Assets::Blocks::k_uBlockWidth;
-			size_t uTexturesCountCol = Assets::Blocks::k_uHeight / Assets::Blocks::k_uBlockHeight;
-			for ( size_t i = 0; i < uTexturesCountCol; i++ ) {
-				for ( size_t j = 0; j < uTexturesCountRow; j++ ) {
-					const auto uIndex = j * uTexturesCountRow + i;
-					if ( ImEditor::ImageButton( m_Blocks.GetTexture( uIndex ) ) ) {
-						g_ErrHandler.HandleResult( m_Blocks.ExportSubImg( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ), uIndex ) );
-					}
-					ImGui::SameLine();
+			for ( size_t uIndex = 0; uIndex < Assets::Blocks::k_uNumBlocks; uIndex++ ) {
+				if ( ImEditor::ImageButton( m_Blocks.GetTexture( uIndex ) ) ) {
+					g_ErrHandler.HandleResult( m_Blocks.ExportSubImg( Util::FileSystem::FormatExportPathFromFileName( GetAssetName() ), uIndex ) );
 				}
-				ImGui::NewLine();
+				if ( (uIndex + 1) % 8 == 0 ) ImGui::NewLine();
+				else ImGui::SameLine();
 			}
 		}
 
