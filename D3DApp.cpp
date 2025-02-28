@@ -9,6 +9,9 @@ INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 */
 
+#include <dwmapi.h>
+
+
 #include "imgui/imgui.h"
 #include "imgui_impl_dx9.h"
 
@@ -21,6 +24,22 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
     (int)((v4).z * (v4).w * 255.0f),			\
     (int)((v4).w * 255.0f)) 					\
 
+
+typedef LONG( WINAPI* RtlGetVersionPtr )(PRTL_OSVERSIONINFOW);
+bool IsWindows11OrGreater()
+{
+	HMODULE hDll = GetModuleHandleW( L"ntdll.dll" );
+	if ( hDll ) {
+		RtlGetVersionPtr fnRtlGetVersion = (RtlGetVersionPtr)GetProcAddress( hDll, "RtlGetVersion" );
+		if ( fnRtlGetVersion ) {
+			RTL_OSVERSIONINFOW osvi = { sizeof( osvi ) };
+			if ( fnRtlGetVersion( &osvi ) == 0 ) {
+				return (osvi.dwMajorVersion == 10 && osvi.dwBuildNumber >= 10240);
+			}
+		}
+	}
+	return false;
+}
 
 CD3DApp::CD3DApp()
 {
@@ -101,6 +120,7 @@ HRESULT CD3DApp::Create( HINSTANCE hInstance )
 	wc.cbWndExtra = 4;
 	::RegisterClassEx( &wc );
 
+
 	if ( m_hWnd == NULL ) {
 		m_hWnd = ::CreateWindowEx( 0, wc.lpszClassName, EDITOR_NAME, WS_OVERLAPPEDWINDOW, 100, 100, 800, 600, nullptr, 0, hInstance, this );
 		size_t length = wcslen( wc.lpszClassName ) + 1;
@@ -110,6 +130,14 @@ HRESULT CD3DApp::Create( HINSTANCE hInstance )
 	if ( FAILED( hr = Initialize3DEnvironment() ) ) {
 		::UnregisterClassW( wc.lpszClassName, wc.hInstance );
 		return hr;
+	}
+
+	if ( IsWindows11OrGreater() ) {
+		BOOL nDarkMode = 1;
+		HRESULT hr = ::DwmSetWindowAttribute( m_hWnd, 20 /* DWMWA_USE_IMMERSIVE_DARK_MODE */, &nDarkMode, sizeof( nDarkMode ) );
+		if ( FAILED( hr ) ) {
+			hr = ::DwmSetWindowAttribute( m_hWnd, 19 /* DWMWA_USE_IMMERSIVE_DARK_MODE */, &nDarkMode, sizeof( nDarkMode ) );
+		}
 	}
 
 	::ShowWindow( m_hWnd, SW_SHOWDEFAULT );
