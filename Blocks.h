@@ -59,7 +59,7 @@ namespace Assets
 		}
 
 	private:
-		uint8_t m_Data[Blocks::k_uWidth * Blocks::k_uHeight];
+		uint8_t m_Data[Blocks::k_uSize];
 		CTexture2D* m_pSubTextures[256]; // Split textures (32x32)
 	};
 }

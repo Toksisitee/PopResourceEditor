@@ -61,6 +61,13 @@ namespace Assets
 				}
 			}
 
+			const auto uAlpha = m_Data[k_uSize - 1];
+			for ( size_t i = 0; i < k_uSize; i++ ) {
+				if ( m_Data[i] == uAlpha ) {
+					m_Data[i] = GetPalette()->FindColor( *GetPalette()->GetColor( uAlpha ) );
+				}
+			}
+
 			return Result::OK_LOAD;
 		}
 
