@@ -34,4 +34,12 @@ To build PopResourceEditor with Visual Studio 2022, ensure that you have the fol
 - **Windows SDK 10.0** (latest version).
 - **Precompiled libraries** (e.g., spdlog) are included in the project. However, if you prefer to use your own, you will need to precompile them yourself, as no build tools are provided for third-party libraries.
 
-<p align="center"> <img width="1024" height="960" src="https://github.com/Toksisitee/PopResourceEditor/blob/master/PopResourceEditor.png"></img> </p>
+### [Support](https://ko-fi.com/toksisitee)
+If you enjoy the free tools and fan-made patches I've shared over the years, and you’d like to show support, consider making a small donation. It helps keep the projects going, supports my time and effort, and motivates me to continue developing.  Learn more about my projects [here](https://toksisitee.github.io/).
+<p align="left">
+  <a href="https://ko-fi.com/toksisitee">
+    <img src="https://cdn.prod.website-files.com/5c14e387dab576fe667689cf/670f5a02fcf48af59c591185_support_me_on_kofi_dark.png" width="20%" />
+  </a>
+</p>
+
+<p align="center"> <img width="100%" src="https://github.com/Toksisitee/PopResourceEditor/blob/master/PopResourceEditor.png"></img> </p>
