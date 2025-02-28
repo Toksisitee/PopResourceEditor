@@ -52,14 +52,19 @@ namespace Assets
 	Result CPalette::ExportBin( const std::string& sFilePath )
 	{
 		g_ErrHandler.SetFileType( FileType::Palette );
+		const uint8_t uPad = 0;
 
 		std::ofstream ofs( sFilePath, std::ios::binary | std::ios::trunc );
 		if ( ofs.is_open() ) {
-			ofs.write( reinterpret_cast<const char*>(m_Data), sizeof( m_Data ) );
+			for ( size_t i = 0; i < Palette::k_uNumColors; ++i ) {
+				ofs.write( reinterpret_cast<const char*>(&m_ColorTable[i].r), sizeof( m_ColorTable[i].r ) );
+				ofs.write( reinterpret_cast<const char*>(&m_ColorTable[i].g), sizeof( m_ColorTable[i].g ) );
+				ofs.write( reinterpret_cast<const char*>(&m_ColorTable[i].b), sizeof( m_ColorTable[i].b ) );
+				ofs.write( reinterpret_cast<const char*>(&uPad), sizeof( uPad ) );
+			}
 			ofs.close();
 			return Result::OK_EXPORT;
 		}
-
 		return Result::FAIL_EXPORT;
 	}
 
