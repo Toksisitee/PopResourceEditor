@@ -372,6 +372,9 @@ void CEditorApp::Run()
 						if ( ImGui::MenuItem( "About" ) ) {
 							bAboutWnd = true;
 						}
+						if ( ImGui::MenuItem( "Donate" ) ) {
+							Util::OpenBrowser( "https://ko-fi.com/toksisitee" );
+						}
 						ImGui::EndMenuBar();
 					}
 
@@ -388,11 +391,24 @@ void CEditorApp::Run()
 											 ImGuiCond_Always );
 
 					if ( ImGui::BeginPopupModal( "About", NULL, ImGuiWindowFlags_AlwaysAutoResize ) ) {
+						const char* pszUrl = "https://github.com/Toksisitee/PopResourceEditor";
 						ImGui::TextWrapped( "Open-source asset editor and manager written in C++ for Bullfrog's Populous: The Beginning, designed to preview, modify, and generate the game's assets." );
 						ImGui::NewLine();
 						ImGui::TextWrapped( "Project: %S", EDITOR_NAME );
 						ImGui::TextWrapped( "Version: %s", EDITOR_VERSION );
 						ImGui::TextWrapped( "Compiled: %s (%s)", EDITOR_DATE, EDITOR_CONFIG );
+						ImGui::Text( "Repository: " ); 
+						ImGui::SameLine();
+						ImGui::TextColored( ImVec4( 0.0f, 0.5f, 1.0f, 1.0f ), pszUrl );
+
+						if ( ImGui::IsItemHovered() ) {
+							ImGui::SetMouseCursor( ImGuiMouseCursor_Hand );
+						}
+
+						if ( ImGui::IsItemClicked() ) {
+							Util::OpenBrowser( pszUrl );
+						}
+
 						ImGui::NewLine();
 
 						const char* pszLicense =

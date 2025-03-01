@@ -251,4 +251,9 @@ namespace Util
 	{
 		ShellExecuteA( 0, "open", sPath.c_str(), NULL, NULL, SW_SHOWNORMAL );
 	}
+
+	void OpenBrowser( const char* pszUrl )
+	{
+		ShellExecuteA( 0, "open", pszUrl, NULL, NULL, SW_SHOWNORMAL );
+	}
 }

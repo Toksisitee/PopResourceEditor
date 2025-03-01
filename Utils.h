@@ -42,4 +42,5 @@ namespace Util
 	extern std::string StringToLowerCopy( const std::string& str );
 	extern std::string wcstombs( void* pwszStr, size_t uBufferSize );
 	extern void OpenDirectory( const std::string& sPath );
+	extern void OpenBrowser( const char* pszUrl );
 }
