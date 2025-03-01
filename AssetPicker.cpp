@@ -274,7 +274,6 @@ namespace AssetPicker
 		static std::string sSelectedAsset = "";
 
 		if ( bShowAssetPicker ) {
-			ImGui::Begin( "Asset Picker", &bShowAssetPicker );
 
 			//if ( ImGui::Button( "Toggle View" ) ) {
 			//	g_AssetPicker.eViewMode = (g_AssetPicker.eViewMode == ViewMode::List) ? ViewMode::Grid : ViewMode::List;
@@ -332,6 +331,5 @@ namespace AssetPicker
 		}
 		
 		ImGui::EndChild();
-		ImGui::End();
 	}
 }
