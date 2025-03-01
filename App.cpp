@@ -350,179 +350,148 @@ void CEditorApp::Run()
 				ImGui::ShowDemoWindow( &bShowDemo );
 			}
 
-#if 0
-			if ( ImGui::Button( "Test" ) ) {
-				auto sFilePath = Util::FileSystem::FormatPath( "pal0-0.dat" );
-				g_ErrHandler.HandleResult( g_Palette.LoadBin( sFilePath ) );
-				sFilePath = Util::FileSystem::FormatPath( "pal.bmp" );
-				g_ErrHandler.HandleResult( g_Palette.ExportImg( sFilePath.c_str() ) );
-			}
-			ImGui::NewLine();
+			//Debug::RenderWindows();
+
+			DockspaceDraw();
+			g_WndMngr.Render();
+			ImGui::Begin( "Root", nullptr, ImGuiWindowFlags_MenuBar );
 			{
-				static bool bLoaded = false;
-
-#if 1
-				if ( !bLoaded ) {
-					auto sFilePath = Util::FileSystem::FormatPath( "pal0-b.dat" );
-					g_ErrHandler.HandleResult( g_Palette.LoadBin( sFilePath ) );
-					sFilePath = Util::FileSystem::FormatPath( "pal.bmp" );
-					g_ErrHandler.HandleResult( g_Palette.ExportImg( sFilePath.c_str() ) );
-
-					sFilePath = Util::FileSystem::FormatPath( "sky0-b.dat" );
-					if ( g_ErrHandler.HandleResult( g_Sky.LoadBin( sFilePath ) ) != Assets::Result::OK_LOAD ) {
-
-					}
-					bLoaded = true;
-				}
-#endif
-
-
-#endif
-
 				{
-					//Debug::RenderWindows();
-				}
+					static bool bAboutWnd = false;
 
-				DockspaceDraw();
-				g_WndMngr.Render();
-				ImGui::Begin( "Root", nullptr, ImGuiWindowFlags_MenuBar );
-				{
-					{
-						static bool bAboutWnd = false;
+					ImVec2 vecRootPos = ImGui::GetWindowPos();
+					ImVec2 vecRootSize = ImGui::GetWindowSize();
 
-						ImVec2 vecRootPos = ImGui::GetWindowPos();
-						ImVec2 vecRootSize = ImGui::GetWindowSize();
-
-						if ( ImGui::BeginMenuBar() ) {
-							if ( ImGui::BeginMenu( "File" ) ) {
-								if ( ImGui::MenuItem( "Open Export Directory" ) ) {
-									Util::OpenDirectory( Util::FileSystem::GetExportDirectory() );
-								}
-								ImGui::EndMenu();
+					if ( ImGui::BeginMenuBar() ) {
+						if ( ImGui::BeginMenu( "File" ) ) {
+							if ( ImGui::MenuItem( "Open Export Directory" ) ) {
+								Util::OpenDirectory( Util::FileSystem::GetExportDirectory() );
 							}
-							if ( ImGui::MenuItem( "About" ) ) {
-								bAboutWnd = true;
-							}
-							ImGui::EndMenuBar();
+							ImGui::EndMenu();
 						}
+						if ( ImGui::MenuItem( "About" ) ) {
+							bAboutWnd = true;
+						}
+						ImGui::EndMenuBar();
+					}
 
-						if ( bAboutWnd ) {
+					if ( bAboutWnd ) {
+						bAboutWnd = false;
+						ImGui::OpenPopup( "About" );
+					}
+
+					ImVec2 vecPickerCenter = ImVec2( vecRootPos.x + vecRootSize.x * 0.5f, vecRootPos.y + vecRootSize.y * 0.5f );
+					ImVec2 vecAboutWndSize = ImVec2( vecRootSize.x * 0.65f, vecRootSize.y * 0.85f );
+					ImGui::SetNextWindowSize( vecAboutWndSize );
+					ImGui::SetNextWindowPos( ImVec2( vecPickerCenter.x - vecAboutWndSize.x * 0.5f,
+											 vecPickerCenter.y - vecAboutWndSize.y * 0.5f ),
+											 ImGuiCond_Always );
+
+					if ( ImGui::BeginPopupModal( "About", NULL, ImGuiWindowFlags_AlwaysAutoResize ) ) {
+						ImGui::TextWrapped( "Open-source asset editor and manager written in C++ for Bullfrog's Populous: The Beginning, designed to preview, modify, and generate the game's assets." );
+						ImGui::NewLine();
+						ImGui::TextWrapped( "Project: %S", EDITOR_NAME );
+						ImGui::TextWrapped( "Version: %s", EDITOR_VERSION );
+						ImGui::TextWrapped( "Compiled: %s (%s)", EDITOR_DATE, EDITOR_CONFIG );
+						ImGui::NewLine();
+
+						const char* pszLicense =
+							"Copyright (c) 2024-2025 Toksisitee\n"
+							"Permission is hereby granted, free of charge, to any person obtaining a copy"
+							"of this software and associated documentation files (the \"Software\"), to deal"
+							"in the Software without restriction, including without limitation the rights"
+							"to use, copy, modify, merge, publish, distribute, sublicense, and/or sell"
+							"copies of the Software, and to permit persons to whom the Software is"
+							"furnished to do so, subject to the following conditions:"
+							"The above copyright notice and this permission notice shall be included in all"
+							"copies or substantial portions of the Software."
+							"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR"
+							"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,"
+							"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE"
+							"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+							"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,"
+							"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE";
+						ImGui::TextWrapped( pszLicense );
+
+						if ( ImGui::Button( "Close" ) ) {
 							bAboutWnd = false;
-							ImGui::OpenPopup( "About" );
+							ImGui::CloseCurrentPopup();
 						}
-
-						ImVec2 vecPickerCenter = ImVec2( vecRootPos.x + vecRootSize.x * 0.5f, vecRootPos.y + vecRootSize.y * 0.5f );
-						ImVec2 vecAboutWndSize = ImVec2( vecRootSize.x * 0.65f, vecRootSize.y * 0.85f );
-						ImGui::SetNextWindowSize( vecAboutWndSize );
-						ImGui::SetNextWindowPos( ImVec2( vecPickerCenter.x - vecAboutWndSize.x * 0.5f,
-												 vecPickerCenter.y - vecAboutWndSize.y * 0.5f ),
-												 ImGuiCond_Always );
-
-						if ( ImGui::BeginPopupModal( "About", NULL, ImGuiWindowFlags_AlwaysAutoResize ) ) {
-							ImGui::TextWrapped( "Open-source asset editor and manager written in C++ for Bullfrog's Populous: The Beginning, designed to preview, modify, and generate the game's assets." );
-							ImGui::NewLine();
-							ImGui::TextWrapped( "Project: %S", EDITOR_NAME );
-							ImGui::TextWrapped( "Version: %s", EDITOR_VERSION );
-							ImGui::TextWrapped( "Compiled: %s (%s)", EDITOR_DATE, EDITOR_CONFIG );
-							ImGui::NewLine();
-
-							const char* pszLicense =
-								"Copyright (c) 2024-2025 Toksisitee\n"
-								"Permission is hereby granted, free of charge, to any person obtaining a copy"
-								"of this software and associated documentation files (the \"Software\"), to deal"
-								"in the Software without restriction, including without limitation the rights"
-								"to use, copy, modify, merge, publish, distribute, sublicense, and/or sell"
-								"copies of the Software, and to permit persons to whom the Software is"
-								"furnished to do so, subject to the following conditions:"
-								"The above copyright notice and this permission notice shall be included in all"
-								"copies or substantial portions of the Software."
-								"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR"
-								"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,"
-								"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE"
-								"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
-								"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,"
-								"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE";
-							ImGui::TextWrapped( pszLicense );
-
-							if ( ImGui::Button( "Close" ) ) {
-								bAboutWnd = false;
-								ImGui::CloseCurrentPopup();
-							}
-							ImGui::EndPopup();
-						}
-
-						if ( ImGui::Button( "Create Texture Set" ) ) {
-							auto pWnd = g_WndMngr.AddWindow<CTextureSetWnd>( GetDevice(), "Texture Set" );
-						}
+						ImGui::EndPopup();
 					}
-					AssetPicker::Render();
-					ImGui::End();
 
+					if ( ImGui::Button( "Create Texture Set" ) ) {
+						auto pWnd = g_WndMngr.AddWindow<CTextureSetWnd>( GetDevice(), "Texture Set" );
+					}
 				}
-				g_ImGuiSink->Render();
+				AssetPicker::Render();
+				ImGui::End();
+
+			}
+			g_ImGuiSink->Render();
 		}
-			// Rendering
-			//ImGui::DockSpaceOverViewport();
-			ImGui::EndFrame();
-			Render3DEnvironment( (void*)&io );
+		// Rendering
+		//ImGui::DockSpaceOverViewport();
+		ImGui::EndFrame();
+		Render3DEnvironment( (void*)&io );
 	}
 
-		ImGui_ImplDX9_Shutdown();
-		ImGui_ImplWin32_Shutdown();
-		ImGui::DestroyContext();
+	ImGui_ImplDX9_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
 
-		Cleanup3DEnviornment();
-		DestroyWindow();
+	Cleanup3DEnviornment();
+	DestroyWindow();
 }
 
-	// TODO: move
-	void SetupSpdlog()
-	{
-		std::vector<spdlog::sink_ptr> sinks;
-		auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+// TODO: move
+void SetupSpdlog()
+{
+	std::vector<spdlog::sink_ptr> sinks;
+	auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 
-		sinks.push_back( console_sink );
-		sinks.push_back( g_ImGuiSink );
+	sinks.push_back( console_sink );
+	sinks.push_back( g_ImGuiSink );
 
-		auto loggers = std::make_shared<spdlog::logger>( "logger", begin( sinks ), end( sinks ) );
+	auto loggers = std::make_shared<spdlog::logger>( "logger", begin( sinks ), end( sinks ) );
 
-		spdlog::register_logger( loggers );
-		spdlog::set_default_logger( loggers );
-		spdlog::set_pattern( "[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v" );
-	}
+	spdlog::register_logger( loggers );
+	spdlog::set_default_logger( loggers );
+	spdlog::set_pattern( "[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v" );
+}
 
-	LRESULT CEditorApp::WndProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
-	{
-		if ( ImGui_ImplWin32_WndProcHandler( m_hWnd, uMsg, wParam, lParam ) )
-			return true;
+LRESULT CEditorApp::WndProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
+{
+	if ( ImGui_ImplWin32_WndProcHandler( m_hWnd, uMsg, wParam, lParam ) )
+		return true;
 
-		switch ( uMsg ) {
-			case WM_SIZE:
-				if ( wParam == SIZE_MINIMIZED )
-					return 0;
-				WndResized( (UINT)LOWORD( lParam ), (UINT)HIWORD( lParam ) );
+	switch ( uMsg ) {
+		case WM_SIZE:
+			if ( wParam == SIZE_MINIMIZED )
 				return 0;
-			case WM_SYSCOMMAND:
-				if ( (wParam & 0xfff0) == SC_KEYMENU ) // Disable ALT application menu
-					return 0;
-				break;
-			case WM_DESTROY:
-				// TODO: cleanup
-				::PostQuitMessage( 0 );
+			WndResized( (UINT)LOWORD( lParam ), (UINT)HIWORD( lParam ) );
+			return 0;
+		case WM_SYSCOMMAND:
+			if ( (wParam & 0xfff0) == SC_KEYMENU ) // Disable ALT application menu
 				return 0;
-			case WM_DPICHANGED:
-				if ( ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DpiEnableScaleViewports ) {
-					//const int dpi = HIWORD(wParam);
-					//printf("WM_DPICHANGED to %d (%.0f%%)\n", dpi, (float)dpi / 96.0f * 100.0f);
-					const RECT* suggested_rect = (RECT*)lParam;
-					::SetWindowPos( m_hWnd, nullptr,
-						suggested_rect->left, suggested_rect->top,
-						suggested_rect->right - suggested_rect->left,
-						suggested_rect->bottom - suggested_rect->top,
-						SWP_NOZORDER | SWP_NOACTIVATE );
-				}
-				break;
-		}
-		return ::DefWindowProcW( m_hWnd, uMsg, wParam, lParam );
+			break;
+		case WM_DESTROY:
+			// TODO: cleanup
+			::PostQuitMessage( 0 );
+			return 0;
+		case WM_DPICHANGED:
+			if ( ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DpiEnableScaleViewports ) {
+				//const int dpi = HIWORD(wParam);
+				//printf("WM_DPICHANGED to %d (%.0f%%)\n", dpi, (float)dpi / 96.0f * 100.0f);
+				const RECT* suggested_rect = (RECT*)lParam;
+				::SetWindowPos( m_hWnd, nullptr,
+					suggested_rect->left, suggested_rect->top,
+					suggested_rect->right - suggested_rect->left,
+					suggested_rect->bottom - suggested_rect->top,
+					SWP_NOZORDER | SWP_NOACTIVATE );
+			}
+			break;
 	}
+	return ::DefWindowProcW( m_hWnd, uMsg, wParam, lParam );
+}
 
