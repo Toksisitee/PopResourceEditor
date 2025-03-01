@@ -2,7 +2,7 @@
 
 # PopResourceEditor
 
-Open-source asset editor and manager written in C++ for Bullfrog's Populous: The Beginning, designed to preview, modify, and generate the game's assets.
+Open-source asset editor and manager written in C++ for Bullfrog's Populous: The Beginning game, designed to preview, modify, and generate the game's assets.
 
 ### Features
   - **Asset Picker**
@@ -24,10 +24,6 @@ For now, the following assets are supported:
  - **Sky**: Texture for the sky.
  - **Sprite**: 2D textures. GUI, people, spell effects.
 
-### License
-PopResourceEditor Copyright © 2024-2025 Toksisitee.
-This project is distributed under the MIT License. See the LICENSE file for more details.
-
 ### Building
 To build PopResourceEditor with Visual Studio 2022, ensure that you have the following dependencies installed:
 - **Visual Studio 2022** (v143) with **C++20** (/std:c++20) support.
@@ -38,8 +34,12 @@ To build PopResourceEditor with Visual Studio 2022, ensure that you have the fol
 If you enjoy the free tools and fan-made patches I've shared over the years, and you’d like to show support, consider making a small donation. It helps keep the projects going, supports my time and effort, and motivates me to continue developing.  Learn more about my projects [here](https://toksisitee.github.io/).
 <p align="left">
   <a href="https://ko-fi.com/toksisitee">
-    <img src="https://cdn.prod.website-files.com/5c14e387dab576fe667689cf/670f5a02fcf48af59c591185_support_me_on_kofi_dark.png" width="20%" />
+    <img src="https://cdn.prod.website-files.com/5c14e387dab576fe667689cf/670f5a02fcf48af59c591185_support_me_on_kofi_dark.png" width="35%" />
   </a>
 </p>
 
 <p align="center"> <img width="100%" src="https://github.com/Toksisitee/PopResourceEditor/blob/master/PopResourceEditor.png"></img> </p>
+
+### License
+PopResourceEditor Copyright © 2024-2025 Toksisitee.
+This project is distributed under the MIT License. See the LICENSE file for more details.
