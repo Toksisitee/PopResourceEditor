@@ -172,7 +172,6 @@ namespace Assets
 
 				Color originalColor = *pPalette;
 
-				// TODO: temp uMode switch
 				if ( eMode == Cliff::Generation::NO_LUMINANCE ) {
 					blendedColor = BlendColors( originalColor, ditherColor, fFade );
 				}

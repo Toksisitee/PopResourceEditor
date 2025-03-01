@@ -65,7 +65,6 @@ Assets::CPalette g_Palette;
 Assets::CSky g_Sky;
 extern CIniFile g_IniFile;
 
-Assets::Sprite::CSprite g_Sprite( nullptr );
 ImFont* g_ImFonts[eImFont::Max] = { 0 };
 
 void RenderSetupScreen()
@@ -460,113 +459,70 @@ void CEditorApp::Run()
 					ImGui::End();
 
 				}
-
-#if 0
-				{
-					ImGui::Begin( "Sprite Textures" );
-
-					static bool inputs_step = true;
-
-					if ( g_Sprite.m_Bank.Header.Count == 0 ) {
-						auto sFilePath = Util::FileSystem::FormatPath( "HSPR0-0.dat" );
-						g_Sprite.SetPalette( &g_Palette );
-						g_ErrHandler.HandleResult( g_Sprite.LoadBin( sFilePath ) );
-						g_Sprite.CreateTextures( g_Editor.m_pd3dDevice );
-					}
-					else {
-						ImEditor::SetPointFiltering( g_Editor.m_pd3dDevice );
-
-						static uint16_t uSprIndex = 5000;
-						ImEditor::InputScalar( "##SpriteEditor", &uSprIndex );
-						//ImGui::InputScalar( "##SpriteIndex", ImGuiDataType_U16, &uSprIndex, inputs_step ? &u16_one : NULL, NULL, "%u" );
-						auto pTex = g_Sprite.GetTexture( uSprIndex );
-						ImVec2 texSize = ImVec2( static_cast<float>(pTex->GetWidth()), static_cast<float>(pTex->GetHeight()) );
-						texSize.x = 256;
-						texSize.y = 256;
-
-						static bool uv = false;
-						ImGui::Checkbox( "UV", &uv );
-						if ( uv ) {
-							float fTexelU = 0.5f / texSize.x;
-							float fTexelV = 0.5f / texSize.y;
-							auto uv0 = ImVec2( fTexelU, fTexelV );
-							auto uv1 = ImVec2( 1.0f - fTexelU, 1.0f - fTexelV );
-							ImEditor::RenderTexture( pTex, texSize, uv0, uv1 );
-						}
-						else {
-							ImEditor::RenderTexture( pTex, texSize );
-						}
-
-						ImEditor::ResetRenderState();
-					}
-					ImGui::End();
-				}
-			}
-#endif
-			g_ImGuiSink->Render();
+				g_ImGuiSink->Render();
 		}
-		// Rendering
-		//ImGui::DockSpaceOverViewport();
-		ImGui::EndFrame();
-		Render3DEnvironment( (void*)&io );
+			// Rendering
+			//ImGui::DockSpaceOverViewport();
+			ImGui::EndFrame();
+			Render3DEnvironment( (void*)&io );
 	}
 
-	ImGui_ImplDX9_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
+		ImGui_ImplDX9_Shutdown();
+		ImGui_ImplWin32_Shutdown();
+		ImGui::DestroyContext();
 
-	Cleanup3DEnviornment();
-	DestroyWindow();
+		Cleanup3DEnviornment();
+		DestroyWindow();
 }
 
-// TODO: move
-void SetupSpdlog()
-{
-	std::vector<spdlog::sink_ptr> sinks;
-	auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+	// TODO: move
+	void SetupSpdlog()
+	{
+		std::vector<spdlog::sink_ptr> sinks;
+		auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 
-	sinks.push_back( console_sink );
-	sinks.push_back( g_ImGuiSink );
+		sinks.push_back( console_sink );
+		sinks.push_back( g_ImGuiSink );
 
-	auto loggers = std::make_shared<spdlog::logger>( "logger", begin( sinks ), end( sinks ) );
+		auto loggers = std::make_shared<spdlog::logger>( "logger", begin( sinks ), end( sinks ) );
 
-	spdlog::register_logger( loggers );
-	spdlog::set_default_logger( loggers );
-	spdlog::set_pattern( "[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v" );
-}
-
-LRESULT CEditorApp::WndProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
-{
-	if ( ImGui_ImplWin32_WndProcHandler( m_hWnd, uMsg, wParam, lParam ) )
-		return true;
-
-	switch ( uMsg ) {
-		case WM_SIZE:
-			if ( wParam == SIZE_MINIMIZED )
-				return 0;
-			WndResized( (UINT)LOWORD( lParam ), (UINT)HIWORD( lParam ) );
-			return 0;
-		case WM_SYSCOMMAND:
-			if ( (wParam & 0xfff0) == SC_KEYMENU ) // Disable ALT application menu
-				return 0;
-			break;
-		case WM_DESTROY:
-			// TODO: cleanup
-			::PostQuitMessage( 0 );
-			return 0;
-		case WM_DPICHANGED:
-			if ( ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DpiEnableScaleViewports ) {
-				//const int dpi = HIWORD(wParam);
-				//printf("WM_DPICHANGED to %d (%.0f%%)\n", dpi, (float)dpi / 96.0f * 100.0f);
-				const RECT* suggested_rect = (RECT*)lParam;
-				::SetWindowPos( m_hWnd, nullptr,
-					suggested_rect->left, suggested_rect->top,
-					suggested_rect->right - suggested_rect->left,
-					suggested_rect->bottom - suggested_rect->top,
-					SWP_NOZORDER | SWP_NOACTIVATE );
-			}
-			break;
+		spdlog::register_logger( loggers );
+		spdlog::set_default_logger( loggers );
+		spdlog::set_pattern( "[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v" );
 	}
-	return ::DefWindowProcW( m_hWnd, uMsg, wParam, lParam );
-}
+
+	LRESULT CEditorApp::WndProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
+	{
+		if ( ImGui_ImplWin32_WndProcHandler( m_hWnd, uMsg, wParam, lParam ) )
+			return true;
+
+		switch ( uMsg ) {
+			case WM_SIZE:
+				if ( wParam == SIZE_MINIMIZED )
+					return 0;
+				WndResized( (UINT)LOWORD( lParam ), (UINT)HIWORD( lParam ) );
+				return 0;
+			case WM_SYSCOMMAND:
+				if ( (wParam & 0xfff0) == SC_KEYMENU ) // Disable ALT application menu
+					return 0;
+				break;
+			case WM_DESTROY:
+				// TODO: cleanup
+				::PostQuitMessage( 0 );
+				return 0;
+			case WM_DPICHANGED:
+				if ( ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DpiEnableScaleViewports ) {
+					//const int dpi = HIWORD(wParam);
+					//printf("WM_DPICHANGED to %d (%.0f%%)\n", dpi, (float)dpi / 96.0f * 100.0f);
+					const RECT* suggested_rect = (RECT*)lParam;
+					::SetWindowPos( m_hWnd, nullptr,
+						suggested_rect->left, suggested_rect->top,
+						suggested_rect->right - suggested_rect->left,
+						suggested_rect->bottom - suggested_rect->top,
+						SWP_NOZORDER | SWP_NOACTIVATE );
+				}
+				break;
+		}
+		return ::DefWindowProcW( m_hWnd, uMsg, wParam, lParam );
+	}
 

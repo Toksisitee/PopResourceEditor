@@ -27,6 +27,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 #include "BlocksWnd.h"
 #include "LevelWnd.h"
 #include "PaletteWnd.h"
+#include "SpriteWnd.h"
 
 #include "Assets.h"
 
@@ -280,6 +281,12 @@ namespace Assets
 		return result;
 	}
 
+	Result QuickLoadSprite( CSprite* pSprite, const std::string& sFilePath )
+	{
+		auto result = pSprite->LoadBin( sFilePath );
+		return result;
+	}
+
 	Result QuickLoad( void* pAsset, const std::string& sFilePath, FileType eFileType )
 	{
 		switch ( eFileType ) {
@@ -303,6 +310,8 @@ namespace Assets
 				return QuickLoadPalette( static_cast<CPalette*>(pAsset), sFilePath );
 			case Assets::FileType::Sky:
 				return QuickLoadSky( static_cast<CSky*>(pAsset), sFilePath );
+			case Assets::FileType::Sprite:
+				return QuickLoadSprite( static_cast<CSprite*>(pAsset), sFilePath );
 		}
 
 		return Result::FAIL_LOAD;
@@ -378,8 +387,9 @@ namespace Assets
 			}
 			case Assets::FileType::Sprite:
 			{
-				assert( false && "TODO: Implement SpriteWnd" );
-				break;
+				auto pWnd = g_WndMngr.AddWindow<CSpriteWnd>( pDevice, sFilePath );
+				pWnd->SetAssetName( Util::FileSystem::GetFileName( sFilePath ) );
+				return QuickLoad( (void*)pWnd->GetAsset(), sFilePath, eFileType );
 			}
 		}
 
@@ -443,7 +453,7 @@ namespace Assets
 		Assets::QuickLoad( pAsset, sFilePath, eType );
 
 		if ( eType == Assets::FileType::Blocks ) {
-			static_cast<CBlocks*>(pAsset)->CreateTexture( pDevice, Blocks::k_uWidth/4, Blocks::k_uHeight/4 );
+			static_cast<CBlocks*>(pAsset)->CreateTexture( pDevice, Blocks::k_uWidth / 4, Blocks::k_uHeight / 4 );
 		}
 		else
 			pAsset->CreateTexture( pDevice );

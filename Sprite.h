@@ -36,7 +36,7 @@ namespace Assets
 		struct Frame
 		{
 			SpriteInfo	Sprite;
-			int8_t*		Data;
+			int8_t* Data;
 			PixelMap	Map;
 		};
 
@@ -51,41 +51,39 @@ namespace Assets
 			BankHeader Header;
 			std::vector<Frame> Frames;
 		};
-
-		class CSprite
-		{
-		public:
-			explicit CSprite( CPalette* pPalette ) :
-				m_pPalette( pPalette ), m_bIsHFX( false )
-			{
-			}
-			~CSprite() = default;
-
-			Bank m_Bank;
-			Result LoadBin( const std::string& file );
-			void ExportImg( uint16_t index );
-			void Map( uint16_t index );
-			void Reset();
-
-			void SetPalette( CPalette* pPalette ) { m_pPalette = pPalette; }
-			void SetHFX( bool b ) { m_bIsHFX = b; }
-
-			void CreateTextures( LPDIRECT3DDEVICE9 pD3DDevice );
-			[[nodiscard]] inline CTexture2D* GetTexture( uint32_t uSlot ) { return (uSlot < m_pTextures.size()) ? m_pTextures.at( uSlot ) : nullptr; }
-
-		private:
-			[[nodiscard]] inline bool IsAlphaSprite( uint32_t uIndex ) const { return m_bIsHFX && ((uIndex >= 1090 && uIndex <= 1499) || (uIndex >= 1538 && uIndex <= 1592)); }
-			[[nodiscard]] inline bool IsValid( SpriteInfo& sprInfo ) { return sprInfo.Width > 0 && sprInfo.Height > 0; }
-
-		private:
-			char* m_pBuffer = nullptr;
-			uint32_t m_nBufferLength = 0;
-			bool m_bIsHFX = false;;
-
-			CPalette* m_pPalette;
-			std::vector<CTexture2D*> m_pTextures;
-
-		};
 	}
+
+	class CSprite
+	{
+	public:
+		explicit CSprite() = default;
+		~CSprite() = default;
+
+		Sprite::Bank m_Bank;
+		Result LoadBin( const std::string& file );
+		void ExportImg( uint16_t index );
+		void Map( uint16_t index );
+		void Reset();
+
+		void SetPalette( CPalette* pPalette ) { m_pPalette = pPalette; }
+		void SetHFX( bool b ) { m_bIsHFX = b; }
+
+		void CreateTextures( LPDIRECT3DDEVICE9 pD3DDevice );
+		[[nodiscard]] inline CTexture2D* GetTexture( uint32_t uSlot ) { return (uSlot < m_pTextures.size()) ? m_pTextures.at( uSlot ) : nullptr; }
+
+	private:
+		[[nodiscard]] inline bool IsAlphaSprite( uint32_t uIndex ) const { return m_bIsHFX && ((uIndex >= 1090 && uIndex <= 1499) || (uIndex >= 1538 && uIndex <= 1592)); }
+		[[nodiscard]] inline bool IsValid( Sprite::SpriteInfo& sprInfo ) { return sprInfo.Width > 0 && sprInfo.Height > 0; }
+
+	private:
+		char* m_pBuffer = nullptr;
+		uint32_t m_nBufferLength = 0;
+		bool m_bIsHFX = false;;
+
+		CPalette* m_pPalette;
+		std::vector<CTexture2D*> m_pTextures;
+
+	};
+
 }
 
