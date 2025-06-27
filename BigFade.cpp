@@ -63,12 +63,12 @@ namespace Assets
 				}
 			}
 
-			if ( colors.size() > 112 ) {
+			if ( colors.size() > k_uNumColors ) {
 				g_ErrHandler.LogFmt( Log::Level::ERR, "LoadImg: Too many unique colors (%i). Maximum allowed: %u", colors.size(), k_uNumColors );
 				return Result::FAIL_LOAD;
 			}
 
-			if ( colors.size() < 112 ) {
+			if ( colors.size() < k_uNumColors ) {
 				g_ErrHandler.LogFmt( Log::Level::WRN, "LoadImg: Image is not optimized. %i additional unique colors could still be used.", k_uNumColors - colors.size() );
 			}
 
